@@ -1,0 +1,27 @@
+/* === 04-layout-buttons: layout + bottoni generici (fuori header) === */
+.container{
+  max-width:var(--container-max); margin:0 auto; padding:var(--spazio-lg);
+  display:grid; grid-template-columns:1fr; gap:var(--spazio-lg);
+}
+
+/* layout mobile del progetto (colonna) */
+.container{
+  display:flex; flex-direction:column; gap:0; max-width:900px;
+  margin:0 auto; padding:2rem 1rem; box-sizing:border-box;
+}
+.content-area{display:flex;flex-direction:column;gap:2rem}
+.sidebar{width:100%;box-sizing:border-box}
+
+/* Bottoni globali (pill) per il resto del sito */
+.button-primary,.button-secondary,.button-social{
+  padding:.75rem 1.5rem; border-radius:50px; border:2px solid transparent;
+  font-weight:700; transition:var(--transizione); cursor:pointer;
+  width:100%; max-width:280px; text-align:center; font-family:var(--font-body);
+}
+.button-primary{background:var(--c-successo);color:#fff}
+.button-primary:hover{background:var(--c-primario-hover);transform:scale(1.03)}
+.button-secondary{background:transparent;border-color:var(--c-bordi);color:var(--c-testo-leggero)}
+.button-secondary:hover{background:var(--c-secondario);border-color:var(--c-secondario);color:#fff}
+.button-social.google{background:#4285F4;color:#fff}
+.button-social.google:hover{background:#3367D6}
+.full-width-btn{width:100%;display:block;text-align:center;margin-top:var(--spazio-md)}

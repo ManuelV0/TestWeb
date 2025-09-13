@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Widget Poesia - The Italian Poetry Project</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --error: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 6px;
+        }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover {
+            filter: brightness(0.9);
+        }
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        #widget-container {
+            min-height: 500px;
+            border: 3px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: white;
+            position: relative;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .loading { background: var(--warning); color: white; }
+        .success { background: var(--success); color: white; }
+        .error { background: var(--error); color: white; }
+        .debug-panel {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #2c3e50;
+        }
+        .log-info { color: #3498db; }
+        .log-success { color: #2ecc71; }
+        .log-error { color: #e74c3c; }
+        .log-warning { color: #f39c12; }
+        .log-debug { color: #9b59b6; }
+        #visual-debug {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Widget Poesia Italiana</h1>
+        
+        <div class="control-panel">
+            <button id="load-btn">▶️ Carica Widget</button>
+            <button id="unmount-btn" disabled>⏹️ Rimuovi Widget</button>
+            <button id="check-deps-btn">🔍 Verifica Dipendenze</button>
+            <button id="force-refresh-btn">🔄 Ricarica Forzata</button>
+            <button id="clear-btn">🧹 Pulisci Log</button>
+        </div>
+
+        <div class="status" id="status">Stato: Pronto</div>
+        
+        <div id="widget-container">
+            <p style="text-align: center; color: #7f8c8d;">Il widget apparirà qui</p>
+        </div>
+
+        <h2>Console di Debug</h2>
+        <div class="debug-panel" id="debug-console">
+            <div class="log-entry">[System] Inizializzato alle <span id="timestamp"></span></div>
+        </div>
+    </div>
+
+    <div id="visual-debug">
+        <h3>Debug Visivo</h3>
+        <div id="react-version"></div>
+        <div id="widget-api-status"></div>
+        <div id="container-status"></div>
+    </div>
+
+    <!-- Dipendenze -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <script>
+        // Elementi UI
+        const debugConsole = document.getElementById('debug-console');
+        const statusElement = document.getElementById('status');
+        const widgetContainer = document.getElementById('widget-container');
+        const visualDebug = document.getElementById('visual-debug');
+        const timestampElement = document.getElementById('timestamp');
+        
+        // Inizializzazione
+        timestampElement.textContent = new Date().toLocaleString();
+        
+        // Sistema di logging avanzato
+        const log = (message, type = 'info') => {
+            const timestamp = new Date().toLocaleTimeString();
+            const typeMap = {
+                info: { class: 'log-info', prefix: 'ℹ️' },
+                success: { class: 'log-success', prefix: '✅' },
+                error: { class: 'log-error', prefix: '❌' },
+                warning: { class: 'log-warning', prefix: '⚠️' },
+                debug: { class: 'log-debug', prefix: '🐛' }
+            };
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${typeMap[type].class}`;
+            entry.innerHTML = `${timestamp} ${typeMap[type].prefix} ${message}`;
+            debugConsole.appendChild(entry);
+            debugConsole.scrollTop = debugConsole.scrollHeight;
+            
+            // Aggiorna debug visivo
+            updateVisualDebug();
+        };
+
+        // Debug visivo
+        function updateVisualDebug() {
+            document.getElementById('react-version').innerHTML = `
+                <strong>React:</strong> v${window.React?.version || 'N/D'}
+            `;
+            document.getElementById('widget-api-status').innerHTML = `
+                <strong>MyPoetryApp:</strong> ${window.MyPoetryApp ? '✅' : '❌'}
+            `;
+            document.getElementById('container-status').innerHTML = `
+                <strong>Container:</strong> ${widgetContainer.children.length} elementi
+            `;
+        }
+
+        // Funzioni di controllo
+        async function loadWidget() {
+            log("Inizio caricamento widget...", "info");
+            statusElement.textContent = "Stato: Caricamento in corso...";
+            statusElement.className = "status loading";
+            
+            // Pulisci precedenti istanze
+            document.querySelectorAll('script[src*="my-poetry-app"]').forEach(s => s.remove());
+            
+            try {
+                // Carica il widget
+                const script = document.createElement('script');
+                script.src = `https://widget.theitalianpoetryproject.com/my-poetry-app.iife.js?t=${Date.now()}`;
+                script.crossOrigin = "anonymous";
+                
+                script.onload = () => {
+                    log("Script widget caricato", "success");
+                    
+                    if (window.MyPoetryApp?.mount) {
+                        try {
+                            window.MyPoetryApp.mount(widgetContainer, {
+                                debug: true,
+                                onReady: () => {
+                                    log("Widget montato con successo", "success");
+                                    statusElement.textContent = "Stato: Widget attivo";
+                                    statusElement.className = "status success";
+                                    document.getElementById('unmount-btn').disabled = false;
+                                }
+                            });
+                        } catch (e) {
+                            log(`Errore durante il mount: ${e.message}`, "error");
+                            statusElement.textContent = "Stato: Errore nel mount";
+                            statusElement.className = "status error";
+                        }
+                    } else {
+                        log("MyPoetryApp non trovato su window", "error");
+                        statusElement.textContent = "Stato: API non disponibile";
+                        statusElement.className = "status error";
+                    }
+                };
+                
+                script.onerror = (e) => {
+                    log(`Errore nel caricamento: ${e.message}`, "error");
+                    statusElement.textContent = "Stato: Caricamento fallito";
+                    statusElement.className = "status error";
+                };
+                
+                document.head.appendChild(script);
+            } catch (error) {
+                log(`Errore: ${error.message}`, "error");
+            }
+        }
+
+        function unmountWidget() {
+            if (window.MyPoetryApp?.unmount) {
+                try {
+                    window.MyPoetryApp.unmount(widgetContainer);
+                    log("Widget smontato", "success");
+                    statusElement.textContent = "Stato: Widget rimosso";
+                    statusElement.className = "status success";
+                    document.getElementById('unmount-btn').disabled = true;
+                } catch (e) {
+                    log(`Errore durante unmount: ${e.message}`, "error");
+                }
+            } else {
+                log("Impossibile smontare: API non disponibile", "warning");
+            }
+        }
+
+        function checkDependencies() {
+            log("Verifica dipendenze...", "info");
+            const deps = {
+                'React': !!window.React,
+                'ReactDOM': !!window.ReactDOM,
+                'process': !!window.process,
+                'MyPoetryApp': !!window.MyPoetryApp
+            };
+            
+            Object.entries(deps).forEach(([name, available]) => {
+                log(`${name}: ${available ? '✅' : '❌'}`, available ? 'success' : 'error');
+            });
+        }
+
+        // Event listeners
+        document.getElementById('load-btn').addEventListener('click', loadWidget);
+        document.getElementById('unmount-btn').addEventListener('click', unmountWidget);
+        document.getElementById('check-deps-btn').addEventListener('click', checkDependencies);
+        document.getElementById('force-refresh-btn').addEventListener('click', () => {
+            log("Ricarica forzata avviata...", "warning");
+            location.reload();
+        });
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            debugConsole.innerHTML = '<div class="log-entry">[System] Log pulito</div>';
+        });
+
+        // Inizializzazione
+        log("Ambiente inizializzato", "success");
+        updateVisualDebug();
+    </script>
+</body>
+</html>
