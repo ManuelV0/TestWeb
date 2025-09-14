@@ -1872,3 +1872,327 @@
                 flex-direction: row;
             }
         }
+
+
+
+
+
+
+/* ============================================================================
+           AUDIO PLAYER MODALE MIGLIORATO
+           ========================================================================== */
+        .audio-player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1a2238 0%, #1c2844 100%);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            font-family: var(--font-body);
+            color: white;
+            padding: 0;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spazio-md) var(--spazio-lg);
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .site-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+
+        .instagram-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transizione);
+        }
+
+        .instagram-link:hover {
+            color: #E1306C;
+        }
+
+        .audio-controls-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-lg);
+            padding: var(--spazio-xl);
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .playback-section {
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: var(--spazio-md);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .playback-controls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-sm);
+            align-items: center;
+        }
+
+        .play-button,
+        .stop-button {
+            background: linear-gradient(135deg, var(--c-primario), #3B82F6);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.2rem;
+            width: 100%;
+            max-width: 250px;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .play-button:hover,
+        .stop-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+        }
+
+        .stop-button {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .stop-button:hover {
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            margin: var(--spazio-lg) 0;
+            width: 100%;
+        }
+
+        .speed-section {
+            text-align: center;
+        }
+
+        .speed-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spazio-sm);
+            margin-top: var(--spazio-md);
+        }
+
+        .speed-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.8rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transizione);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .speed-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .speed-button.active {
+            background: linear-gradient(135deg, var(--c-primario), #3B82F6);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            border-color: rgba(37, 99, 235, 0.3);
+        }
+
+        .content-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spazio-xl);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .poetry-text {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
+            font-style: italic;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .current-line {
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.15), transparent);
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            margin: 1rem 0;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .word {
+            transition: all 0.2s ease;
+            padding: 0.1em 0.2em;
+            border-radius: 6px;
+            margin: 0 0.1em;
+        }
+
+        .word.highlight {
+            color: #a5b4fc;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15));
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: wordPulse 0.3s ease;
+        }
+
+        @keyframes wordPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        /* ====== RESPONSIVE MOBILE ====== */
+        @media (max-width: 768px) {
+            .audio-player-modal {
+                padding: 0;
+            }
+            
+            .modal-header {
+                padding: var(--spazio-md);
+                flex-direction: column;
+                gap: var(--spazio-xs);
+                text-align: center;
+            }
+            
+            .site-title {
+                font-size: 1.1rem;
+            }
+            
+            .instagram-link {
+                font-size: 0.9rem;
+            }
+            
+            .audio-controls-container {
+                padding: var(--spazio-md);
+                gap: var(--spazio-md);
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+                margin-bottom: var(--spazio-sm);
+            }
+            
+            .play-button,
+            .stop-button {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+                max-width: 220px;
+            }
+            
+            .divider {
+                margin: var(--spazio-md) 0;
+            }
+            
+            .speed-controls {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spazio-xs);
+            }
+            
+            .speed-button {
+                padding: 0.7rem 0.4rem;
+                font-size: 0.9rem;
+            }
+            
+            .content-section {
+                padding: var(--spazio-md);
+            }
+            
+            .poetry-text {
+                font-size: 1.3rem;
+                line-height: 1.6;
+            }
+            
+            .current-line {
+                padding: 0.8rem 1.5rem;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* ====== PICCOLI DISPOSITIVI ====== */
+        @media (max-width: 480px) {
+            .speed-controls {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .speed-button {
+                padding: 0.6rem 0.3rem;
+                font-size: 0.85rem;
+            }
+            
+            .poetry-text {
+                font-size: 1.1rem;
+            }
+            
+            .play-button,
+            .stop-button {
+                padding: 0.9rem 1.8rem;
+                font-size: 1rem;
+                max-width: 200px;
+            }
+        }
+
+        /* ====== ORIENTAMENTO ORIZZONTALE ====== */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .audio-player-modal {
+                flex-direction: row;
+            }
+            
+            .audio-controls-container {
+                width: 40%;
+                padding: var(--spazio-md);
+            }
+            
+            .content-section {
+                width: 60%;
+                padding: var(--spazio-md);
+            }
+            
+            .poetry-text {
+                font-size: 1.1rem;
+            }
+        }
