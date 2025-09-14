@@ -885,134 +885,136 @@
 
 
 /* =========================================================
-   KARAOKE — REDESIGN MOBILE-FIRST
+   KARAOKE — STILI SPECIFICI E ISOLATI
+   Design mobile-first completamente indipendente
    ========================================================= */
 
-/* Variabili specifiche per karaoke */
-.poetry-widget-section {
-  --kr-bg: #ffffff;
-  --kr-bg-soft: #f7f9fc;
-  --kr-ink: #1f2937;
-  --kr-ink-soft: #6b7280;
-  --kr-primary: #2e7d32;
-  --kr-primary-2: #3a8d3e;
-  --kr-accent: #2196f3;
-  --kr-brd: rgba(28, 49, 58, 0.10);
-  --kr-brd-strong: rgba(28, 49, 58, 0.18);
-  --kr-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
-  --kr-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
-  --kr-radius: 12px;
-  --kr-radius-sm: 8px;
+/* Variabili specifiche per karaoke - prefissate per isolamento */
+:root {
+  --kw-bg: #ffffff;
+  --kw-bg-soft: #f7f9fc;
+  --kw-ink: #1f2937;
+  --kw-ink-soft: #6b7280;
+  --kw-primary: #2e7d32;
+  --kw-primary-2: #3a8d3e;
+  --kw-accent: #2196f3;
+  --kw-brd: rgba(28, 49, 58, 0.10);
+  --kw-brd-strong: rgba(28, 49, 58, 0.18);
+  --kw-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --kw-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+  --kw-radius: 12px;
+  --kw-radius-sm: 8px;
 
-  --kr-gap-xs: 0.4rem;
-  --kr-gap-sm: 0.65rem;
-  --kr-gap-md: 0.85rem;
-  --kr-gap-lg: 1.1rem;
+  --kw-gap-xs: 0.4rem;
+  --kw-gap-sm: 0.65rem;
+  --kw-gap-md: 0.85rem;
+  --kw-gap-lg: 1.1rem;
 
-  --kr-fs-title: 1.15rem;
-  --kr-fs-line: 0.95rem;
+  --kw-fs-title: 1.15rem;
+  --kw-fs-line: 0.95rem;
 
-  --kr-card-maxh: 50vh;
-  --kr-line-min: 44px;
+  --kw-card-maxh: 50vh;
+  --kw-line-min: 44px;
 }
 
-/* Container principale */
-.poetry-widget-section .karaoke-section {
-  background: var(--kr-bg);
-  border: 1px solid var(--kr-brd);
-  border-radius: var(--kr-radius);
-  padding: var(--kr-gap-md);
-  box-shadow: var(--kr-shadow-sm);
-  color: var(--kr-ink);
+/* Container principale - selettore specifico */
+.karaoke-widget {
+  background: var(--kw-bg);
+  border: 1px solid var(--kw-brd);
+  border-radius: var(--kw-radius);
+  padding: var(--kw-gap-md);
+  box-shadow: var(--kw-shadow-sm);
+  color: var(--kw-ink);
   position: relative;
   overflow: hidden;
   margin-bottom: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Accento superiore */
-.poetry-widget-section .karaoke-section::before {
+.karaoke-widget::before {
   content: "";
   position: absolute;
   inset: 0 0 auto 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--kr-primary), var(--kr-accent));
+  background: linear-gradient(90deg, var(--kw-primary), var(--kw-accent));
   opacity: 0.9;
 }
 
 /* Header */
-.poetry-widget-section .karaoke-header {
+.karaoke-widget__header {
   display: flex;
   flex-direction: column;
-  gap: var(--kr-gap-xs);
-  margin-bottom: var(--kr-gap-md);
+  gap: var(--kw-gap-xs);
+  margin-bottom: var(--kw-gap-md);
   padding-bottom: 0.5rem;
-  border-bottom: 1px dashed var(--kr-brd);
+  border-bottom: 1px dashed var(--kw-brd);
   text-align: center;
 }
 
-.poetry-widget-section .karaoke-title {
+.karaoke-widget__title {
   display: flex;
   gap: 0.4rem;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: var(--kr-primary);
-  font-size: var(--kr-fs-title);
+  color: var(--kw-primary);
+  font-size: var(--kw-fs-title);
   line-height: 1.3;
 }
 
-.poetry-widget-section .karaoke-title i {
+.karaoke-widget__title-icon {
   font-size: 0.9em;
 }
 
 /* Contenitore testo (scorrevole) */
-.poetry-widget-section .karaoke-container {
-  background: var(--kr-bg-soft);
-  border: 1px solid var(--kr-brd);
-  border-radius: var(--kr-radius-sm);
-  padding: var(--kr-gap-sm);
+.karaoke-widget__container {
+  background: var(--kw-bg-soft);
+  border: 1px solid var(--kw-brd);
+  border-radius: var(--kw-radius-sm);
+  padding: var(--kw-gap-sm);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  max-height: var(--kr-card-maxh);
+  max-height: var(--kw-card-maxh);
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: var(--kr-primary) #e6ecf5;
+  scrollbar-color: var(--kw-primary) #e6ecf5;
 }
 
-.poetry-widget-section .karaoke-container::-webkit-scrollbar {
+.karaoke-widget__container::-webkit-scrollbar {
   width: 5px;
 }
 
-.poetry-widget-section .karaoke-container::-webkit-scrollbar-track {
+.karaoke-widget__container::-webkit-scrollbar-track {
   background: #e6ecf5;
   border-radius: 10px;
   margin: 2px 0;
 }
 
-.poetry-widget-section .karaoke-container::-webkit-scrollbar-thumb {
-  background: var(--kr-primary);
+.karaoke-widget__container::-webkit-scrollbar-thumb {
+  background: var(--kw-primary);
   border-radius: 10px;
   border: 1px solid #e6ecf5;
 }
 
 /* Riga & parole */
-.poetry-widget-section .karaoke-lines {
+.karaoke-widget__lines {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  font-size: var(--kr-fs-line);
+  font-size: var(--kw-fs-line);
   line-height: 1.5;
   padding: 0.1rem;
 }
 
-.poetry-widget-section .karaoke-line {
+.karaoke-widget__line {
   --progress: 0%;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  min-height: var(--kr-line-min);
+  min-height: var(--kw-line-min);
   padding: 0.65rem 0.75rem;
   margin: 0.1rem 0;
   border-radius: 10px;
@@ -1024,22 +1026,22 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.poetry-widget-section .karaoke-line.is-active {
+.karaoke-widget__line--active {
   transform: translateX(1px);
   box-shadow: 0 6px 12px rgba(46, 125, 50, 0.12);
   outline: 1px solid rgba(46, 125, 50, 0.2);
-  border-left: 2px solid var(--kr-primary);
+  border-left: 2px solid var(--kw-primary);
 }
 
-.poetry-widget-section .karaoke-line.is-completed {
+.karaoke-widget__line--completed {
   opacity: 0.75;
 }
 
-.poetry-widget-section .karaoke-line.is-upcoming {
+.karaoke-widget__line--upcoming {
   opacity: 0.9;
 }
 
-.poetry-widget-section .word {
+.karaoke-widget__word {
   display: inline-block;
   margin: 0 0.1rem;
   padding: 0.06rem 0.18rem;
@@ -1048,12 +1050,12 @@
 }
 
 @media (hover: hover) {
-  .poetry-widget-section .word:hover {
+  .karaoke-widget__word:hover {
     background: rgba(46, 125, 50, 0.06);
   }
 }
 
-.poetry-widget-section .word.active {
+.karaoke-widget__word--active {
   background: linear-gradient(135deg, rgba(46, 125, 50, 0.22), rgba(46, 125, 50, 0.10));
   color: #174f1d;
   transform: scale(1.02);
@@ -1061,11 +1063,11 @@
 }
 
 /* Progress + tempo */
-.poetry-widget-section .karaoke-progress-container {
-  margin-top: var(--kr-gap-sm);
+.karaoke-widget__progress-container {
+  margin-top: var(--kw-gap-sm);
 }
 
-.poetry-widget-section .karaoke-progress-bar {
+.karaoke-widget__progress-bar {
   width: 100%;
   height: 5px;
   border-radius: 999px;
@@ -1074,27 +1076,27 @@
   position: relative;
 }
 
-.poetry-widget-section .karaoke-progress-fill {
+.karaoke-widget__progress-fill {
   width: var(--progress, 0%);
   height: 100%;
-  background: linear-gradient(90deg, var(--kr-primary), var(--kr-accent));
+  background: linear-gradient(90deg, var(--kw-primary), var(--kw-accent));
   border-radius: 999px;
   position: relative;
   overflow: hidden;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .poetry-widget-section .karaoke-progress-fill::after {
+  .karaoke-widget__progress-fill::after {
     content: "";
     position: absolute;
     inset: 0;
     left: -100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-    animation: kr-shimmer 2s infinite;
+    animation: kw-shimmer 2s infinite;
   }
 }
 
-@keyframes kr-shimmer {
+@keyframes kw-shimmer {
   0% {
     left: -100%;
   }
@@ -1104,17 +1106,17 @@
   }
 }
 
-.poetry-widget-section .karaoke-time {
+.karaoke-widget__time {
   display: flex;
   gap: 0.4rem;
   justify-content: space-between;
   margin-top: 0.5rem;
-  color: var(--kr-ink-soft);
+  color: var(--kw-ink-soft);
   font-weight: 600;
   font-size: 0.85rem;
 }
 
-.poetry-widget-section .karaoke-time span {
+.karaoke-widget__time-span {
   flex: 1 1 0;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -1124,21 +1126,21 @@
 }
 
 /* Controlli - ottimizzati per touch */
-.poetry-widget-section .karaoke-controls {
+.karaoke-widget__controls {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: var(--kr-gap-md);
+  margin-bottom: var(--kw-gap-md);
 }
 
-.poetry-widget-section .karaoke-toggle {
+.karaoke-widget__toggle {
   min-height: 44px;
   min-width: 120px;
   padding: 0.6rem 1rem;
   border-radius: 999px;
-  border: 1px solid var(--kr-brd);
-  background: var(--kr-primary);
+  border: 1px solid var(--kw-brd);
+  background: var(--kw-primary);
   color: #fff;
   font-weight: 700;
   font-size: 0.9rem;
@@ -1149,88 +1151,89 @@
   box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
   transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   touch-action: manipulation;
+  cursor: pointer;
 }
 
-.poetry-widget-section .karaoke-toggle:active {
+.karaoke-widget__toggle:active {
   transform: scale(0.97);
-  background: var(--kr-primary-2);
+  background: var(--kw-primary-2);
 }
 
 /* Media query per schermi più grandi (tablet) */
 @media (min-width: 768px) {
-  .poetry-widget-section {
-    --kr-gap-md: 1rem;
-    --kr-gap-lg: 1.25rem;
-    --kr-fs-title: 1.25rem;
-    --kr-fs-line: 1rem;
-    --kr-card-maxh: 55vh;
-    --kr-line-min: 48px;
+  :root {
+    --kw-gap-md: 1rem;
+    --kw-gap-lg: 1.25rem;
+    --kw-fs-title: 1.25rem;
+    --kw-fs-line: 1rem;
+    --kw-card-maxh: 55vh;
+    --kw-line-min: 48px;
   }
 
-  .poetry-widget-section .karaoke-section {
-    padding: var(--kr-gap-lg);
+  .karaoke-widget {
+    padding: var(--kw-gap-lg);
   }
 
-  .poetry-widget-section .karaoke-line {
+  .karaoke-widget__line {
     padding: 0.75rem 0.9rem;
   }
 
-  .poetry-widget-section .karaoke-controls {
+  .karaoke-widget__controls {
     gap: 0.75rem;
   }
 
-  .poetry-widget-section .karaoke-toggle {
+  .karaoke-widget__toggle {
     min-width: 130px;
   }
 }
 
 /* Media query per desktop */
 @media (min-width: 1024px) {
-  .poetry-widget-section .karaoke-section {
+  .karaoke-widget {
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
-    gap: var(--kr-gap-md);
+    gap: var(--kw-gap-md);
   }
 
-  .poetry-widget-section .karaoke-header {
+  .karaoke-widget__header {
     text-align: left;
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
   }
 
-  .poetry-widget-section .karaoke-title {
+  .karaoke-widget__title {
     justify-content: flex-start;
   }
 
-  .poetry-widget-section .karaoke-controls {
+  .karaoke-widget__controls {
     order: 3;
-    margin-top: var(--kr-gap-sm);
+    margin-top: var(--kw-gap-sm);
   }
 }
 
 /* Landscape per dispositivi mobili */
 @media (orientation: landscape) and (max-width: 900px) {
-  .poetry-widget-section {
-    --kr-card-maxh: 65vh;
-    --kr-line-min: 40px;
+  :root {
+    --kw-card-maxh: 65vh;
+    --kw-line-min: 40px;
   }
 
-  .poetry-widget-section .karaoke-line {
+  .karaoke-widget__line {
     padding: 0.5rem 0.65rem;
     min-height: 40px;
   }
 
-  .poetry-widget-section .karaoke-controls {
+  .karaoke-widget__controls {
     flex-direction: row;
     justify-content: space-around;
   }
 
-  .poetry-widget-section .karaoke-toggle {
+  .karaoke-widget__toggle {
     min-width: 110px;
     flex: 1;
     max-width: 45%;
@@ -1239,10 +1242,9 @@
 
 /* Accessibilità - Riduzione animazioni */
 @media (prefers-reduced-motion: reduce) {
-
-  .poetry-widget-section .karaoke-progress-fill::after,
-  .poetry-widget-section .karaoke-line,
-  .poetry-widget-section .word {
+  .karaoke-widget__progress-fill::after,
+  .karaoke-widget__line,
+  .karaoke-widget__word {
     animation: none !important;
     transition: none !important;
   }
@@ -1250,26 +1252,26 @@
 
 /* Dark mode */
 @media (prefers-color-scheme: dark) {
-  .poetry-widget-section {
-    --kr-bg: #0f172a;
-    --kr-bg-soft: #111827;
-    --kr-ink: #e5e7eb;
-    --kr-ink-soft: #9ca3af;
-    --kr-brd: rgba(255, 255, 255, 0.10);
-    --kr-brd-strong: rgba(255, 255, 255, 0.18);
-    --kr-shadow: 0 12px 24px rgba(0, 0, 0, 0.40);
+  :root {
+    --kw-bg: #0f172a;
+    --kw-bg-soft: #111827;
+    --kw-ink: #e5e7eb;
+    --kw-ink-soft: #9ca3af;
+    --kw-brd: rgba(255, 255, 255, 0.10);
+    --kw-brd-strong: rgba(255, 255, 255, 0.18);
+    --kw-shadow: 0 12px 24px rgba(0, 0, 0, 0.40);
   }
 
-  .poetry-widget-section .karaoke-section {
+  .karaoke-widget {
     background: linear-gradient(180deg, #0f172a, #0d1526);
   }
 
-  .poetry-widget-section .karaoke-container {
+  .karaoke-widget__container {
     background: rgba(17, 24, 39, 0.9);
-    border-color: var(--kr-brd-strong);
+    border-color: var(--kw-brd-strong);
   }
 
-  .poetry-widget-section .karaoke-line {
+  .karaoke-widget__line {
     background: linear-gradient(90deg,
         rgba(31, 41, 55, 0.20) 0%,
         rgba(46, 125, 50, 0.22) var(--progress),
@@ -1277,7 +1279,7 @@
         transparent 100%);
   }
 
-  .poetry-widget-section .word.active {
+  .karaoke-widget__word--active {
     color: #e9f6eb;
   }
 }
