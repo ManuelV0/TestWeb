@@ -1,0 +1,18 @@
+# netlify.toml
+
+# disattiva cache per l'HTML (sempre)
+[[headers]]
+for = "/*.html"
+  [headers.values]
+  Cache-Control = "no-cache, no-store, must-revalidate"
+
+# cache "breve" per CSS/JS (cambiare a piacere)
+[[headers]]
+for = "/*.css"
+  [headers.values]
+  Cache-Control = "max-age=60, must-revalidate"
+
+[[headers]]
+for = "/*.js"
+  [headers.values]
+  Cache-Control = "max-age=60, must-revalidate"

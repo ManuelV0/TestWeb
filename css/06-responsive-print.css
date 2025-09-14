@@ -1,0 +1,17 @@
+/* === 06-responsive-print: solo stampa (layout sempre mobile) === */
+
+/* Ottimizzazioni generali per il layout mobile always-on */
+#monthly-poems-list{
+  max-height:none;
+  overflow-y:visible;
+}
+
+/* Stampa */
+@media print{
+  *,*::before,*::after{background:none !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}
+  body{padding-top:0}
+  .main-header,.main-footer,.sidebar,.mobile-nav-toggle,.modal-backdrop{display:none !important}
+  .nav-wrapper{display:none !important}
+  .container{display:block !important; grid-template-columns:none !important; max-width:none !important}
+  .poem-row{page-break-inside:avoid;border:1px solid #ccc !important}
+}

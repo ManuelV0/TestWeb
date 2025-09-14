@@ -1,0 +1,58 @@
+/* === 01-base: variabili unificate + reset + accessibilità === */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap');
+
+:root{
+  /* Colori principali */
+  --c-sfondo: #F8FAFC;
+  --c-superficie: #FFFFFF;
+  --c-primario: #2E7D32;
+  --c-primario-hover: #256b2a;
+  --c-secondario: #2196F3;
+  --c-secondario-hover: #1e88e5;
+  --c-testo: #1F2937;
+  --c-testo-leggero: #6B7280;
+  --c-bordi: #E5E7EB;
+  --c-stelle: #F59E0B;
+  --c-errore: #EF4444;
+  --c-successo: #10B981;
+  --c-avviso: #FBBF24;
+  --c-perla: #F8F8FF;
+
+  /* Bordi e ombre */
+  --bordo-arrotondato: 12px;
+  --bordo-arrotondato-sm: 8px;
+  --ombra-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --ombra: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px rgba(0,0,0,0.1);
+  --ombra-xl: 0 20px 25px rgba(0,0,0,0.1), 0 10px 10px rgba(0,0,0,0.04);
+
+  /* Spaziature */
+  --spazio-xs: 0.5rem;
+  --spazio-sm: 0.75rem;
+  --spazio-md: 1rem;
+  --spazio-lg: 1.5rem;
+  --spazio-xl: 2.5rem;
+
+  /* Tipografia */
+  --font-body: 'Inter', 'Open Sans', system-ui, sans-serif;
+  --font-heading: 'Poppins', 'Montserrat', ui-sans-serif, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Layout */
+  --header-height: 56px;
+  --container-max: 1200px;
+  --transizione: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* reset base */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body); background:var(--c-sfondo); color:var(--c-testo);
+  padding-top:var(--header-height); line-height:1.7; -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* accessibilità */
+:focus-visible{outline:3px solid var(--c-secondario-hover); outline-offset:2px; border-radius:4px}
+:focus:not(:focus-visible){outline:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
