@@ -1286,3 +1286,263 @@
     color: #e9f6eb;
   }
 }
+
+/* ============================================================================
+           AUDIO PLAYER MODALE MIGLIORATO
+           ========================================================================== */
+        .audio-player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            padding: var(--spazio-md);
+            font-family: var(--font-body);
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-sm);
+            background: rgba(255, 255, 255, 0.08);
+            padding: var(--spazio-md);
+            border-radius: var(--bordo-arrotondato);
+            margin-bottom: var(--spazio-md);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .main-controls {
+            display: flex;
+            gap: var(--spazio-sm);
+            justify-content: center;
+            width: 100%;
+        }
+
+        .play-button,
+        .stop-button {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--bordo-arrotondato-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .play-button:hover,
+        .stop-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .speed-controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-xs);
+            width: 100%;
+            margin-top: var(--spazio-sm);
+        }
+
+        .speed-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .speed-buttons {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .speed-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.4rem 0.7rem;
+            border-radius: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transizione);
+            font-size: 0.85rem;
+        }
+
+        .speed-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .speed-button.active {
+            background: var(--c-primario);
+            color: white;
+        }
+
+        .back-button-modal {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: var(--bordo-arrotondato-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            width: 100%;
+            justify-content: center;
+            margin-top: var(--spazio-md);
+        }
+
+        .back-button-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .content-highlight {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--bordo-arrotondato);
+            padding: var(--spazio-lg);
+            font-size: 1.3rem;
+            line-height: 1.9;
+            color: white;
+            font-family: var(--font-body);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .current-line {
+            background: rgba(37, 99, 235, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            margin: -0.5rem -1rem;
+            border-left: 3px solid var(--c-primario);
+        }
+
+        .word {
+            transition: var(--transizione);
+            padding: 0.1em 0.2em;
+            border-radius: 3px;
+            margin: 0 0.05em;
+        }
+
+        .word.highlight {
+            color: #a5b4fc;
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15));
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+            animation: wordPulse 0.3s ease;
+        }
+
+        .word.glow {
+            opacity: 0.7;
+        }
+
+        @keyframes wordPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* ====== RESPONSIVE MOBILE ====== */
+        @media (max-width: 768px) {
+            .audio-player-modal {
+                padding: var(--spazio-sm);
+            }
+            
+            .audio-controls {
+                padding: var(--spazio-sm);
+                gap: var(--spazio-sm);
+            }
+            
+            .main-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .play-button,
+            .stop-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+                min-width: 80px;
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .speed-controls-section {
+                align-items: center;
+            }
+            
+            .speed-label {
+                font-size: 0.85rem;
+                text-align: center;
+            }
+            
+            .speed-buttons {
+                justify-content: center;
+            }
+            
+            .speed-button {
+                padding: 0.35rem 0.6rem;
+                font-size: 0.8rem;
+            }
+            
+            .back-button-modal {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
+                margin-top: var(--spazio-sm);
+            }
+            
+            .content-highlight {
+                padding: var(--spazio-md);
+                font-size: 1.1rem;
+                line-height: 1.7;
+            }
+        }
+
+        /* ====== DESKTOP ====== */
+        @media (min-width: 769px) {
+            .audio-controls {
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            
+            .main-controls {
+                width: auto;
+                gap: var(--spazio-sm);
+            }
+            
+            .speed-controls-section {
+                flex-direction: row;
+                align-items: center;
+                width: auto;
+                margin-top: 0;
+                margin-left: var(--spazio-md);
+                gap: var(--spazio-sm);
+            }
+            
+            .speed-label {
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+            
+            .back-button-modal {
+                width: auto;
+                margin-top: 0;
+                margin-left: auto;
+            }
+        }
