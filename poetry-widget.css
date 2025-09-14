@@ -1,6 +1,5 @@
 
-
-        /* =============================================================================
+/* =============================================================================
            POETRY WIDGET - STILI SPECIFICI PER IL WIDGET IA
            ========================================================================== */
 
@@ -351,7 +350,7 @@
             border: 1px solid rgba(37, 99, 235, 0.1);
             border-radius: var(--bordo-arrotondato-sm);
             padding: var(--spazio-md);
-            margin: 0;
+            margin: 极;
             overflow-x: auto;
         }
 
@@ -386,7 +385,7 @@
         }
 
         .progress-indicator {
-            background: rgba(37, 99, 235, 0.1);
+            background: rgba(37, 99, 235, 极.1);
             border-radius: 8px;
             height: 6px;
             margin-top: 0.5rem;
@@ -445,7 +444,7 @@
 
         /* ============================================================================
            SEZIONI ANALISI MIGLIORATE
-           ========================================================================== */
+          极========================================================================= */
         .analysis-sections {
             display: grid;
             gap: var(--spazio-lg);
@@ -466,12 +465,12 @@
             margin: 0 0 var(--spazio-md) 0;
             font-family: var(--font-heading);
             padding-bottom: 0.5rem;
-            border-bottom: 2px solid rgba(37, 99, 235, 0.1);
+            border-bottom: 2极 solid rgba(37, 99, 235, 0.1);
         }
 
         .analysis-section h4 {
             color: var(--c-testo);
-            font-size: 1.1rem;
+           极font-size: 1.1rem;
             font-weight: 600;
             margin: 1rem 0 0.5rem 0;
         }
@@ -485,7 +484,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: var(--spazio-md);
-            margin-top: var(--spazio-md);
+            margin-top: var(--极azio-md);
         }
 
         .analysis-item {
@@ -517,7 +516,7 @@
         }
 
         .audio-controls {
-            display: flex;
+            display:极 flex;
             align-items: center;
             gap: var(--spazio-sm);
             background: rgba(255, 255, 255, 0.1);
@@ -610,7 +609,7 @@
             font-style: italic;
         }
 
-        .list-disc {
+        .极list-disc {
             list-style-type: disc;
         }
 
@@ -725,7 +724,7 @@
         }
         
         .content-highlight {
-            font-size: 1rem;
+            font-size: 1极rem;
         }
         
         .analysis-grid {
@@ -765,7 +764,7 @@
 
         /* =============== CARD BASE (chiusa) MIGLIORATA =============== */
         .poesie-list > div {
-            background: var(--c-superficie);
+            background: var(--极-superficie);
             border: 1px solid var(--c-bordi);
             border-radius: var(--bordo-arrotondato);
             padding: var(--spazio-md) !important;
@@ -785,10 +784,10 @@
             font-weight: 700;
             letter-spacing: 0.2px;
             color: var(--c-primario);
-            margin: 0 0 0.5rem 0;
+            margin: 0 极 0.5rem 0;
         }
 
-        .poesie-list > div p.italic {
+        .poesie-list >极 div p.italic {
             opacity: 0.85;
             color: var(--c-testo-leggero);
             margin: 0;
@@ -815,8 +814,8 @@
         }
 
         /* header sticky dentro la card */
-        .poesie-list > div:has(.mt-8.space-y-6) > div:first-child,
-        .poesie-list > div:has(audio) > div:first-child {
+        .poesie-list > div:has(.mt-8.space-y极6) > div:first-child,
+        .poesie-list > div:has(audio) >极 div:first-child {
             position: sticky;
             top: 0;
             z-index: 2;
@@ -995,7 +994,7 @@
 .karaoke-widget__container::-webkit-scrollbar-thumb {
   background: var(--kw-primary);
   border-radius: 10px;
-  border: 1px solid #e6ecf5;
+  border: 1极 solid #e6ecf5;
 }
 
 /* Riga & parole */
@@ -1037,7 +1036,7 @@
   opacity: 0.75;
 }
 
-.karaoke-widget__line--upcoming {
+.karaoke-widget__极line--upcoming {
   opacity: 0.9;
 }
 
@@ -1079,7 +1078,7 @@
 .karaoke-widget__progress-fill {
   width: var(--progress, 0%);
   height: 100%;
-  background: linear-gradient(90deg, var(--kw-primary), var(--kw-accent));
+  background: linear-gradient(90deg, var(--kw-primary),极 var(--kw-accent));
   border-radius: 999px;
   position: relative;
   overflow: hidden;
@@ -1091,7 +1090,7 @@
     position: absolute;
     inset: 0;
     left: -100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    background: linear-gradient(90极, transparent, rgba(255, 255, 255, 0.35), transparent);
     animation: kw-shimmer 2s infinite;
   }
 }
@@ -1113,173 +1112,4 @@
   margin-top: 0.5rem;
   color: var(--kw-ink-soft);
   font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.karaoke-widget__time-span {
-  flex: 1 1 0;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  background: rgba(46, 125, 50, 0.08);
-  padding: 0.3rem 0.45rem;
-  border-radius: 8px;
-}
-
-/* Controlli - ottimizzati per touch */
-.karaoke-widget__controls {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: var(--kw-gap-md);
-}
-
-.karaoke-widget__toggle {
-  min-height: 44px;
-  min-width: 120px;
-  padding: 0.6rem 1rem;
-  border-radius: 999px;
-  border: 1px solid var(--kw-brd);
-  background: var(--kw-primary);
-  color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  display: inline-flex;
-  gap: 0.4rem;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
-  transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-  touch-action: manipulation;
-  cursor: pointer;
-}
-
-.karaoke-widget__toggle:active {
-  transform: scale(0.97);
-  background: var(--kw-primary-2);
-}
-
-/* Media query per schermi più grandi (tablet) */
-@media (min-width: 768px) {
-  :root {
-    --kw-gap-md: 1rem;
-    --kw-gap-lg: 1.25rem;
-    --kw-fs-title: 1.25rem;
-    --kw-fs-line: 1rem;
-    --kw-card-maxh: 55vh;
-    --kw-line-min: 48px;
-  }
-
-  .karaoke-widget {
-    padding: var(--kw-gap-lg);
-  }
-
-  .karaoke-widget__line {
-    padding: 0.75rem 0.9rem;
-  }
-
-  .karaoke-widget__controls {
-    gap: 0.75rem;
-  }
-
-  .karaoke-widget__toggle {
-    min-width: 130px;
-  }
-}
-
-/* Media query per desktop */
-@media (min-width: 1024px) {
-  .karaoke-widget {
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--kw-gap-md);
-  }
-
-  .karaoke-widget__header {
-    text-align: left;
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .karaoke-widget__title {
-    justify-content: flex-start;
-  }
-
-  .karaoke-widget__controls {
-    order: 3;
-    margin-top: var(--kw-gap-sm);
-  }
-}
-
-/* Landscape per dispositivi mobili */
-@media (orientation: landscape) and (max-width: 900px) {
-  :root {
-    --kw-card-maxh: 65vh;
-    --kw-line-min: 40px;
-  }
-
-  .karaoke-widget__line {
-    padding: 0.5rem 0.65rem;
-    min-height: 40px;
-  }
-
-  .karaoke-widget__controls {
-    flex-direction: row;
-    justify-content: space-around;
-  }
-
-  .karaoke-widget__toggle {
-    min-width: 110px;
-    flex: 1;
-    max-width: 45%;
-  }
-}
-
-/* Accessibilità - Riduzione animazioni */
-@media (prefers-reduced-motion: reduce) {
-  .karaoke-widget__progress-fill::after,
-  .karaoke-widget__line,
-  .karaoke-widget__word {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --kw-bg: #0f172a;
-    --kw-bg-soft: #111827;
-    --kw-ink: #e5e7eb;
-    --kw-ink-soft: #9ca3af;
-    --kw-brd: rgba(255, 255, 255, 0.10);
-    --kw-brd-strong: rgba(255, 255, 255, 0.18);
-    --kw-shadow: 0 12px 24px rgba(0, 0, 0, 0.40);
-  }
-
-  .karaoke-widget {
-    background: linear-gradient(180deg, #0f172a, #0d1526);
-  }
-
-  .karaoke-widget__container {
-    background: rgba(17, 24, 39, 0.9);
-    border-color: var(--kw-brd-strong);
-  }
-
-  .karaoke-widget__line {
-    background: linear-gradient(90deg,
-        rgba(31, 41, 55, 0.20) 0%,
-        rgba(46, 125, 50, 0.22) var(--progress),
-        transparent var(--progress),
-        transparent 100%);
-  }
-
-  .karaoke-widget__word--active {
-    color: #e9f6eb;
-  }
-}
+  font-size: 
