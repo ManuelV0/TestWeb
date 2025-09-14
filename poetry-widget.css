@@ -1546,3 +1546,329 @@
                 margin-left: auto;
             }
         }
+/* ============================================================================
+           AUDIO PLAYER MODALE MIGLIORATO
+           ========================================================================== */
+        .audio-player-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            font-family: var(--font-body);
+            color: white;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spazio-md);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .site-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .instagram-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .instagram-link:hover {
+            color: white;
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-md);
+            background: rgba(255, 255, 255, 0.05);
+            padding: var(--spazio-lg);
+            margin: var(--spazio-md);
+            border-radius: var(--bordo-arrotondato);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .playback-controls {
+            display: flex;
+            gap: var(--spazio-md);
+            justify-content: center;
+            width: 100%;
+        }
+
+        .play-button,
+        .stop-button {
+            background: linear-gradient(135deg, var(--c-primario), var(--c-secondario));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--bordo-arrotondato);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            min-width: 140px;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .play-button:hover,
+        .stop-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .speed-controls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spazio-sm);
+            align-items: center;
+            width: 100%;
+        }
+
+        .speed-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .speed-buttons {
+            display: flex;
+            gap: var(--spazio-xs);
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .speed-button {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transizione);
+            font-size: 0.9rem;
+            min-width: 60px;
+        }
+
+        .speed-button:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .speed-button.active {
+            background: var(--c-primario);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .content-highlight {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spazio-lg);
+            font-size: 1.4rem;
+            line-height: 2;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .current-line {
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .word {
+            transition: all 0.2s ease;
+            padding: 0.1em 0.2em;
+            border-radius: 4px;
+            margin: 0 0.1em;
+        }
+
+        .word.highlight {
+            color: #a5b4fc;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(37, 99, 235, 0.15));
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: wordPulse 0.3s ease;
+        }
+
+        @keyframes wordPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spazio-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .share-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: var(--bordo-arrotondato-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .ai-analysis-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .ai-analysis-link:hover {
+            color: white;
+        }
+
+        .navigation-links {
+            display: flex;
+            gap: var(--spazio-md);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transizione);
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        /* ====== RESPONSIVE MOBILE ====== */
+        @media (max-width: 768px) {
+            .audio-player-modal {
+                padding: 0;
+            }
+            
+            .modal-header {
+                padding: var(--spazio-sm);
+            }
+            
+            .site-title {
+                font-size: 1rem;
+            }
+            
+            .instagram-link {
+                font-size: 0.8rem;
+            }
+            
+            .audio-controls {
+                padding: var(--spazio-md);
+                margin: var(--spazio-sm);
+                gap: var(--spazio-md);
+            }
+            
+            .playback-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--spazio-sm);
+            }
+            
+            .play-button,
+            .stop-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+                min-width: 120px;
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .speed-controls {
+                gap: var(--spazio-xs);
+            }
+            
+            .speed-label {
+                font-size: 0.9rem;
+            }
+            
+            .speed-buttons {
+                gap: 0.3rem;
+            }
+            
+            .speed-button {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.85rem;
+                min-width: 50px;
+            }
+            
+            .content-highlight {
+                padding: var(--spazio-md);
+                font-size: 1.2rem;
+                line-height: 1.8;
+            }
+            
+            .modal-footer {
+                padding: var(--spazio-sm);
+                flex-direction: column;
+                gap: var(--spazio-sm);
+            }
+            
+            .share-button {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .navigation-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: var(--spazio-sm);
+            }
+            
+            .nav-link {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* ====== DESKTOP ====== */
+        @media (min-width: 769px) {
+            .playback-controls {
+                flex-direction: row;
+            }
+            
+            .modal-footer {
+                flex-direction: row;
+            }
+        }
