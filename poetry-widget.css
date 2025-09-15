@@ -888,10 +888,6 @@
    Design mobile-first completamente indipendente
    ========================================================= */
 
-/* =========================================================
-   KARAOKE — DESIGN MOBILE-FIRST OTTIMIZZATO
-   ========================================================= */
-
 /* Variabili specifiche per karaoke */
 :root {
   --kr-bg: #ffffff;
@@ -1074,7 +1070,7 @@
   width: 100%;
   height: 5px;
   border-radius: 999px;
-  background: rgba(46, 125, 50, 0.12);
+  background: rgba(46, 125, 50, 极.12);
   overflow: hidden;
   position: relative;
 }
@@ -1094,19 +1090,17 @@
     position: absolute;
     inset: 0;
     left: -100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.35),
+        transparent);
     animation: kr-shimmer 2s infinite;
   }
 }
 
 @keyframes kr-shimmer {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 100%;
-  }
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 
 .karaoke-time {
@@ -1140,7 +1134,7 @@
 .karaoke-toggle {
   min-height: 44px;
   min-width: 120px;
-  padding: 0.6rem 1rem;
+  padding: 极.6rem 1rem;
   border-radius: 999px;
   border: 1px solid var(--kr-brd);
   background: var(--kr-primary);
@@ -1151,7 +1145,7 @@
   gap: 0.4rem;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+  box-shadow: 0 4极 10px rgba(46, 125, 50, 0.2);
   transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
   touch-action: manipulation;
   cursor: pointer;
@@ -1169,7 +1163,7 @@
     --kr-gap-lg: 1.25rem;
     --kr-fs-title: 1.25rem;
     --kr-fs-line: 1rem;
-    --kr-card-maxh: 55vh;
+    --极-card-maxh: 55vh;
     --kr-line-min: 48px;
   }
 
@@ -1220,7 +1214,7 @@
 }
 
 /* Landscape per dispositivi mobili */
-@media (orientation: landscape) and (max-width: 900px) {
+@media (orientation: landscape) and (max-width: 900极) {
   :root {
     --kr-card-maxh: 65vh;
     --kr-line-min: 40px;
@@ -1258,7 +1252,7 @@
   :root {
     --kr-bg: #0f172a;
     --kr-bg-soft: #111827;
-    --kr-ink: #e5e7eb;
+    --kr-ink: #e5极7eb;
     --kr-ink-soft: #9ca3af;
     --kr-brd: rgba(255, 255, 255, 0.10);
     --kr-brd-strong: rgba(255, 255, 255, 0.18);
@@ -1288,598 +1282,7 @@
 }
 
 /* ============================================================================
-           AUDIO PLAYER MODALE MIGLIORATO
-           ========================================================================== */
-        .audio-player-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.92);
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-            padding: var(--spazio-md);
-            font-family: var(--font-body);
-        }
-
-        .audio-controls {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spazio-sm);
-            background: rgba(255, 255, 255, 0.08);
-            padding: var(--spazio-md);
-            border-radius: var(--bordo-arrotondato);
-            margin-bottom: var(--spazio-md);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .main-controls {
-            display: flex;
-            gap: var(--spazio-sm);
-            justify-content: center;
-            width: 100%;
-        }
-
-        .play-button,
-        .stop-button {
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--bordo-arrotondato-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transizione);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            min-width: 100px;
-            justify-content: center;
-        }
-
-        .play-button:hover,
-        .stop-button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .speed-controls-section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spazio-xs);
-            width: 100%;
-            margin-top: var(--spazio-sm);
-        }
-
-        .speed-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 0.3rem;
-        }
-
-        .speed-buttons {
-            display: flex;
-            gap: 0.4rem;
-            flex-wrap: wrap;
-        }
-
-        .speed-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 0.4rem 0.7rem;
-            border-radius: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transizione);
-            font-size: 0.85rem;
-        }
-
-        .speed-button:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .speed-button.active {
-            background: var(--c-primario);
-            color: white;
-        }
-
-        .back-button-modal {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: var(--bordo-arrotondato-sm);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transizione);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.9rem;
-            width: 100%;
-            justify-content: center;
-            margin-top: var(--spazio-md);
-        }
-
-        .back-button-modal:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .content-highlight {
-            flex: 1;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--bordo-arrotondato);
-            padding: var(--spazio-lg);
-            font-size: 1.3rem;
-            line-height: 1.9;
-            color: white;
-            font-family: var(--font-body);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .current-line {
-            background: rgba(37, 99, 235, 0.15);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            margin: -0.5rem -1rem;
-            border-left: 3px solid var(--c-primario);
-        }
-
-        .word {
-            transition: var(--transizione);
-            padding: 0.1em 0.2em;
-            border-radius: 3px;
-            margin: 0 0.05em;
-        }
-
-        .word.highlight {
-            color: #a5b4fc;
-            background: linear-gradient(180deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15));
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
-            animation: wordPulse 0.3s ease;
-        }
-
-        .word.glow {
-            opacity: 0.7;
-        }
-
-        @keyframes wordPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        /* ====== RESPONSIVE MOBILE ====== */
-        @media (max-width: 768px) {
-            .audio-player-modal {
-                padding: var(--spazio-sm);
-            }
-            
-            .audio-controls {
-                padding: var(--spazio-sm);
-                gap: var(--spazio-sm);
-            }
-            
-            .main-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .play-button,
-            .stop-button {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
-                min-width: 80px;
-                width: 100%;
-                max-width: 200px;
-            }
-            
-            .speed-controls-section {
-                align-items: center;
-            }
-            
-            .speed-label {
-                font-size: 0.85rem;
-                text-align: center;
-            }
-            
-            .speed-buttons {
-                justify-content: center;
-            }
-            
-            .speed-button {
-                padding: 0.35rem 0.6rem;
-                font-size: 0.8rem;
-            }
-            
-            .back-button-modal {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.85rem;
-                margin-top: var(--spazio-sm);
-            }
-            
-            .content-highlight {
-                padding: var(--spazio-md);
-                font-size: 1.1rem;
-                line-height: 1.7;
-            }
-        }
-
-        /* ====== DESKTOP ====== */
-        @media (min-width: 769px) {
-            .audio-controls {
-                flex-direction: row;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-            
-            .main-controls {
-                width: auto;
-                gap: var(--spazio-sm);
-            }
-            
-            .speed-controls-section {
-                flex-direction: row;
-                align-items: center;
-                width: auto;
-                margin-top: 0;
-                margin-left: var(--spazio-md);
-                gap: var(--spazio-sm);
-            }
-            
-            .speed-label {
-                margin-bottom: 0;
-                white-space: nowrap;
-            }
-            
-            .back-button-modal {
-                width: auto;
-                margin-top: 0;
-                margin-left: auto;
-            }
-        }
-/* ============================================================================
-           AUDIO PLAYER MODALE MIGLIORATO
-           ========================================================================== */
-        .audio-player-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            z-index: 1000;
-            font-family: var(--font-body);
-            color: white;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spazio-md);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .site-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-        }
-
-        .instagram-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .instagram-link:hover {
-            color: white;
-        }
-
-        .audio-controls {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spazio-md);
-            background: rgba(255, 255, 255, 0.05);
-            padding: var(--spazio-lg);
-            margin: var(--spazio-md);
-            border-radius: var(--bordo-arrotondato);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .playback-controls {
-            display: flex;
-            gap: var(--spazio-md);
-            justify-content: center;
-            width: 100%;
-        }
-
-        .play-button,
-        .stop-button {
-            background: linear-gradient(135deg, var(--c-primario), var(--c-secondario));
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: var(--bordo-arrotondato);
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transizione);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1.1rem;
-            min-width: 140px;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .play-button:hover,
-        .stop-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-        }
-
-        .speed-controls {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spazio-sm);
-            align-items: center;
-            width: 100%;
-        }
-
-        .speed-label {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .speed-buttons {
-            display: flex;
-            gap: var(--spazio-xs);
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .speed-button {
-            background: rgba(255, 255, 255, 0.12);
-            color: rgba(255, 255, 255, 0.9);
-            border: none;
-            padding: 0.6rem 1rem;
-            border-radius: 20px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transizione);
-            font-size: 0.9rem;
-            min-width: 60px;
-        }
-
-        .speed-button:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
-
-        .speed-button.active {
-            background: var(--c-primario);
-            color: white;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-        }
-
-        .content-highlight {
-            flex: 1;
-            overflow-y: auto;
-            padding: var(--spazio-lg);
-            font-size: 1.4rem;
-            line-height: 2;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .current-line {
-            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            margin: 1rem 0;
-            display: inline-block;
-            font-weight: 500;
-        }
-
-        .word {
-            transition: all 0.2s ease;
-            padding: 0.1em 0.2em;
-            border-radius: 4px;
-            margin: 0 0.1em;
-        }
-
-        .word.highlight {
-            color: #a5b4fc;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(37, 99, 235, 0.15));
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-            animation: wordPulse 0.3s ease;
-        }
-
-        @keyframes wordPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: var(--spazio-md);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .share-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: none;
-            padding: 0.7rem 1.2rem;
-            border-radius: var(--bordo-arrotondato-sm);
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transizione);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .share-button:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .ai-analysis-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
-
-        .ai-analysis-link:hover {
-            color: white;
-        }
-
-        .navigation-links {
-            display: flex;
-            gap: var(--spazio-md);
-        }
-
-        .nav-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: var(--transizione);
-        }
-
-        .nav-link:hover {
-            color: white;
-        }
-
-        /* ====== RESPONSIVE MOBILE ====== */
-        @media (max-width: 768px) {
-            .audio-player-modal {
-                padding: 0;
-            }
-            
-            .modal-header {
-                padding: var(--spazio-sm);
-            }
-            
-            .site-title {
-                font-size: 1rem;
-            }
-            
-            .instagram-link {
-                font-size: 0.8rem;
-            }
-            
-            .audio-controls {
-                padding: var(--spazio-md);
-                margin: var(--spazio-sm);
-                gap: var(--spazio-md);
-            }
-            
-            .playback-controls {
-                flex-direction: column;
-                align-items: center;
-                gap: var(--spazio-sm);
-            }
-            
-            .play-button,
-            .stop-button {
-                padding: 0.8rem 1.5rem;
-                font-size: 1rem;
-                min-width: 120px;
-                width: 100%;
-                max-width: 200px;
-            }
-            
-            .speed-controls {
-                gap: var(--spazio-xs);
-            }
-            
-            .speed-label {
-                font-size: 0.9rem;
-            }
-            
-            .speed-buttons {
-                gap: 0.3rem;
-            }
-            
-            .speed-button {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.85rem;
-                min-width: 50px;
-            }
-            
-            .content-highlight {
-                padding: var(--spazio-md);
-                font-size: 1.2rem;
-                line-height: 1.8;
-            }
-            
-            .modal-footer {
-                padding: var(--spazio-sm);
-                flex-direction: column;
-                gap: var(--spazio-sm);
-            }
-            
-            .share-button {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .navigation-links {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-                gap: var(--spazio-sm);
-            }
-            
-            .nav-link {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* ====== DESKTOP ====== */
-        @media (min-width: 769px) {
-            .playback-controls {
-                flex-direction: row;
-            }
-            
-            .modal-footer {
-                flex-direction: row;
-            }
-        }
-
-
-
-
-
-
-/* ============================================================================
-           AUDIO PLAYER MODALE MIGLIORATO
+           AUDIO PLAYER MODALE MIGLIORATO - MOBILE FIRST
            ========================================================================== */
         .audio-player-modal {
             position: fixed;
@@ -1893,33 +1296,30 @@
             z-index: 1000;
             font-family: var(--font-body);
             color: white;
-            padding: 0;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--spazio-md) var(--spazio-lg);
+            padding: var(--spazio-md);
             background: rgba(0, 0, 0, 0.4);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .site-title {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: white;
-            letter-spacing: 0.5px;
         }
 
         .instagram-link {
             color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: var(--transizione);
+            gap: 0.4rem;
         }
 
         .instagram-link:hover {
@@ -1929,10 +1329,8 @@
         .audio-controls-container {
             display: flex;
             flex-direction: column;
-            gap: var(--spazio-lg);
-            padding: var(--spazio-xl);
-            max-width: 500px;
-            margin: 0 auto;
+            gap: var(--spazio-md);
+            padding: var(--spazio-md);
             width: 100%;
         }
 
@@ -1941,12 +1339,10 @@
         }
 
         .section-title {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: 600;
             color: white;
-            margin-bottom: var(--spazio-md);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: var(--spazio-sm);
         }
 
         .playback-controls {
@@ -1961,40 +1357,36 @@
             background: linear-gradient(135deg, var(--c-primario), #3B82F6);
             color: white;
             border: none;
-            padding: 1.2rem 2.5rem;
+            padding: 1rem 1.5rem;
             border-radius: 50px;
             font-weight: 600;
             cursor: pointer;
             transition: var(--transizione);
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            font-size: 1.2rem;
+            gap: 0.5rem;
+            font-size: 1rem;
             width: 100%;
-            max-width: 250px;
+            max-width: 200px;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .play-button:hover,
-        .stop-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+        .极-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
         }
 
         .stop-button {
             background: linear-gradient(135deg, #EF4444, #DC2626);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-        }
-
-        .stop-button:hover {
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .divider {
             height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            margin: var(--spazio-lg) 0;
+            margin: var(--spazio-md) 0;
             width: 100%;
         }
 
@@ -2005,43 +1397,65 @@
         .speed-controls {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: var(--spazio-sm);
-            margin-top: var(--spazio-md);
+            gap: var(--spazio-xs);
+            margin-top: var(--spazio-sm);
         }
 
         .speed-button {
             background: rgba(255, 255, 255, 0.1);
             color: rgba(255, 255, 255, 0.9);
             border: none;
-            padding: 0.8rem 0.5rem;
-            border-radius: 12px;
+            padding: 0.6rem 0.4rem;
+            border-radius: 8px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transizione);
-            font-size: 1rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
         }
 
         .speed-button:hover {
             background: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
         }
 
         .speed-button.active {
             background: linear-gradient(135deg, var(--c-primario), #3B82F6);
             color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            border-color: rgba(37, 99, 235, 0.3);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .back-button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-top: var(--spazio-md);
+        }
+
+        .back-button-modal {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transizione);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        .back-button-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
         .content-section {
             flex: 1;
             overflow-y: auto;
-            padding: var(--spazio-xl);
+            padding: var(--spazio-md);
             text-align: center;
             background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -2049,19 +1463,18 @@
         }
 
         .poetry-text {
-            font-size: 1.6rem;
-            line-height: 1.8;
+            font-size: 1.3rem;
+            line-height: 1.7;
             color: rgba(255, 255, 255, 0.95);
-            max-width: 600px;
+            max-width: 100%;
             font-style: italic;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .current-line {
             background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.15), transparent);
-            padding: 1rem 2rem;
-            border-radius: 16px;
-            margin: 1rem 0;
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            margin: 0.5rem 0;
             display: inline-block;
             font-weight: 500;
         }
@@ -2069,114 +1482,75 @@
         .word {
             transition: all 0.2s ease;
             padding: 0.1em 0.2em;
-            border-radius: 6px;
+            border-radius: 4px;
             margin: 0 0.1em;
         }
 
         .word.highlight {
             color: #a5b4fc;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(37, 99, 235, 0.15));
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(37, 99, 235, 极.15));
             animation: wordPulse 0.3s ease;
         }
 
         @keyframes wordPulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
         /* ====== RESPONSIVE MOBILE ====== */
         @media (max-width: 768px) {
-            .audio-player-modal {
-                padding: 0;
-            }
-            
             .modal-header {
-                padding: var(--spazio-md);
+                padding: var(--spazio-sm);
                 flex-direction: column;
                 gap: var(--spazio-xs);
                 text-align: center;
             }
             
             .site-title {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
             
             .instagram-link {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
             
             .audio-controls-container {
-                padding: var(--spazio-md);
-                gap: var(--spazio-md);
+                padding: var(--spazio-sm);
             }
             
             .section-title {
-                font-size: 1.3rem;
-                margin-bottom: var(--spazio-sm);
+                font-size: 1.1rem;
             }
             
             .play-button,
             .stop-button {
-                padding: 1rem 2rem;
-                font-size: 1.1rem;
-                max-width: 220px;
-            }
-            
-            .divider {
-                margin: var(--spazio-md) 0;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.95rem;
+                max-width: 180px;
             }
             
             .speed-controls {
                 grid-template-columns: repeat(2, 1fr);
-                gap: var(--spazio-xs);
             }
             
             .speed-button {
-                padding: 0.7rem 0.4rem;
-                font-size: 0.9rem;
-            }
-            
-            .content-section {
-                padding: var(--spazio-md);
+                padding: 0.5rem 0.3rem;
+                font-size: 0.8rem;
             }
             
             .poetry-text {
-                font-size: 1.3rem;
+                font-size: 1.1rem;
                 line-height: 1.6;
             }
             
             .current-line {
-                padding: 0.8rem 1.5rem;
-                font-size: 1.2rem;
+                padding: 0.6rem 1rem;
+                font-size: 1极rem;
             }
         }
 
-        /* ====== PICCOLI DISPOSITIVI ====== */
-        @media (max-width: 480px) {
-            .speed-controls {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .speed-button {
-                padding: 0.6rem 0.3rem;
-                font-size: 0.85rem;
-            }
-            
-            .poetry-text {
-                font-size: 1.1rem;
-            }
-            
-            .play-button,
-            .stop-button {
-                padding: 0.9rem 1.8rem;
-                font-size: 1rem;
-                max-width: 200px;
-            }
-        }
-
-        /* ====== ORIENTAMENTO ORIZZONTALE ====== */
+        /* ====== ORIENTAMENTO ORIZZONTALE MOBILE ====== */
         @media (max-width: 768px) and (orientation: landscape) {
             .audio-player-modal {
                 flex-direction: row;
@@ -2184,15 +1558,15 @@
             
             .audio-controls-container {
                 width: 40%;
-                padding: var(--spazio-md);
+                padding: var(--spazio-sm);
             }
             
             .content-section {
                 width: 60%;
-                padding: var(--spazio-md);
+                padding: var(--spazio-sm);
             }
             
             .poetry-text {
-                font-size: 1.1rem;
+                font-size: 1rem;
             }
         }
