@@ -1,5 +1,16 @@
 /* === 05-components: poems + modali + sidebar + footer + mission + author + utilities === */
 
+
+.widget-title{
+  
+display: center;
+
+
+  
+}
+
+
+
 /* === SEZIONE POEMI === */
 .poem-row{
   background: var(--c-superficie);
