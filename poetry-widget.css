@@ -1688,7 +1688,7 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     margin: 20px 0;
-    width: 100%;
+    width: 0%;
 }
 
 .speed-section {
