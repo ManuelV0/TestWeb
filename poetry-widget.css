@@ -1874,3 +1874,27 @@
         font-size: 1.1rem;
     }
 }
+
+/* ——— Rimuovi il rettangolo verde della riga attiva ——— */
+.poetry-widget-section .karaoke-line,
+.poetry-widget-section .karaoke-line.is-active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-left: 0 !important;   /* se non vuoi la banda laterale */
+}
+
+/* Se usi la versione nel player modale */
+.audio-player-modal .current-line {
+  background: transparent !important;
+}
+
+/* Mantieni solo l’evidenza sulla parola attiva (facoltativo) */
+.poetry-widget-section .word.active,
+.audio-player-modal .word.highlight {
+  background: transparent !important;     /* oppure lascia un leggero highlight */
+  /* esempio soft:
+  background: rgba(46,125,50,.12) !important;
+  border-radius: 4px;
+  */
+}
