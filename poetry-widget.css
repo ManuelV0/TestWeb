@@ -2085,3 +2085,94 @@ body {
   padding: 0.1em 0.25em;
   text-shadow: none !important;
 }
+
+
+/* ============ KARAOKE: altezza adattiva + collapse on scroll ============ */
+
+/* Token per altezze responsive: usa i nuovi viewport units (iOS friendly) */
+.karaoke-poetry-section {
+  /* base “mobile-first”: tra 320px e ~75% del viewport dinamico */
+  --kr-min-h: 320px;
+  --kr-max-h: 82dvh;           /* 82% del viewport dinamico */
+  --kr-ideal: 68dvh;           /* target ideale */
+  height: clamp(var(--kr-min-h), var(--kr-ideal), var(--kr-max-h));
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+/* header e progress restano di altezza “auto” */
+.karaoke-header { flex-shrink: 0; }
+.karaoke-progress { flex-shrink: 0; }
+
+/* il contenitore centrale deve occupare lo spazio residuo */
+.karaoke-content-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* fade in basso per suggerire che c’è altro contenuto */
+.karaoke-content-container::after {
+  content:"";
+  position: sticky;
+  bottom: -1px;
+  display: block;
+  height: 20px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,.06));
+}
+
+/* -------- Stato collassato (applicato via JS) -------- */
+.karaoke-poetry-section.is-collapsed {
+  height: 56px;                /* “barra” */
+  transition: height .28s ease;
+  cursor: pointer;
+}
+
+.karaoke-poetry-section.is-collapsed .karaoke-content-container,
+.karaoke-poetry-section.is-collapsed .karaoke-progress {
+  display: none;
+}
+
+.karaoke-poetry-section.is-collapsed .karaoke-header {
+  padding: .5rem .9rem;
+  border-bottom: none;
+}
+
+/* Maniglia visiva per suggerire che è espandibile */
+.karaoke-header::after {
+  content:"";
+  display: block;
+  width: 36px; height: 4px;
+  margin: .35rem auto 0;
+  border-radius: 999px;
+  background: #cbd5e1;
+  opacity: .8;
+}
+
+@media (min-width: 1024px) {
+  .karaoke-poetry-section {
+    /* su desktop concediamo un filo più di spazio */
+    --kr-ideal: 60dvh;
+    --kr-max-h: 70dvh;
+  }
+}
+
+/* Dark mode coerenza */
+@media (prefers-color-scheme: dark) {
+  .karaoke-poetry-section {
+    background: #1e293b;
+    border-color: #334155;
+    box-shadow: 0 12px 24px rgba(0,0,0,.35);
+  }
+  .karaoke-content-container::after {
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,.06));
+  }
+}
