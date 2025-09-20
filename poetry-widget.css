@@ -2034,3 +2034,54 @@ body {
 .karaoke-poetry-section.collapsed .karaoke-progress {
   display: none;
 }
+
+
+/* ===== KARAOKE — RIMUOVI QUALSIASI SFONDO DI RIGA ===== */
+
+/* riga elenco */
+.karaoke-section .karaoke-container .karaoke-line,
+.karaoke-section .karaoke-container .karaoke-line.active,
+.karaoke-section .karaoke-container .karaoke-line.is-active,
+.karaoke-poetry-section .karaoke-line,
+.karaoke-poetry-section .karaoke-line.active,
+.karaoke-poetry-section .karaoke-line.is-active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* opzionale: lascia solo una sottile barra laterale quando attiva */
+.karaoke-section .karaoke-container .karaoke-line.active,
+.karaoke-section .karaoke-container .karaoke-line.is-active,
+.karaoke-poetry-section .karaoke-line.active,
+.karaoke-poetry-section .karaoke-line.is-active {
+  border-left: 2px solid var(--kr-primary) !important;
+}
+
+/* modale / riga corrente */
+.audio-player-modal .current-line {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* dark mode: non reintrodurre sfondi */
+@media (prefers-color-scheme: dark) {
+  .karaoke-section .karaoke-container .karaoke-line,
+  .karaoke-section .karaoke-container .karaoke-line.active,
+  .karaoke-poetry-section .karaoke-line,
+  .karaoke-poetry-section .karaoke-line.active,
+  .audio-player-modal .current-line {
+    background: transparent !important;
+  }
+}
+
+/* Evidenzia SOLO la parola attiva (soft) */
+.karaoke-word.active,
+.word.active,
+.audio-player-modal .word.highlight {
+  background: rgba(46,125,50,.14) !important;  /* cambia a 'transparent' se vuoi zero highlight */
+  color: #174f1d !important;
+  border-radius: 4px;
+  padding: 0.1em 0.25em;
+  text-shadow: none !important;
+}
