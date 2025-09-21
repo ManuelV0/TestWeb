@@ -480,3 +480,233 @@ body {
     transform: none;
   }
 }
+
+/* =============================================================================
+   BLOCCO 3 — PAGINA POESIA SINGOLA, TESTO & SEZIONE AUDIO
+   - Header pagina, contenuto poesia (pre), controlli e stato audio.
+   - Fix refusi e coerenza con variabili globali.
+   ========================================================================== */
+
+/* ===== CONTAINER PAGINA ===== */
+.poetry-page {
+  max-width: min(100%, 900px);
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-bottom: var(--spazio-lg);
+  padding: 0.75rem 1.25rem;
+
+  background: var(--c-superficie);
+  color: var(--c-primario);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato-sm);
+  box-shadow: var(--ombra-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transizione), color var(--transizione), border-color var(--transizione), transform var(--transizione), box-shadow var(--transizione);
+}
+
+.back-button:hover {
+  background: var(--c-primario);
+  color: #fff;
+  border-color: var(--c-primario);
+  transform: translateY(-2px);
+  box-shadow: var(--ombra);
+}
+
+.back-button:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--c-primario) 55%, white);
+  outline-offset: 2px;
+}
+
+/* ===== HEADER POESIA ===== */
+.poetry-header {
+  text-align: center;
+  margin-bottom: var(--spazio-xl);
+  padding: var(--spazio-lg);
+
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-sm);
+}
+
+.poetry-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--c-testo);
+}
+
+.poetry-header .author {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--c-primario);
+}
+
+/* ===== CONTENUTO POESIA ===== */
+.poetry-content {
+  margin-bottom: var(--spazio-lg);
+  padding: var(--spazio-md);
+
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato);
+  box-shadow: var(--ombra-sm);
+}
+
+.poetry-text { margin-bottom: var(--spazio-lg); }
+
+.poetry-text pre {
+  margin: 0;
+  padding: var(--spazio-sm);
+
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-x: auto;
+
+  background: rgba(37, 99, 235, 0.02);
+  border: 1px solid rgba(37, 99, 235, 0.1);
+  border-radius: var(--bordo-arrotondato-sm);
+}
+
+/* ===== SEZIONE AUDIO ===== */
+.audio-section {
+  margin-bottom: var(--spazio-lg);
+  padding: var(--spazio-md);
+
+  background: color-mix(in oklab, var(--c-primario) 3%, transparent);
+  border: 1px solid rgba(37, 99, 235, 0.1); /* FIX: rimosso carattere non valido */
+  border-radius: var(--bordo-arrotondato-sm);
+}
+
+.audio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spazio-sm);
+  margin-bottom: var(--spazio-sm);
+}
+
+.audio-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-weight: 600;
+  color: var(--c-primario);
+}
+
+.audio-status i { font-size: 1.25rem; }
+
+/* ===== PROGRESS ===== */
+.progress-indicator {
+  height: 6px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.progress-bar {
+  height: 100%;
+  width: var(--progress, 0%);
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--c-primario), var(--c-successo));
+  transition: width 0.3s ease;
+}
+
+/* ===== OPZIONI AUDIO / AZIONI ===== */
+.audio-options {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: var(--spazio-sm);
+  margin-top: var(--spazio-md);
+}
+
+.listen-button,
+.audio-download-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  padding: 0.75rem 1.25rem;
+
+  background: var(--c-primario);
+  color: #fff;
+  border: 1px solid color-mix(in oklab, var(--c-primario) 20%, #0000);
+  border-radius: var(--bordo-arrotondato-sm);
+  box-shadow: var(--ombra-sm);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--transizione), transform var(--transizione), box-shadow var(--transizione);
+}
+
+.listen-button:hover,
+.audio-download-link:hover {
+  background: var(--c-primario-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--ombra);
+}
+
+.listen-button:focus-visible,
+.audio-download-link:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--c-primario) 55%, white);
+  outline-offset: 2px;
+}
+
+/* ===== ERRORI AUDIO ===== */
+.audio-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin-top: var(--spazio-sm);
+  padding: 0.75rem;
+
+  color: var(--c-errore);
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--bordo-arrotondato-sm);
+}
+
+/* ===== AUDIO NELLA CARD / PAGINA ===== */
+.poesie-list > div audio,
+.poetry-content audio {
+  width: 100%;
+  padding: 0.25rem;
+
+  background: var(--c-superficie);
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-arrotondato-sm);
+  box-shadow: var(--ombra-sm);
+}
+
+/* ===== RIDUZIONE MOVIMENTO ===== */
+@media (prefers-reduced-motion: reduce) {
+  .back-button,
+  .listen-button,
+  .audio-download-link {
+    transition: none;
+  }
+  .back-button:hover,
+  .listen-button:hover,
+  .audio-download-link:hover {
+    transform: none;
+  }
+}
