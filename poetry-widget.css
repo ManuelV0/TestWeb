@@ -2050,3 +2050,29 @@ body {
 .karaoke-section {
   display: none;
 }
+
+/* --- FIX: rimuovi il riquadro blu dietro la poesia --- */
+.audio-player-modal .content-section {
+  background: transparent !important;   /* via il fondo blu/trasparente */
+  box-shadow: none !important;          /* niente ombra */
+  border: none !important;              /* nessun bordo */
+  padding: 0.5rem !important;           /* un filo di respiro, regola a gusto */
+  margin-top: 0 !important;
+  border-radius: 0 !important;          /* niente angoli arrotondati del box */
+}
+
+/* opzionale: se vuoi ancora più “pulito”, elimina anche l’effetto sulla riga corrente */
+.audio-player-modal .current-line {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* opzionale: se vedi altri riquadri, togli eventuali fondi nei player “moderni” */
+.karaoke-player,
+.karaoke-content-wrapper,
+.karaoke-player-header,
+.karaoke-player-progress {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
