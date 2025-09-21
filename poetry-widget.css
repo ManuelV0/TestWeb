@@ -710,3 +710,589 @@ body {
     transform: none;
   }
 }
+
+/* =============================================================================
+   BLOCCO 4 — KARAOKE (CLASSICO + PLAYER MODERNO)
+   - Consolidamento stili, fix refusi, coerenza variabili, accessibilità.
+   - Include: section/header/container/line/word/progress/time/controls + modal.
+   ========================================================================== */
+
+/* ========== KARAOKE CLASSICO (container compatto) ========== */
+.karaoke-section {
+  background: var(--kr-bg);
+  border: 1px solid var(--kr-brd);
+  border-radius: var(--kr-radius);
+  padding: var(--kr-gap-md);
+  box-shadow: var(--kr-shadow-sm);
+  color: var(--kr-ink);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.karaoke-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--kr-primary), var(--kr-accent));
+  opacity: 0.9;
+}
+
+/* Header classico */
+.karaoke-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kr-gap-xs);
+  margin-bottom: var(--kr-gap-md);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--kr-brd);
+  text-align: center;
+}
+
+.karaoke-title {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--kr-primary);
+  font-size: var(--kr-fs-title);
+  line-height: 1.3;
+}
+
+.karaoke-title i { font-size: 0.9em; }
+
+/* Scroller + testo classico */
+.karaoke-container {
+  background: var(--kr-bg-soft);
+  border: 1px solid var(--kr-brd);
+  border-radius: var(--kr-radius-sm);
+  padding: var(--kr-gap-sm);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  max-height: var(--kr-card-maxh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--kr-primary) #e6ecf5;
+}
+
+.karaoke-container::-webkit-scrollbar { width: 5px; }
+.karaoke-container::-webkit-scrollbar-track {
+  background: #e6ecf5; border-radius: 10px; margin: 2px 0;
+}
+.karaoke-container::-webkit-scrollbar-thumb {
+  background: var(--kr-primary); border-radius: 10px; border: 1px solid #e6ecf5;
+}
+
+.karaoke-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: var(--kr-fs-line);
+  line-height: 1.5;
+  padding: 0.1rem;
+}
+
+/* Linea/Parola classiche */
+.karaoke-line {
+  --progress: 0%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: var(--kr-line-min);
+  padding: 0.65rem 0.75rem;
+  margin: 0.1rem 0;
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg,
+      rgba(28, 49, 58, 0.06) 0%,
+      rgba(46, 125, 50, 0.12) var(--progress),
+      transparent var(--progress) 100%);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.karaoke-line.active {
+  transform: translateX(1px);
+  box-shadow: 0 6px 12px rgba(46, 125, 50, 0.12);
+  outline: 1px solid rgba(46, 125, 50, 0.2);
+  border-left: 2px solid var(--kr-primary);
+}
+
+.karaoke-line.completed { opacity: 0.75; }
+.karaoke-line.upcoming { opacity: 0.9; }
+
+.karaoke-word {
+  display: inline-block;
+  margin: 0 0.1rem;
+  padding: 0.06rem 0.18rem;
+  border-radius: 5px;
+  transition: background-color 0.1s ease, transform 0.1s ease;
+}
+
+@media (hover: hover) {
+  .karaoke-word:hover { background: rgba(46, 125, 50, 0.06); }
+}
+
+.karaoke-word.active {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.22), rgba(46, 125, 50, 0.10));
+  color: #174f1d;
+  transform: scale(1.02);
+  text-shadow: 0 1px 1px rgba(46, 125, 50, 0.25);
+}
+
+/* Progress + tempo classici */
+.karaoke-progress-container { margin-top: var(--kr-gap-sm); }
+
+.karaoke-progress-bar {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(46, 125, 50, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+.karaoke-progress-fill {
+  width: var(--progress, 0%);
+  height: 100%;
+  background: linear-gradient(90deg, var(--kr-primary), var(--kr-accent));
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .karaoke-progress-fill::after {
+    content: "";
+    position: absolute; inset: 0; left: -100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    animation: kr-shimmer 2s infinite;
+  }
+}
+
+@keyframes kr-shimmer { 0% { left:-100%; } 100% { left:100%; } }
+
+.karaoke-time {
+  display: flex; gap: 0.4rem; justify-content: space-between;
+  margin-top: 0.5rem; color: var(--kr-ink-soft);
+  font-weight: 600; font-size: 0.85rem;
+}
+
+.karaoke-time span {
+  flex: 1 1 0; text-align: center; font-variant-numeric: tabular-nums;
+  background: rgba(46, 125, 50, 0.08); padding: 0.3rem 0.45rem; border-radius: 8px;
+}
+
+/* Controlli classici */
+.karaoke-controls {
+  display: flex; justify-content: center; flex-wrap: wrap;
+  gap: 0.5rem; margin-bottom: var(--kr-gap-md);
+}
+
+.karaoke-toggle {
+  min-height: 44px; min-width: 120px; padding: 0.6rem 1rem;
+  border-radius: 999px; border: 1px solid var(--kr-brd);
+  background: var(--kr-primary); color: #fff; font-weight: 700; font-size: 0.9rem;
+  display: inline-flex; gap: 0.4rem; align-items: center; justify-content: center;
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
+  transition: transform 0.12s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  touch-action: manipulation; cursor: pointer;
+}
+.karaoke-toggle:active { transform: scale(0.97); background: var(--kr-primary-2); }
+
+/* ========== MODAL AUDIO PLAYER (layout immersive) ========== */
+.audio-player-modal {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #1a2238 0%, #1c2844 100%);
+  display: flex; flex-direction: column; z-index: 1000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff; padding: 20px;
+}
+
+.modal-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+}
+
+.site-title { font-size: 1.4rem; font-weight: 700; color: #fff; }
+
+.instagram-link {
+  color: rgba(255,255,255,0.8); text-decoration: none; font-size: 1rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.instagram-link:hover { color: #E1306C; }
+
+/* Controlli principali del modal */
+.audio-controls-container { display: flex; flex-direction: column; gap: 25px; width: 100%; }
+.playback-section { text-align: center; }
+.section-title { font-size: 1.3rem; font-weight: 600; color: #fff; margin-bottom: 15px; }
+
+.playback-controls {
+  display: flex; flex-direction: column; gap: 15px; align-items: center;
+}
+
+.play-button, .stop-button {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: #fff; border: none; padding: 12px 25px; border-radius: 70px;
+  font-weight: 600; cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 10px; font-size: 1rem; width: 100%;
+  max-width: 200px; justify-content: center; box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+}
+.stop-button {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+}
+.play-button:hover, .stop-button:hover {
+  transform: translateY(-2px); box-shadow: 0 6px 16px rgba(46,125,50,0.4);
+}
+
+/* Divider + velocità */
+.divider {
+  height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  margin: 20px 0; width: 100%;
+}
+
+.speed-section { text-align: center; }
+.speed-controls {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px;
+}
+
+.speed-button {
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); border: none;
+  padding: 10px 8px; border-radius: 8px; font-weight: 500; cursor: pointer;
+  transition: var(--transition); font-size: 0.9rem;
+}
+.speed-button:hover { background: rgba(255,255,255,0.15); }
+.speed-button.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: #fff; box-shadow: 0 2px 8px rgba(46,125,50,0.3);
+}
+
+/* Contenuto testuale nel modal */
+.back-button-container { display: flex; justify-content: center; width: 100%; margin-top: 10px; }
+.back-button-modal {
+  background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 10px 20px;
+  border-radius: 20px; font-weight: 600; cursor: pointer; transition: var(--transition);
+  display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem;
+}
+.back-button-modal:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+.content-section {
+  flex: 1; overflow-y: auto; padding: 20px; text-align: center;
+  background: rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: center;
+  align-items: center; margin-top: 20px; border-radius: 12px;
+}
+
+.poetry-text { font-size: 1.4rem; line-height: 1.7; color: rgba(255,255,255,0.95); max-width: 100%; font-style: italic; }
+.current-line {
+  background: linear-gradient(90deg, transparent, rgba(46,125,50,0.15), transparent);
+  padding: 12px 18px; border-radius: 12px; margin: 10px 0; display: inline-block; font-weight: 500;
+}
+
+/* Parole animate nel modal */
+.word { transition: all 0.2s ease; padding: 2px 4px; border-radius: 4px; margin: 0 2px; }
+.word.highlight {
+  color: #a5b4fc;
+  background: linear-gradient(135deg, rgba(46,125,50,0.25), rgba(46,125,50,0.15));
+  animation: wordPulse 0.3s ease;
+}
+@keyframes wordPulse { 0% {transform:scale(1);} 50% {transform:scale(1.05);} 100% {transform:scale(1);} }
+
+/* ========== PLAYER MODERNO (card dedicata) ========== */
+:root {
+  --karaoke-bg: #ffffff;
+  --karaoke-header-bg: #f8fafc;
+  --karaoke-text: #1f2937;
+  --karaoke-line-bg: rgba(37, 99, 235, 0.08);
+  --karaoke-word-active: #1e40af;
+  --karaoke-word-bg: rgba(37, 99, 235, 0.12);
+  --karaoke-border: #e2e8f0;
+  --karaoke-progress-bg: #e2e8f0;
+  --karaoke-progress-fill: linear-gradient(90deg, #3b82f6, #60a5fa);
+  --karaoke-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  --karaoke-radius: 20px;
+  --karaoke-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.karaoke-player {
+  max-width: 900px; max-height: 600px; height: 70vh; margin: 2.5rem auto;
+  background: var(--karaoke-bg); border-radius: var(--karaoke-radius);
+  box-shadow: var(--karaoke-shadow); overflow: hidden; display: flex; flex-direction: column;
+  font-family: 'Georgia', serif; position: relative; border: 1px solid var(--karaoke-border);
+  transition: var(--karaoke-transition);
+}
+.karaoke-player:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.15); }
+
+.karaoke-player-header {
+  padding: 1.5rem 2rem; background: var(--karaoke-header-bg);
+  border-bottom: 1px solid var(--karaoke-border);
+  display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; position: relative;
+}
+.karaoke-player-header::after {
+  content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--karaoke-border), transparent);
+}
+.karaoke-player-title {
+  font-size: 1.5rem; font-weight: 700; color: var(--karaoke-text); margin: 0;
+  display: flex; align-items: center; gap: 1rem; letter-spacing: -0.02em;
+}
+.karaoke-player-title i {
+  font-size: 1.6em;
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.karaoke-player-controls { display: flex; gap: 1rem; align-items: center; }
+.karaoke-player-toggle {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  border: 1px solid #cbd5e1; border-radius: 50px; padding: 0.75rem 1.5rem;
+  font-size: 0.95rem; color: #475569; cursor: pointer; display: flex; align-items: center; gap: 0.75rem;
+  transition: var(--karaoke-transition); font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.karaoke-player-toggle:hover {
+  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #94a3b8; background: linear-gradient(135deg, #ffffff, #f1f5f9);
+}
+
+.karaoke-content-wrapper {
+  flex: 1; overflow: hidden; position: relative;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.karaoke-scroll-container {
+  height: 100%; overflow-y: auto; scroll-behavior: smooth; padding: 2rem;
+  position: relative; scroll-padding: 2rem 0;
+}
+.karaoke-text-container { text-align: center; padding: 0.5rem 0; max-width: 800px; margin: 0 auto; }
+
+.karaoke-line { /* riuso della classe, ma con stile moderno */
+  margin: 1.75rem 0; padding: 1.5rem 2rem; border-radius: 16px;
+  transition: var(--karaoke-transition); line-height: 1.8; font-size: 1.35rem;
+  position: relative; background: transparent; border: 1px solid transparent; opacity: 0.7; transform: scale(0.98);
+}
+.karaoke-line.active {
+  background: var(--karaoke-line-bg);
+  border-color: rgba(37,99,235,0.1);
+  transform: translateX(12px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(37,99,235,0.12);
+  animation: linePulse 3s ease-in-out infinite;
+  opacity: 1; z-index: 2;
+}
+.karaoke-line.past { opacity: 0.5; transform: scale(0.96); }
+
+.karaoke-word {
+  display: inline-block; margin: 0 0.25em; padding: 0.4em 0.5em; border-radius: 10px;
+  transition: var(--karaoke-transition); position: relative; font-weight: 500; color: #4b5563;
+}
+.karaoke-word.active {
+  color: var(--karaoke-word-active); background: var(--karaoke-word-bg);
+  font-weight: 700; transform: scale(1.35); z-index: 10; animation: wordHighlight 0.6s ease-out;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2); margin: 0 0.4em;
+}
+.karaoke-word.next { color: #3b82f6; font-weight: 600; transform: scale(1.15); opacity: 0.9; }
+
+.karaoke-player-progress {
+  padding: 1.5rem 2rem; background: var(--karaoke-header-bg); border-top: 1px solid var(--karaoke-border);
+  flex-shrink: 0; position: relative;
+}
+.karaoke-player-progress::before {
+  content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--karaoke-border), transparent);
+}
+.progress-container {
+  width: 100%; height: 10px; background: var(--karaoke-progress-bg); border-radius: 8px; overflow: hidden;
+  margin-bottom: 1rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); position: relative;
+}
+.progress-bar {
+  height: 100%; width: var(--progress, 0%); background: var(--karaoke-progress-fill);
+  border-radius: 8px; transition: width 0.4s ease; position: relative; overflow: hidden;
+}
+.progress-bar::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  animation: progressShine 2s infinite;
+}
+.progress-time {
+  display: flex; justify-content: space-between; align-items: center; font-size: 1rem;
+  color: #64748b; font-weight: 500;
+}
+.progress-time span {
+  font-variant-numeric: tabular-nums; background: #f1f5f9; padding: 0.5rem 1rem; border-radius: 50px;
+  font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Animazioni moderne */
+@keyframes wordHighlight {
+  0% { transform: scale(1); background: transparent; box-shadow: none; }
+  50% { transform: scale(1.5); box-shadow: 0 10px 30px rgba(37,99,235,0.3); }
+  100% { transform: scale(1.35); box-shadow: 0 8px 20px rgba(37,99,235,0.2); }
+}
+@keyframes linePulse {
+  0%,100% { box-shadow: 0 12px 30px rgba(37,99,235,0.12); }
+  50% { box-shadow: 0 16px 40px rgba(37,99,235,0.18); }
+}
+@keyframes progressShine { 0% { transform: translateX(-100%);} 100% { transform: translateX(100%);} }
+
+/* Scrollbar moderna */
+.karaoke-scroll-container::-webkit-scrollbar { width: 10px; }
+.karaoke-scroll-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; margin: 10px 0; }
+.karaoke-scroll-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; border: 2px solid #f1f5f9; }
+.karaoke-scroll-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ========== TEMA SCURO (classico + moderno) ========== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --kr-bg: #0f172a; --kr-bg-soft: #111827; --kr-ink: #e5e7eb; --kr-ink-soft: #9ca3af;
+    --kr-brd: rgba(255,255,255,0.10); --kr-brd-strong: rgba(255,255,255,0.18);
+    --kr-shadow: 0 12px 24px rgba(0,0,0,0.40);
+
+    --karaoke-bg: #1e293b; --karaoke-header-bg: #0f172a; --karaoke-text: #f1f5f9;
+    --karaoke-line-bg: rgba(59,130,246,0.18); --karaoke-word-active: #bfdbfe;
+    --karaoke-word-bg: rgba(59,130,246,0.25); --karaoke-border: #334155;
+    --karaoke-progress-bg: #334155; --karaoke-progress-fill: linear-gradient(90deg, #60a5fa, #93c5fd);
+    --karaoke-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+
+  .karaoke-content-wrapper {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  }
+
+  .karaoke-player-toggle {
+    background: linear-gradient(135deg, #334155, #475569);
+    color: #cbd5e1; border-color: #475569;
+  }
+  .karaoke-player-toggle:hover {
+    background: linear-gradient(135deg, #475569, #64748b);
+    color: #f1f5f9; border-color: #64748b;
+  }
+
+  .progress-time span {
+    background: #334155; color: #cbd5e1; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  /* Classico: linea/word dark */
+  .karaoke-line {
+    background: linear-gradient(90deg,
+      rgba(31, 41, 55, 0.20) 0%,
+      rgba(46, 125, 50, 0.22) var(--progress),
+      transparent var(--progress) 100%);
+  }
+  .karaoke-word.active { color: #e9f6eb; }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (min-width: 768px) {
+  :root {
+    --kr-gap-md: 1rem; --kr-gap-lg: 1.25rem; --kr-fs-title: 1.25rem;
+    --kr-fs-line: 1rem; --kr-card-maxh: 55vh; --kr-line-min: 48px;
+  }
+  .karaoke-section { padding: var(--kr-gap-lg); }
+  .karaoke-line { padding: 0.75rem 0.9rem; }
+  .karaoke-controls { gap: 0.75rem; }
+  .karaoke-toggle { min-width: 130px; }
+
+  .modal-header { padding: 12px 0; flex-direction: column; gap: 10px; text-align: center; }
+  .site-title { font-size: 1.2rem; }
+  .instagram-link { font-size: 0.9rem; }
+  .section-title { font-size: 1.1rem; }
+  .play-button, .stop-button { padding: 10px 20px; font-size: 0.95rem; max-width: 180px; }
+  .speed-controls { grid-template-columns: repeat(2, 1fr); }
+  .speed-button { padding: 8px 6px; font-size: 0.85rem; }
+  .poetry-text { font-size: 1.2rem; line-height: 1.6; }
+  .current-line { padding: 10px 15px; font-size: 1.1rem; }
+}
+
+@media (min-width: 1024px) {
+  .karaoke-section {
+    max-width: 1000px; margin-inline: auto;
+    display: grid; grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; gap: var(--kr-gap-md);
+  }
+  .karaoke-header { text-align: left; border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .karaoke-title { justify-content: flex-start; }
+  .karaoke-controls { order: 3; margin-top: var(--kr-gap-sm); }
+}
+
+@media (orientation: landscape) and (max-width: 900px) {
+  :root { --kr-card-maxh: 65vh; --kr-line-min: 40px; }
+  .karaoke-line { padding: 0.5rem 0.65rem; min-height: 40px; }
+  .karaoke-controls { flex-direction: row; justify-content: space-around; }
+  .karaoke-toggle { min-width: 110px; flex: 1; max-width: 45%; }
+
+  .audio-player-modal { flex-direction: row; padding: 15px; }
+  .audio-controls-container { width: 40%; padding-right: 15px; }
+  .content-section { width: 60%; padding: 15px; margin-top: 0; }
+  .poetry-text { font-size: 1.1rem; }
+}
+
+@media (max-width: 1000px) {
+  .karaoke-player { height: 65vh; margin: 2rem auto; border-radius: 18px; }
+  .karaoke-player-header { padding: 1.25rem 1.75rem; }
+  .karaoke-player-title { font-size: 1.35rem; gap: 0.75rem; }
+  .karaoke-scroll-container { padding: 1.75rem; }
+  .karaoke-line { margin: 1.5rem 0; padding: 1.25rem 1.75rem; font-size: 1.25rem; }
+  .karaoke-word { margin: 0 0.2em; padding: 0.35em 0.45em; }
+  .karaoke-word.active { transform: scale(1.3); margin: 0 0.35em; }
+}
+
+@media (max-width: 768px) {
+  .karaoke-player {
+    height: 60vh; margin: 1.5rem auto; border-radius: 16px; max-height: 500px;
+  }
+  .karaoke-player-header {
+    padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; text-align: center;
+  }
+  .karaoke-player-title { font-size: 1.25rem; }
+  .karaoke-player-controls { width: 100%; justify-content: center; }
+  .karaoke-scroll-container { padding: 1.5rem; }
+  .karaoke-line { margin: 1.25rem 0; padding: 1rem 1.5rem; font-size: 1.15rem; border-radius: 14px; }
+  .karaoke-word { margin: 0 0.15em; padding: 0.3em 0.4em; font-size: 0.98em; }
+  .karaoke-word.active { transform: scale(1.25); margin: 0 0.3em; }
+  .karaoke-player-progress { padding: 1.25rem 1.5rem; }
+  .progress-container { height: 8px; }
+  .progress-time { font-size: 0.95rem; }
+  .progress-time span { padding: 0.4rem 0.8rem; }
+}
+
+@media (max-width: 480px) {
+  .karaoke-player { height: 55vh; margin: 1rem auto; border-radius: 14px; max-height: 450px; }
+  .karaoke-player-header { padding: 0.875rem 1.25rem; }
+  .karaoke-player-title { font-size: 1.1rem; gap: 0.5rem; }
+  .karaoke-player-toggle { padding: 0.6rem 1.25rem; font-size: 0.9rem; gap: 0.5rem; }
+  .karaoke-scroll-container { padding: 1.25rem; }
+  .karaoke-line { margin: 1rem 0; padding: 0.875rem 1.25rem; font-size: 1.05rem; border-radius: 12px; line-height: 1.7; }
+  .karaoke-word { margin: 0 0.1em; padding: 0.25em 0.35em; font-size: 0.95em; }
+  .karaoke-word.active { transform: scale(1.2); margin: 0 0.25em; }
+  .karaoke-player-progress { padding: 1rem 1.25rem; }
+  .progress-container { height: 7px; }
+  .progress-time { font-size: 0.9rem; }
+  .progress-time span { padding: 0.35rem 0.7rem; }
+}
+
+/* ========== ACCESSIBILITÀ & RIDUZIONE MOVIMENTO ========== */
+.karaoke-player-toggle:focus-visible,
+.karaoke-word.active:focus-visible {
+  outline: 3px solid #3b82f6; outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .karaoke-line, .karaoke-word, .progress-bar,
+  .play-button, .stop-button, .speed-button,
+  .karaoke-player-toggle { transition: none !important; }
+  .karaoke-word.active, .karaoke-line.active { animation: none !important; transform: scale(1.15); }
+  .progress-bar::after, .karaoke-progress-fill::after { animation: none !important; }
+  .karaoke-scroll-container { scroll-behavior: auto; }
+}
+
+/* ========== FIX OPZIONALI UI (elimina riquadri in modal) ========== */
+.audio-player-modal .content-section,
+.audio-player-modal .current-line,
+.karaoke-player,
+.karaoke-content-wrapper,
+.karaoke-player-header,
+.karaoke-player-progress {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
