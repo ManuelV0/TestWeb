@@ -871,3 +871,587 @@ section h5 {
     scroll-behavior: auto;
   }
 }
+
+/* =============================================================================
+   MIGLIORAMENTI CARD ESPANSA
+   ========================================================================== */
+
+/* Transizione smooth per l'apertura/chiusura della card */
+.poesia-card {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Header card con effetto "sticky" quando espansa */
+.poesia-card[aria-expanded="true"] > div:first-child {
+  position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid var(--gray-200);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+}
+
+/* Icona di apertura/chiusura animata */
+.poesia-card > div:first-child span:last-child {
+  transition: transform 0.3s ease;
+  background: var(--primary-50);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--primary-200);
+}
+
+.poesia-card[aria-expanded="true"] > div:first-child span:last-child {
+  transform: rotate(180deg);
+  background: var(--primary-100);
+}
+
+/* Contenuto espanso con animazione */
+.poesia-card > div:not(:first-child) {
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 1000px;
+  }
+}
+
+/* Sezione audio migliorata */
+.poesia-card .mt-6 {
+  background: var(--gray-50);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  border: 1px solid var(--gray-200);
+  margin: var(--space-4) 0;
+}
+
+.poesia-card audio {
+  width: 100%;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Miglioramenti sezioni analisi */
+.poesia-card section {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.poesia-card section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary-500), var(--primary-300));
+}
+
+.poesia-card section:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Header sezioni con gradiente */
+.poesia-card section h3 {
+  background: linear-gradient(135deg, currentColor 0%, transparent 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* List items migliorati */
+.poesia-card ul li {
+  position: relative;
+  padding-left: var(--space-2);
+  margin-bottom: var(--space-2);
+  transition: color 0.3s ease;
+}
+
+.poesia-card ul li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary-500);
+  font-weight: bold;
+}
+
+.poesia-card ul li:hover {
+  color: var(--gray-800);
+}
+
+/* Citazioni con stile speciale */
+.poesia-card blockquote {
+  border-left: 3px solid var(--primary-300);
+  padding-left: var(--space-4);
+  margin: var(--space-3) 0;
+  font-style: italic;
+  background: var(--gray-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+/* Progress indicator per stati di caricamento */
+.loading-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--primary-200);
+  border-top: 2px solid var(--primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: var(--space-2);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* =============================================================================
+   SEZIONE KARAOKE COMPLETA
+   ========================================================================== */
+
+.karaoke-section {
+  background: linear-gradient(135deg, #1a1f2d 0%, #2d3748 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin: var(--space-8) 0;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.karaoke-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+  animation: rainbowBorder 3s linear infinite;
+}
+
+@keyframes rainbowBorder {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Header karaoke */
+.karaoke-header {
+  text-align: center;
+  margin-bottom: var(--space-6);
+  position: relative;
+  z-index: 2;
+}
+
+.karaoke-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+  to { text-shadow: 0 0 30px rgba(78, 205, 196, 0.7); }
+}
+
+/* Container testo karaoke */
+.karaoke-container {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: var(--space-4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Linee karaoke */
+.karaoke-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  margin: var(--space-2) 0;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 60px;
+}
+
+.karaoke-line.active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-left: 3px solid #4ecdc4;
+}
+
+.karaoke-line.completed {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+
+/* Parole karaoke */
+.karaoke-word {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  margin: 2px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.karaoke-word:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.karaoke-word.active {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+  z-index: 10;
+  animation: wordPulse 0.6s ease-out;
+}
+
+.karaoke-word.next {
+  color: #4ecdc4;
+  font-weight: 600;
+}
+
+@keyframes wordPulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(78, 205, 196, 0.4); }
+  50% { transform: scale(1.15); box-shadow: 0 4px 20px rgba(78, 205, 196, 0.6); }
+  100% { transform: scale(1.1); box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4); }
+}
+
+/* Progress bar karaoke */
+.karaoke-progress {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--space-4) 0;
+  position: relative;
+}
+
+.karaoke-progress-bar {
+  height: 100%;
+  width: var(--progress, 0%);
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.karaoke-progress-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Tempo karaoke */
+.karaoke-time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-top: var(--space-2);
+}
+
+.karaoke-time span {
+  font-variant-numeric: tabular-nums;
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+}
+
+/* Controlli karaoke */
+.karaoke-controls {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  align-items: center;
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.karaoke-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.karaoke-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.karaoke-button:hover::before {
+  left: 100%;
+}
+
+.karaoke-button.primary {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  color: white;
+  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+.karaoke-button.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+.karaoke-button.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.karaoke-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Modal karaoke a schermo intero */
+.karaoke-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.karaoke-modal-content {
+  max-width: 800px;
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+}
+
+.karaoke-modal-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.karaoke-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+/* Responsive design per karaoke */
+@media (max-width: 768px) {
+  .karaoke-section {
+    padding: var(--space-4);
+    margin: var(--space-6) 0;
+  }
+  
+  .karaoke-title {
+    font-size: var(--text-xl);
+  }
+  
+  .karaoke-word {
+    font-size: var(--text-base);
+    padding: var(--space-1);
+  }
+  
+  .karaoke-line {
+    min-height: 50px;
+    padding: var(--space-2);
+  }
+  
+  .karaoke-controls {
+    flex-direction: column;
+  }
+  
+  .karaoke-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .karaoke-container {
+    max-height: 200px;
+  }
+  
+  .karaoke-line {
+    min-height: 40px;
+  }
+  
+  .karaoke-word {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Effetti particellari per karaoke */
+.karaoke-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.karaoke-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: float 6s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Theme toggle per karaoke */
+.karaoke-theme-toggle {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+}
+
+.karaoke-theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Varianti tema karaoke */
+.karaoke-section.light {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: var(--gray-900);
+}
+
+.karaoke-section.light .karaoke-container {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+.karaoke-section.light .karaoke-word.active {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+}
+
+/* Accessibilità */
+@media (prefers-reduced-motion: reduce) {
+  .karaoke-word,
+  .karaoke-line,
+  .karaoke-button,
+  .karaoke-progress-bar {
+    transition: none;
+    animation: none;
+  }
+  
+  .karaoke-word.active {
+    transform: scale(1.05);
+  }
+}
+
+/* Highlight per lettura vocale */
+.karaoke-word[data-voice-active="true"] {
+  outline: 2px solid #ffd700;
+  outline-offset: 2px;
+}
