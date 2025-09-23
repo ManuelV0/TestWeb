@@ -1,5 +1,5 @@
 /* =============================================================================
-   VARIABILI GLOBALI & TIPOGRAFIA
+   VARIABILI GLOBALI & RESET
    ========================================================================== */
 :root {
   /* Sistema cromatico principale */
@@ -151,9 +151,7 @@
   --line-height-relaxed: 1.75;
 }
 
-/* =============================================================================
-   RESET E STILI DI BASE
-   ========================================================================== */
+/* Reset e stili di base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -178,100 +176,81 @@ body {
 /* =============================================================================
    LAYOUT PRINCIPALE
    ========================================================================== */
-main {
-  max-width: min(100%, 56rem);
+.app-container {
+  max-width: min(100%, 1200px);
   margin: 0 auto;
   padding: var(--space-6);
   min-height: 100vh;
-  background-color: var(--gray-50);
 }
 
-/* =============================================================================
-   COMPONENTI PRINCIPALI
-   ========================================================================== */
-
-/* Titolo principale */
-.text-3xl {
-  font-size: var(--text-3xl);
-  font-weight: 800;
-  margin-bottom: var(--space-6);
-  text-align: center;
-  color: var(--primary-700);
-  letter-spacing: -0.025em;
-}
-
-.font-montserrat {
-  font-family: 'Montserrat', var(--font-sans);
-  font-weight: 700;
-}
-
-.font-open-sans {
-  font-family: 'Open Sans', var(--font-sans);
-}
-
-/* Barra di ricerca */
-.poetry-search-bar {
+/* Header e ricerca */
+.app-header {
   margin-bottom: var(--space-8);
 }
 
-.poetry-search-bar input {
+.search-bar {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-bar input {
   width: 100%;
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--gray-300);
+  padding: var(--space-4) var(--space-10);
   font-size: var(--text-lg);
-  color: var(--gray-700);
-  background-color: white;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--radius-xl);
+  background: white;
+  color: var(--gray-900);
+  box-shadow: var(--shadow-md);
   transition: all var(--transition-normal);
 }
 
-.poetry-search-bar input:focus {
+.search-bar input:focus {
   outline: none;
   border-color: var(--primary-500);
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
-.poetry-search-bar input::placeholder {
+.search-bar input::placeholder {
   color: var(--gray-400);
 }
 
-/* Lista poesie */
-.poesie-list {
-  max-height: 70vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--primary-500) var(--gray-100);
+.clear-search {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--gray-200);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.poesie-list::-webkit-scrollbar {
-  width: 6px;
+.clear-search:hover {
+  background: var(--gray-300);
+  transform: translateY(-50%) scale(1.1);
 }
 
-.poesie-list::-webkit-scrollbar-track {
-  background: var(--gray-100);
-  border-radius: var(--radius-full);
-}
-
-.poesie-list::-webkit-scrollbar-thumb {
-  background: var(--primary-500);
-  border-radius: var(--radius-full);
-}
-
-.poesie-list::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600);
-}
-
-/* Card poesia */
+/* =============================================================================
+   CARD POESIA ESPANSA MIGLIORATA
+   ========================================================================== */
 .poesia-card {
-  width: 100%;
+  background: white;
   border: 1px solid var(--gray-200);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--space-6);
-  background-color: white;
-  box-shadow: var(--shadow-lg);
   margin-bottom: var(--space-6);
-  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
   position: relative;
   overflow: hidden;
 }
@@ -289,7 +268,7 @@ main {
 }
 
 .poesia-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-xl);
   border-color: var(--primary-200);
 }
@@ -298,606 +277,49 @@ main {
   opacity: 1;
 }
 
-/* Header card */
-.poesia-card > div:first-child {
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-4);
-}
-
-.poesia-card h2 {
-  font-size: var(--text-xl);
-  font-weight: 800;
-  color: var(--primary-700);
-  margin-bottom: var(--space-1);
-  line-height: var(--line-height-tight);
-}
-
-.poesia-card .text-sm {
-  font-size: var(--text-sm);
-  font-style: italic;
-  color: var(--gray-500);
-  margin-bottom: var(--space-2);
-}
-
-.poesia-card .text-base {
-  font-size: var(--text-base);
-  color: var(--gray-900);
-  line-height: var(--line-height-relaxed);
-}
-
-/* Effetto line-clamp */
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Sezione audio */
-.poesia-card audio {
-  width: 100%;
-  margin: var(--space-2) 0;
-  border-radius: var(--radius-md);
-  background: var(--gray-100);
-}
-
-.poesia-card audio::-webkit-media-controls-panel {
-  background: var(--gray-100);
-}
-
-/* Sezioni analisi */
-.mt-8 {
-  margin-top: var(--space-8);
-}
-
-.space-y-6 > * + * {
-  margin-top: var(--space-6);
-}
-
-/* Sezioni colorate per analisi */
-section {
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-inner);
-  border: 1px solid;
-}
-
-/* Psicologica - Fallacie */
-.bg-rose-50 {
-  background-color: var(--rose-50);
-  border-color: var(--rose-300);
-}
-
-.text-rose-800 {
-  color: var(--rose-800);
-}
-
-.border-rose-300 {
-  border-color: var(--rose-300);
-}
-
-.border-rose-400 {
-  border-color: var(--rose-400);
-}
-
-/* Psicologica - Bias */
-.bg-amber-50 {
-  background-color: var(--amber-50);
-  border-color: var(--amber-300);
-}
-
-.text-amber-800 {
-  color: var(--amber-800);
-}
-
-.border-amber-300 {
-  border-color: var(--amber-300);
-}
-
-.border-amber-400 {
-  border-color: var(--amber-400);
-}
-
-/* Psicologica - Meccanismi */
-.bg-purple-50 {
-  background-color: var(--purple-50);
-  border-color: var(--purple-300);
-}
-
-.text-purple-800 {
-  color: var(--purple-800);
-}
-
-.border-purple-300 {
-  border-color: var(--purple-300);
-}
-
-.border-purple-400 {
-  border-color: var(--purple-400);
-}
-
-/* Psicologica - Schemi */
-.bg-sky-50 {
-  background-color: var(--sky-50);
-  border-color: var(--sky-300);
-}
-
-.text-sky-800 {
-  color: var(--sky-800);
-}
-
-.border-sky-300 {
-  border-color: var(--sky-300);
-}
-
-.border-sky-400 {
-  border-color: var(--sky-400);
-}
-
-/* Tematica */
-.bg-emerald-50 {
-  background-color: var(--emerald-50);
-  border-color: var(--emerald-300);
-}
-
-.text-emerald-800 {
-  color: var(--emerald-800);
-}
-
-.border-emerald-300 {
-  border-color: var(--emerald-300);
-}
-
-.border-emerald-400 {
-  border-color: var(--emerald-400);
-}
-
-/* Stilistica */
-.bg-indigo-50 {
-  background-color: var(--indigo-50);
-  border-color: var(--indigo-300);
-}
-
-.text-indigo-800 {
-  color: var(--indigo-800);
-}
-
-.border-indigo-300 {
-  border-color: var(--indigo-300);
-}
-
-.border-indigo-400 {
-  border-color: var(--indigo-400);
-}
-
-/* Contesto */
-.bg-amber-50 {
-  background-color: var(--amber-50);
-  border-color: var(--amber-300);
-}
-
-.text-amber-800 {
-  color: var(--amber-800);
-}
-
-.border-amber-300 {
-  border-color: var(--amber-300);
-}
-
-.border-amber-400 {
-  border-color: var(--amber-400);
-}
-
-/* Sintesi */
-.bg-slate-50 {
-  background-color: var(--slate-50);
-  border-color: var(--slate-300);
-}
-
-.text-slate-800 {
-  color: var(--slate-800);
-}
-
-.border-slate-300 {
-  border-color: var(--slate-300);
-}
-
-.border-slate-400 {
-  border-color: var(--slate-400);
-}
-
-/* Futurista */
-.bg-green-50 {
-  background-color: var(--emerald-50);
-  border-color: var(--emerald-300);
-}
-
-.text-green-800 {
-  color: var(--emerald-800);
-}
-
-.border-green-300 {
-  border-color: var(--emerald-300);
-}
-
-.border-green-400 {
-  border-color: var(--emerald-400);
-}
-
-.bg-blue-50 {
-  background-color: var(--sky-50);
-  border-color: var(--sky-300);
-}
-
-.text-blue-800 {
-  color: var(--sky-800);
-}
-
-.border-blue-300 {
-  border-color: var(--sky-300);
-}
-
-.border-blue-400 {
-  border-color: var(--sky-400);
-}
-
-.bg-red-50 {
-  background-color: var(--rose-50);
-  border-color: var(--rose-300);
-}
-
-.text-red-800 {
-  color: var(--rose-800);
-}
-
-.border-red-300 {
-  border-color: var(--rose-300);
-}
-
-.border-red-400 {
-  border-color: var(--rose-400);
-}
-
-.bg-yellow-50 {
-  background-color: var(--amber-50);
-  border-color: var(--amber-300);
-}
-
-.text-yellow-800 {
-  color: var(--amber-800);
-}
-
-.border-yellow-300 {
-  border-color: var(--amber-300);
-}
-
-.border-yellow-400 {
-  border-color: var(--amber-400);
-}
-
-/* Titoli sezioni */
-section h3 {
-  font-size: var(--text-lg);
-  font-weight: 700;
-  margin-bottom: var(--space-3);
-  padding-bottom: var(--space-2);
-  border-bottom-width: 1px;
-}
-
-section h4 {
-  font-size: var(--text-base);
-  font-weight: 600;
-  margin-bottom: var(--space-2);
-  color: inherit;
-}
-
-section h5 {
-  font-size: var(--text-sm);
-  font-weight: 600;
-  margin-bottom: var(--space-1);
-  color: inherit;
-}
-
-/* Liste */
-.list-disc {
-  list-style-type: disc;
-}
-
-.list-inside {
-  list-style-position: inside;
-}
-
-.ml-6 {
-  margin-left: var(--space-6);
-}
-
-/* Grid per layout responsive */
-.grid {
-  display: grid;
-}
-
-.gap-3 {
-  gap: var(--space-3);
-}
-
-.sm\:grid-cols-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-/* Messaggi di stato */
-.text-center {
-  text-align: center;
-}
-
-.text-gray-500 {
-  color: var(--gray-500);
-}
-
-.text-gray-400 {
-  color: var(--gray-400);
-}
-
-.mt-12 {
-  margin-top: var(--space-12);
-}
-
-/* Messaggi di successo/errore */
-.bg-green-50 {
-  background-color: var(--emerald-50);
-  border-color: var(--emerald-200);
-}
-
-.text-green-700 {
-  color: var(--emerald-700);
-}
-
-.border-green-200 {
-  border-color: var(--emerald-200);
-}
-
-.bg-red-50 {
-  background-color: var(--rose-50);
-  border-color: var(--rose-200);
-}
-
-.text-red-700 {
-  color: var(--rose-700);
-}
-
-.border-red-200 {
-  border-color: var(--rose-200);
-}
-
-/* Utility per padding/margin */
-.px-3 {
-  padding-left: var(--space-3);
-  padding-right: var(--space-3);
-}
-
-.py-2 {
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
-}
-
-.mb-1 { margin-bottom: var(--space-1); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-3 { margin-bottom: var(--space-3); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mt-1 { margin-top: var(--space-1); }
-.mt-2 { margin-top: var(--space-2); }
-
-/* Testo */
-.italic {
-  font-style: italic;
-}
-
-.whitespace-pre-wrap {
-  white-space: pre-wrap;
-}
-
-.text-sm {
-  font-size: var(--text-sm);
-}
-
-.font-semibold {
-  font-weight: 600;
-}
-
-.font-medium {
-  font-weight: 500;
-}
-
-.font-bold {
-  font-weight: 700;
-}
-
-.font-extrabold {
-  font-weight: 800;
-}
-
-/* =============================================================================
-   RESPONSIVE DESIGN
-   ========================================================================== */
-@media (max-width: 640px) {
-  main {
-    padding: var(--space-4);
-    max-width: 100%;
-  }
-  
-  .text-3xl {
-    font-size: var(--text-2xl);
-    margin-bottom: var(--space-4);
-  }
-  
-  .poesia-card {
-    padding: var(--space-4);
-  }
-  
-  .poesia-card h2 {
-    font-size: var(--text-lg);
-  }
-  
-  .sm\:grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-  
-  .ml-6 {
-    margin-left: var(--space-4);
-  }
-  
-  section {
-    padding: var(--space-4);
-  }
-}
-
-@media (max-width: 480px) {
-  main {
-    padding: var(--space-3);
-  }
-  
-  .poetry-search-bar input {
-    padding: var(--space-3);
-    font-size: var(--text-base);
-  }
-  
-  .poesia-card {
-    padding: var(--space-3);
-  }
-  
-  section {
-    padding: var(--space-3);
-  }
-}
-
-/* =============================================================================
-   ACCESSIBILITÀ
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-:focus-visible {
-  outline: 2px solid var(--primary-500);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* Supporto per alto contrasto */
-@media (prefers-contrast: high) {
-  :root {
-    --gray-200: #000000;
-    --gray-300: #000000;
-  }
-  
-  .poesia-card {
-    border-width: 2px;
-  }
-  
-  section {
-    border-width: 2px;
-  }
-}
-
-/* =============================================================================
-   ANIMAZIONI
-   ========================================================================== */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.poesia-card {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Loading states */
-.text-gray-500 {
-  opacity: 0.7;
-}
-
-/* =============================================================================
-   UTILITY CLASSES
-   ========================================================================== */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.select-none {
-  user-select: none;
-}
-
-.self-start {
-  align-self: flex-start;
-}
-
-.leading-relaxed {
-  line-height: var(--line-height-relaxed);
-}
-
-.tracking-wide {
-  letter-spacing: 0.025em;
-}
-
-/* =============================================================================
-   SCROLL SMOOTH PER LISTA POESIE
-   ========================================================================== */
-.poesie-list {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .poesie-list {
-    scroll-behavior: auto;
-  }
-}
-
-/* =============================================================================
-   MIGLIORAMENTI CARD ESPANSA
-   ========================================================================== */
-
-/* Transizione smooth per l'apertura/chiusura della card */
-.poesia-card {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-/* Header card con effetto "sticky" quando espansa */
+/* Header card con effetto sticky quando espansa */
 .poesia-card[aria-expanded="true"] > div:first-child {
   position: relative;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   border-bottom: 1px solid var(--gray-200);
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.poesia-card h3 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--primary-700);
+  margin-bottom: var(--space-2);
+  line-height: var(--line-height-tight);
+}
+
+.poesia-card .author {
+  color: var(--gray-500);
+  font-style: italic;
+  margin-bottom: var(--space-3);
+}
+
+.poesia-card .preview {
+  color: var(--gray-700);
+  line-height: var(--line-height-relaxed);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Icona di apertura/chiusura animata */
 .poesia-card > div:first-child span:last-child {
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   background: var(--primary-50);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   border: 1px solid var(--primary-200);
+  color: var(--primary-700);
+  font-weight: 600;
 }
 
 .poesia-card[aria-expanded="true"] > div:first-child span:last-child {
@@ -913,271 +335,169 @@ section h5 {
 @keyframes slideDown {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-20px);
     max-height: 0;
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    max-height: 1000px;
+    max-height: 5000px;
   }
 }
 
-/* Sezione audio migliorata */
-.poesia-card .mt-6 {
-  background: var(--gray-50);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  border: 1px solid var(--gray-200);
-  margin: var(--space-4) 0;
+/* =============================================================================
+   PAGINA SINGOLA POESIA
+   ========================================================================== */
+.poetry-page {
+  max-width: min(100%, 900px);
+  margin: 0 auto;
 }
 
-.poesia-card audio {
-  width: 100%;
-  height: 40px;
-  border-radius: var(--radius-lg);
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
   background: white;
+  color: var(--primary-700);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  margin-bottom: var(--space-6);
+  text-decoration: none;
   box-shadow: var(--shadow-sm);
 }
 
-/* Miglioramenti sezioni analisi */
-.poesia-card section {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.back-button:hover {
+  background: var(--primary-700);
+  color: white;
+  border-color: var(--primary-700);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.poetry-header {
+  text-align: center;
+  padding: var(--space-8);
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-2xl);
+  margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-lg);
   position: relative;
   overflow: hidden;
 }
 
-.poesia-card section::before {
+.poetry-header::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
-  height: 100%;
-  background: linear-gradient(180deg, var(--primary-500), var(--primary-300));
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-300));
 }
 
-.poesia-card section:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Header sezioni con gradiente */
-.poesia-card section h3 {
-  background: linear-gradient(135deg, currentColor 0%, transparent 100%);
+.poetry-header h1 {
+  font-family: var(--font-serif);
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  margin-bottom: var(--space-3);
+  line-height: var(--line-height-tight);
+  color: var(--gray-900);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-400));
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: gradientShift 3s ease infinite;
 }
 
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.poetry-header .author {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--primary-600);
+  margin: 0;
 }
 
-/* List items migliorati */
-.poesia-card ul li {
-  position: relative;
-  padding-left: var(--space-2);
-  margin-bottom: var(--space-2);
-  transition: color 0.3s ease;
+.poetry-content {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+  box-shadow: var(--shadow-lg);
 }
 
-.poesia-card ul li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  color: var(--primary-500);
-  font-weight: bold;
+.poetry-text {
+  margin-bottom: var(--space-8);
 }
 
-.poesia-card ul li:hover {
-  color: var(--gray-800);
-}
-
-/* Citazioni con stile speciale */
-.poesia-card blockquote {
-  border-left: 3px solid var(--primary-300);
-  padding-left: var(--space-4);
-  margin: var(--space-3) 0;
-  font-style: italic;
+.poetry-text pre {
+  margin: 0;
+  padding: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  line-height: var(--line-height-relaxed);
+  white-space: pre-wrap;
+  overflow-x: auto;
   background: var(--gray-50);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-}
-
-/* Progress indicator per stati di caricamento */
-.loading-indicator {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--primary-200);
-  border-top: 2px solid var(--primary-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-right: var(--space-2);
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-inner);
 }
 
 /* =============================================================================
-   SEZIONE KARAOKE COMPLETA
+   SEZIONE AUDIO MIGLIORATA
    ========================================================================== */
-
-.karaoke-section {
-  background: linear-gradient(135deg, #1a1f2d 0%, #2d3748 100%);
-  border-radius: var(--radius-xl);
+.audio-section {
   padding: var(--space-6);
-  margin: var(--space-8) 0;
-  color: white;
+  background: linear-gradient(135deg, var(--primary-50), var(--sky-50));
+  border: 1px solid var(--primary-200);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-8);
   position: relative;
   overflow: hidden;
-  box-shadow: var(--shadow-xl);
 }
 
-.karaoke-section::before {
+.audio-section::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
-  animation: rainbowBorder 3s linear infinite;
+  background: linear-gradient(90deg, var(--primary-500), var(--sky-500));
 }
 
-@keyframes rainbowBorder {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
-
-/* Header karaoke */
-.karaoke-header {
-  text-align: center;
-  margin-bottom: var(--space-6);
-  position: relative;
-  z-index: 2;
-}
-
-.karaoke-title {
-  font-size: var(--text-2xl);
-  font-weight: 700;
-  margin-bottom: var(--space-2);
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titleGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlow {
-  from { text-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
-  to { text-shadow: 0 0 30px rgba(78, 205, 196, 0.7); }
-}
-
-/* Container testo karaoke */
-.karaoke-container {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  max-height: 300px;
-  overflow-y: auto;
-  margin-bottom: var(--space-4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Linee karaoke */
-.karaoke-line {
+.audio-status {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  padding: var(--space-3);
-  margin: var(--space-2) 0;
-  border-radius: var(--radius-md);
-  transition: all 0.3s ease;
-  position: relative;
-  min-height: 60px;
-}
-
-.karaoke-line.active {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.02);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border-left: 3px solid #4ecdc4;
-}
-
-.karaoke-line.completed {
-  opacity: 0.6;
-  transform: scale(0.98);
-}
-
-/* Parole karaoke */
-.karaoke-word {
-  display: inline-block;
-  padding: var(--space-1) var(--space-2);
-  margin: 2px;
-  border-radius: var(--radius-sm);
-  font-size: var(--text-lg);
-  font-weight: 500;
-  transition: all 0.2s ease;
-  position: relative;
-  cursor: pointer;
-}
-
-.karaoke-word:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.karaoke-word.active {
-  background: linear-gradient(135deg, #4ecdc4, #44a08d);
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
-  z-index: 10;
-  animation: wordPulse 0.6s ease-out;
-}
-
-.karaoke-word.next {
-  color: #4ecdc4;
+  gap: var(--space-3);
   font-weight: 600;
+  color: var(--primary-700);
+  margin-bottom: var(--space-4);
 }
 
-@keyframes wordPulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 rgba(78, 205, 196, 0.4); }
-  50% { transform: scale(1.15); box-shadow: 0 4px 20px rgba(78, 205, 196, 0.6); }
-  100% { transform: scale(1.1); box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4); }
-}
-
-/* Progress bar karaoke */
-.karaoke-progress {
+.progress-indicator {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 8px;
+  background: var(--gray-200);
   border-radius: var(--radius-full);
   overflow: hidden;
-  margin: var(--space-4) 0;
-  position: relative;
+  margin-top: var(--space-2);
 }
 
-.karaoke-progress-bar {
+.progress-bar {
   height: 100%;
-  width: var(--progress, 0%);
-  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+  background: linear-gradient(90deg, var(--primary-500), var(--sky-500));
   border-radius: var(--radius-full);
   transition: width 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
-.karaoke-progress-bar::after {
+.progress-bar::after {
   content: "";
   position: absolute;
   top: 0;
@@ -1193,88 +513,50 @@ section h5 {
   100% { left: 100%; }
 }
 
-/* Tempo karaoke */
-.karaoke-time {
+.audio-options {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  margin-top: var(--space-2);
-}
-
-.karaoke-time span {
-  font-variant-numeric: tabular-nums;
-  background: rgba(255, 255, 255, 0.1);
-  padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-full);
-}
-
-/* Controlli karaoke */
-.karaoke-controls {
-  display: flex;
-  gap: var(--space-3);
-  justify-content: center;
-  align-items: center;
-  margin-top: var(--space-4);
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 
-.karaoke-button {
+.listen-button, .audio-download-link {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-3) var(--space-5);
+  background: var(--primary-600);
+  color: white;
   border: none;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-lg);
   font-weight: 600;
-  font-size: var(--text-base);
+  text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
 }
 
-.karaoke-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.karaoke-button:hover::before {
-  left: 100%;
-}
-
-.karaoke-button.primary {
-  background: linear-gradient(135deg, #4ecdc4, #44a08d);
-  color: white;
-  box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
-}
-
-.karaoke-button.primary:hover {
+.listen-button:hover, .audio-download-link:hover {
+  background: var(--primary-700);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+  box-shadow: var(--shadow-lg);
 }
 
-.karaoke-button.secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.audio-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  color: var(--rose-700);
+  background: var(--rose-50);
+  border: 1px solid var(--rose-200);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-4);
 }
 
-.karaoke-button.secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Modal karaoke a schermo intero */
-.karaoke-modal {
+/* =============================================================================
+   SEZIONE KARAOKE DEDICATA
+   ========================================================================== */
+.audio-player-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -1284,174 +566,463 @@ section h5 {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-6);
+  font-family: var(--font-sans);
 }
 
-.karaoke-modal-content {
-  max-width: 800px;
-  width: 100%;
-  height: 80%;
+.audio-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+}
+
+.play-button, .stop-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.play-button {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
+  color: white;
+}
+
+.stop-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.play-button:hover, .stop-button:hover {
+  transform: translateY(-2px);
+}
+
+.speed-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: white;
+}
+
+.speed-button {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.speed-button.active {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-500), var(--sky-500));
+  border-radius: var(--radius-full);
+  transition: width 0.1s linear;
+}
+
+.content-highlight {
+  flex: 1;
+  padding: var(--space-8);
+  overflow-y: auto;
+  text-align: center;
+  font-size: var(--text-2xl);
+  line-height: var(--line-height-relaxed);
+  color: white;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.word {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.word.highlight {
+  background: linear-gradient(135deg, var(--primary-500), var(--sky-500));
+  color: white;
+  transform: scale(1.2);
+  box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+  z-index: 10;
+  animation: wordPulse 0.6s ease-out;
+}
+
+.word.glow {
+  color: var(--sky-300);
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+@keyframes wordPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    transform: scale(1.3);
+    box-shadow: 0 4px 30px rgba(34, 197, 94, 0.6);
+  }
+  100% {
+    transform: scale(1.2);
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
+  }
+}
+
+/* =============================================================================
+   SEZIONI ANALISI MIGLIORATE
+   ========================================================================== */
+.analysis-sections {
   display: flex;
   flex-direction: column;
+  gap: var(--space-6);
 }
 
-.karaoke-modal-close {
+.analysis-section {
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.analysis-section::before {
+  content: "";
   position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--primary-500), var(--primary-300));
+}
+
+.analysis-section:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.analysis-section h2 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-4);
+  color: var(--gray-900);
+  border-bottom: 2px solid var(--gray-200);
+  padding-bottom: var(--space-2);
+}
+
+.analysis-section h4 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: var(--space-4) 0 var(--space-2) 0;
+  color: var(--gray-800);
+}
+
+.analysis-section h5 {
+  font-size: var(--text-base);
+  font-weight: 600;
+  margin: var(--space-3) 0 var(--space-1) 0;
+  color: var(--gray-700);
+}
+
+/* Stili specifici per tipi di analisi */
+.analysis-section:nth-child(odd) {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.analysis-section:nth-child(even) {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+}
+
+/* =============================================================================
+   COMPONENTI UTILITY
+   ========================================================================== */
+.loader, .empty-state {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: var(--space-12);
+  text-align: center;
+  color: var(--gray-500);
+  font-size: var(--text-lg);
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--rose-50);
+  border: 1px solid var(--rose-200);
+  border-radius: var(--radius-lg);
+  color: var(--rose-700);
+  margin-bottom: var(--space-4);
+}
+
+.error-message button {
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+  background: var(--rose-600);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
 }
 
-.karaoke-modal-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
+.error-message button:hover {
+  background: var(--rose-700);
 }
 
-/* Responsive design per karaoke */
+/* Liste */
+.list-disc {
+  list-style-type: disc;
+}
+
+.list-inside {
+  list-style-position: inside;
+}
+
+.ml-6 {
+  margin-left: var(--space-6);
+}
+
+/* Grid responsive */
+.grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.sm\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Testo */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.break-words {
+  word-break: break-word;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
 @media (max-width: 768px) {
-  .karaoke-section {
+  .app-container {
     padding: var(--space-4);
-    margin: var(--space-6) 0;
   }
   
-  .karaoke-title {
-    font-size: var(--text-xl);
+  .poetry-header {
+    padding: var(--space-6);
   }
   
-  .karaoke-word {
-    font-size: var(--text-base);
-    padding: var(--space-1);
+  .poetry-header h1 {
+    font-size: var(--text-2xl);
   }
   
-  .karaoke-line {
-    min-height: 50px;
-    padding: var(--space-2);
+  .poetry-content {
+    padding: var(--space-6);
   }
   
-  .karaoke-controls {
+  .audio-controls {
     flex-direction: column;
+    gap: var(--space-3);
   }
   
-  .karaoke-button {
+  .progress-bar {
     width: 100%;
-    justify-content: center;
+  }
+  
+  .content-highlight {
+    font-size: var(--text-xl);
+    padding: var(--space-4);
+  }
+  
+  .sm\:grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .analysis-section {
+    padding: var(--space-4);
   }
 }
 
 @media (max-width: 480px) {
-  .karaoke-container {
-    max-height: 200px;
+  .app-container {
+    padding: var(--space-3);
   }
   
-  .karaoke-line {
-    min-height: 40px;
+  .search-bar input {
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--text-base);
   }
   
-  .karaoke-word {
-    font-size: var(--text-sm);
+  .poesia-card {
+    padding: var(--space-4);
+  }
+  
+  .poetry-header {
+    padding: var(--space-4);
+  }
+  
+  .poetry-content {
+    padding: var(--space-4);
+  }
+  
+  .audio-options {
+    flex-direction: column;
+  }
+  
+  .listen-button, .audio-download-link {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .content-highlight {
+    font-size: var(--text-lg);
+    gap: var(--space-1);
+  }
+  
+  .word {
+    padding: var(--space-1);
   }
 }
 
-/* Effetti particellari per karaoke */
-.karaoke-particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.karaoke-particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  animation: float 6s infinite linear;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(100vh) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* Theme toggle per karaoke */
-.karaoke-theme-toggle {
-  position: absolute;
-  top: var(--space-4);
-  left: var(--space-4);
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2;
-}
-
-.karaoke-theme-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Varianti tema karaoke */
-.karaoke-section.light {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: var(--gray-900);
-}
-
-.karaoke-section.light .karaoke-container {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-}
-
-.karaoke-section.light .karaoke-word.active {
-  background: linear-gradient(135deg, var(--primary-500), var(--primary-400));
-}
-
-/* Accessibilità */
+/* =============================================================================
+   ACCESSIBILITÀ
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .karaoke-word,
-  .karaoke-line,
-  .karaoke-button,
-  .karaoke-progress-bar {
-    transition: none;
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .word.highlight {
+    transform: scale(1.1);
     animation: none;
   }
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Supporto per alto contrasto */
+@media (prefers-contrast: high) {
+  .poesia-card, .analysis-section, .audio-section {
+    border-width: 2px;
+  }
   
-  .karaoke-word.active {
-    transform: scale(1.05);
+  .word.highlight {
+    outline: 2px solid white;
   }
 }
 
-/* Highlight per lettura vocale */
-.karaoke-word[data-voice-active="true"] {
-  outline: 2px solid #ffd700;
-  outline-offset: 2px;
+/* =============================================================================
+   ANIMAZIONI E EFFETTI SPECIALI
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.poesia-card {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Effetto di caricamento */
+.loading-dots::after {
+  content: "";
+  animation: dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { content: "."; }
+  40% { content: ".."; }
+  60% { content: "..."; }
+  80%, 100% { content: ""; }
+}
+
+/* Scrollbar personalizzata */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+}
+
+/* Modal karaoke scrollbar */
+.audio-player-modal ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.audio-player-modal ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.audio-player-modal ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.audio-player-modal ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
