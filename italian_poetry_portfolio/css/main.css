@@ -1831,46 +1831,14 @@ h1, h2, h3, h4, h5, h6 {
   animation: fadeIn var(--transition-slow) ease-out;
 }
 
-:root {
-  /* Superfici chiare (aree ampie) */
-  --color-background: #f6fff8; /* sfondo pagina */
-  --color-surface:    #eaf9ee; /* card / sezioni */
 
-  /* Scala “primary” CHIARA per sfondi ampi */
-  --color-primary-50:  #f0fdf4;
-  --color-primary-100: #dcfce7; /* <- uso principale per section */
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
 
-  /* Verde SCURO per dettagli/testi/titoli */
-  --color-primary:   #166534; /* titoli, icone, dettagli scuri */
-  --color-secondary: #0e3b1d; /* ancora più scuro per hover/bordi strong */
 
-  /* CTA/Accent (bottoni primari) */
-  --color-accent:    #16a34a; /* green-600 */
-  --color-accent-600:#15803d;
-  --color-accent-700:#0f5f2e;
 
-  /* Testi */
-  --color-text-primary:   #ffffff; /* testo su bottoni scuri */
-  --color-text-secondary: #0f2d1f; /* testo base su sfondo chiaro */
-  --color-text-muted:     #5f7c6b;
 
-  /* Stato (lasciati coerenti) */
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
-  --color-error:   #ef4444;
 
-  /* Ombre */
-  --shadow-primary: 0 4px 20px rgba(14, 59, 29, 0.12);
-  --shadow-card:    0 2px 10px rgba(14, 59, 29, 0.08);
-  --shadow-focus:   0 0 0 3px rgba(22, 101, 52, 0.20);
-}
-  /* Transitions */
-  --transition-fast: 300ms ease-out;
-  --transition-slow: 600ms ease-out;
-}
+
+
 
 @keyframes fadeIn {
   from {
