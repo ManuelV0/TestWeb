@@ -4154,3 +4154,91 @@ body::before {
   pointer-events: none;
   backdrop-filter: blur(0.5px);
 }
+
+
+/* === GLASS CARDS + SFONDO SFOCATO === */
+
+/* 1) Layer che sfoca SOLO lo sfondo della pagina (non le card) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;                 /* sotto le card */
+  pointer-events: none;
+  /* sfocatura + un velo leggerissimo per contrasto */
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+          backdrop-filter: blur(10px) saturate(120%);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Utility per elementi che NON devono essere sfocati (es. header/footer) */
+.no-blur,
+header, footer, nav {
+  position: relative;
+  z-index: 2; /* sopra al layer di blur */
+}
+
+/* 2) Card effetto vetro (glassmorphism) */
+.card,
+.bg-white,
+.bg-surface,
+.bg-primary-50 {
+  position: relative;
+  z-index: 10; /* ben sopra allo sfondo sfocato */
+  border-radius: 20px !important;
+  /* vetro: trasparenza + bordo + luce */
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+          backdrop-filter: blur(14px) saturate(140%);
+}
+
+/* Hover più “cristallino” */
+.card:hover,
+.bg-white:hover,
+.bg-surface:hover,
+.bg-primary-50:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+  transition: all .3s ease;
+}
+
+/* Tipografia più leggibile sulle card in vetro */
+.card *, 
+.bg-white *, 
+.bg-surface *, 
+.bg-primary-50 * {
+  color: var(--c-testo) !important;            /* testo scuro leggibile */
+  text-shadow: none !important;                /* niente alone dentro la card */
+  -webkit-text-stroke: 0 !important;
+}
+
+/* 3) Disattiva gli overlay precedenti per evitare “doppi veli” */
+section::after, main::after, article::after, aside::after,
+.bg-primary-50::after, .bg-surface::after, .bg-white::after,
+.card::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+}
+
+/* 4) Mobile: sfocatura più leggera per performance */
+@media (max-width: 768px) {
+  body::before {
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+            backdrop-filter: blur(6px) saturate(120%);
+  }
+  .card, .bg-white, .bg-surface, .bg-primary-50 {
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+            backdrop-filter: blur(10px) saturate(140%);
+  }
+}
