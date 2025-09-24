@@ -4103,4 +4103,41 @@ body, body * {
 }
 
 
--webkit-text-stroke: 0 !important;
+/* === PATCH NEON VERDE CYBERPUNK === */
+
+/* Ombre neon globali */
+:root {
+  --ombra-testo-nero: 
+    0 0 4px #00ff99,
+    0 0 8px #00ff99,
+    0 0 16px #00ff99,
+    0 0 32px #00ff99;
+
+  --ombra-testo-nero-forte: 
+    0 0 6px #00ff99,
+    0 0 12px #00ff99,
+    0 0 24px #00ff99,
+    0 0 48px #00ff99;
+}
+
+/* Titoli neon */
+h1, h2, h3, h4, h5, h6 {
+  color: #ccffcc !important; /* verde chiaro leggibile */
+  text-shadow: var(--ombra-testo-nero-forte) !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Testo normale neon */
+p, span, div, li, a, label {
+  color: #e6ffe6 !important; /* bianco-verdino */
+  text-shadow: var(--ombra-testo-nero) !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* Testo bianco forzato */
+.text-white, 
+[class*="text-white"] {
+  color: #ccffcc !important;
+  text-shadow: var(--ombra-testo-nero) !important;
+  -webkit-text-stroke: 0 !important;
+}
