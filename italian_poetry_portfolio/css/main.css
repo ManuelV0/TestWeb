@@ -4331,9 +4331,18 @@ body::before {
   }
 }
 
-/* === PATCH: SFONDI BIANCHI → TURCHESE SCURO SFUMATO === */
+/* === PATCH GLOBALE: TUTTI GLI SFONDI BIANCHI → TURCHESE SCURO SFUMATO === */
 
-/* Tutti i container con fondo bianco */
+:root {
+  --grad-turchese: linear-gradient(
+    135deg,
+    #00CED1 0%,   /* turchese chiaro */
+    #008B8B 50%,  /* turchese medio */
+    #003333 100%  /* scuro profondo */
+  );
+}
+
+/* 1) Tutti i contenitori e le card bianche */
 .bg-white,
 .bg-surface,
 .bg-primary-50,
@@ -4346,64 +4355,6 @@ article.bg-white,
 aside.bg-white,
 header.bg-white,
 footer.bg-white {
-  position: relative;
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-
-  /* ✅ sfondo turchese sfumato scuro */
-  background: linear-gradient(
-    135deg,
-    #00CED1 0%,   /* turchese chiaro */
-    #008B8B 50%,  /* turchese medio */
-    #003333 100%  /* scuro */
-  ) !important;
-}
-
-/* Testo sopra sfondo scuro → chiaro e leggibile */
-.bg-white *, 
-.bg-surface *, 
-.bg-primary-50 *,
-.card *, 
-.box *, 
-.content-box * {
-  color: #f8faff !important; /* bianco ghiaccio */
-  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-}
-/* === FIX GLOBALE: TUTTE LE CARD E SFONDI BIANCHI → TURCHESE SCURO === */
-/* Incolla QUESTO blocco come ULTIMO nel file */
-
-:root {
-  --grad-turchese: linear-gradient(135deg,#00CED1 0%,#008B8B 50%,#003333 100%);
-}
-
-/* 1) Background pagina */
-html, body {
-  background: var(--grad-turchese) !important;
-}
-
-/* 2) Forza turchese su card e container “bianchi”.
-      Opt-out: aggiungi .keep-white dove NON vuoi il turchese. */
-body :is(
-  .card,
-  .box,
-  .content-box,
-  .bg-white,
-  .bg-surface,
-  .bg-primary-50,
-  section.bg-white,
-  main.bg-white,
-  article.bg-white,
-  aside.bg-white,
-  header.bg-white,
-  footer.bg-white,
-  [class*="bg-white"],
-  [class*="bg-surface"],
-  [style*="background:#fff"],
-  [style*="background: #fff"],
-  [style*="background-color:#fff"],
-  [style*="background-color: #fff"]
-):not(.keep-white) {
   background: var(--grad-turchese) !important;
   border: 1px solid rgba(255,255,255,0.15) !important;
   border-radius: 20px;
@@ -4412,53 +4363,30 @@ body :is(
   overflow: hidden;
 }
 
-/* 3) Testo leggibile sopra il turchese */
-body :is(
-  .card,
-  .box,
-  .content-box,
-  .bg-white,
-  .bg-surface,
-  .bg-primary-50,
-  [class*="bg-white"],
-  [class*="bg-surface"]
-):not(.keep-white) * {
+/* 2) Testo sopra gli sfondi scuri → bianco ghiaccio */
+.bg-white *, 
+.bg-surface *, 
+.bg-primary-50 *,
+.card *, 
+.box *, 
+.content-box * {
   color: #f8faff !important;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
   -webkit-text-stroke: 0.5px rgba(0,0,0,0.4);
 }
 
-/* 4) Blocca gli hover che riportano al bianco */
-body :is(
-  .hover\:bg-white:hover,
-  .bg-white:hover,
-  .bg-surface:hover,
-  .bg-primary-50:hover
-):not(.keep-white) {
+/* 3) Blocca hover che riportano al bianco */
+.bg-white:hover,
+.bg-surface:hover,
+.bg-primary-50:hover,
+.card:hover,
+.box:hover,
+.content-box:hover {
   background: var(--grad-turchese) !important;
-  filter: brightness(1.03);
+  filter: brightness(1.05);
 }
 
-/* 5) Patch contro il “glass” che reimposta lo sfondo
-      Opt-out: usa .keep-glass se vuoi mantenere il glass su un elemento. */
-body :is(
-  .card,
-  .box,
-  .content-box,
-  .bg-white,
-  .bg-surface,
-  .bg-primary-50
-):not(.keep-white):not(.keep-glass) {
-  -webkit-backdrop-filter: none !important;
-          backdrop-filter: none !important;
-}
-
-/* 6) Alcune varianti di card personalizzate */
-body :is(
-  .mood-card .card,
-  .grid > div > div.card,
-  .text-center.hover\:shadow-primary
-):not(.keep-white) {
+/* 4) Anche lo sfondo globale della pagina */
+html, body {
   background: var(--grad-turchese) !important;
-  border-color: rgba(255,255,255,0.18) !important;
 }
