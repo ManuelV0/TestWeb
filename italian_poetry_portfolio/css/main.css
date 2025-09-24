@@ -4370,4 +4370,95 @@ footer.bg-white {
   color: #f8faff !important; /* bianco ghiaccio */
   text-shadow: 0 2px 4px rgba(0,0,0,0.7);
 }
+/* === FIX GLOBALE: TUTTE LE CARD E SFONDI BIANCHI → TURCHESE SCURO === */
+/* Incolla QUESTO blocco come ULTIMO nel file */
 
+:root {
+  --grad-turchese: linear-gradient(135deg,#00CED1 0%,#008B8B 50%,#003333 100%);
+}
+
+/* 1) Background pagina */
+html, body {
+  background: var(--grad-turchese) !important;
+}
+
+/* 2) Forza turchese su card e container “bianchi”.
+      Opt-out: aggiungi .keep-white dove NON vuoi il turchese. */
+body :is(
+  .card,
+  .box,
+  .content-box,
+  .bg-white,
+  .bg-surface,
+  .bg-primary-50,
+  section.bg-white,
+  main.bg-white,
+  article.bg-white,
+  aside.bg-white,
+  header.bg-white,
+  footer.bg-white,
+  [class*="bg-white"],
+  [class*="bg-surface"],
+  [style*="background:#fff"],
+  [style*="background: #fff"],
+  [style*="background-color:#fff"],
+  [style*="background-color: #fff"]
+):not(.keep-white) {
+  background: var(--grad-turchese) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 3) Testo leggibile sopra il turchese */
+body :is(
+  .card,
+  .box,
+  .content-box,
+  .bg-white,
+  .bg-surface,
+  .bg-primary-50,
+  [class*="bg-white"],
+  [class*="bg-surface"]
+):not(.keep-white) * {
+  color: #f8faff !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7) !important;
+  -webkit-text-stroke: 0.5px rgba(0,0,0,0.4);
+}
+
+/* 4) Blocca gli hover che riportano al bianco */
+body :is(
+  .hover\:bg-white:hover,
+  .bg-white:hover,
+  .bg-surface:hover,
+  .bg-primary-50:hover
+):not(.keep-white) {
+  background: var(--grad-turchese) !important;
+  filter: brightness(1.03);
+}
+
+/* 5) Patch contro il “glass” che reimposta lo sfondo
+      Opt-out: usa .keep-glass se vuoi mantenere il glass su un elemento. */
+body :is(
+  .card,
+  .box,
+  .content-box,
+  .bg-white,
+  .bg-surface,
+  .bg-primary-50
+):not(.keep-white):not(.keep-glass) {
+  -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+}
+
+/* 6) Alcune varianti di card personalizzate */
+body :is(
+  .mood-card .card,
+  .grid > div > div.card,
+  .text-center.hover\:shadow-primary
+):not(.keep-white) {
+  background: var(--grad-turchese) !important;
+  border-color: rgba(255,255,255,0.18) !important;
+}
