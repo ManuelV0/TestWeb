@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Poetry Matchmaking - Discover Your Perfect Verse | Theitalianpoetry</title>
+    <meta name="description" content="Discover poetry that speaks to your soul through our AI-powered matchmaking engine. Find Italian poetry that resonates with your mood, preferences, and reading history." />
+    <link rel="stylesheet" href="../css/main.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fitalianpo1980back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.8"></script>
+</head>
+<body class="bg-background min-h-screen">
+    <!-- Navigation Header -->
+    <header class="bg-primary shadow-primary sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-playfair font-bold text-white">Theitalianpoetry</h1>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="poet_portfolio_landing.html" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Portfolio</a>
+                        <a href="dynamic_biography_timeline.html" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Timeline</a>
+                        <a href="ai_poetry_matchmaking.html" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 bg-secondary">Discover</a>
+                        <a href="qr_and_sharing_center.html" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Share</a>
+                        <a href="analytics_dashboard.html" class="text-white hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300">Analytics</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="text-white hover:text-accent focus:outline-none focus:text-accent" onclick="toggleMobileMenu()">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="md:hidden hidden">
+                <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-secondary">
+                    <a href="poet_portfolio_landing.html" class="text-white hover:text-accent block px-3 py-2 rounded-md text-base font-medium">Portfolio</a>
+                    <a href="dynamic_biography_timeline.html" class="text-white hover:text-accent block px-3 py-2 rounded-md text-base font-medium">Timeline</a>
+                    <a href="ai_poetry_matchmaking.html" class="text-white hover:text-accent block px-3 py-2 rounded-md text-base font-medium bg-primary">Discover</a>
+                    <a href="qr_and_sharing_center.html" class="text-white hover:text-accent block px-3 py-2 rounded-md text-base font-medium">Share</a>
+                    <a href="analytics_dashboard.html" class="text-white hover:text-accent block px-3 py-2 rounded-md text-base font-medium">Analytics</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section with AI Discovery Introduction -->
+    <section class="relative bg-gradient-to-br from-primary via-secondary to-primary-700 py-20">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-8">
+                    <div class="w-24 h-24 mx-auto bg-accent rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-playfair font-bold text-white mb-6">Discover Your Perfect Verse</h1>
+                <p class="text-xl text-accent font-crimson mb-8 max-w-3xl mx-auto">
+                    Let our AI-powered discovery engine connect you with Italian poetry that speaks to your soul, mood, and literary preferences
+                </p>
+                <p class="text-lg text-white opacity-90 mb-12 leading-relaxed max-w-4xl mx-auto">
+                    Experience poetry discovery beyond simple search. Our intelligent matchmaking system analyzes your reading patterns, emotional preferences, and literary tastes to surface unexpected favorites and build deeply personalized reading experiences.
+                </p>
+                
+                <!-- Quick Start Actions -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="btn-primary" onclick="startDiscoveryQuiz()">Start Discovery Quiz</button>
+                    <button class="btn-secondary text-white border-white hover:bg-white hover:text-primary" onclick="scrollToMoodDiscovery()">Browse by Mood</button>
+                    <button class="btn-secondary text-white border-white hover:bg-white hover:text-primary" onclick="scrollToTrending()">Trending Poetry</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preference Onboarding Quiz -->
+    <section id="discovery-quiz" class="py-20 bg-surface">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-playfair font-bold text-primary mb-4">Personalize Your Poetry Journey</h2>
+                <p class="text-lg text-text-muted max-w-2xl mx-auto">Answer a few questions to help our AI understand your literary preferences and discover poetry that resonates with you</p>
+            </div>
+            
+            <div class="poetry-focus max-w-3xl mx-auto">
+                <div id="quiz-container">
+                    <!-- Quiz Question 1 -->
+                    <div class="quiz-question active" data-question="1">
+                        <h3 class="text-2xl font-playfair font-semibold text-primary mb-6">What draws you to poetry?</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button class="quiz-option p-4 border-2 border-primary-200 rounded-lg hover:border-accent hover:bg-accent-50 transition-all duration-300 text-left" data-value="emotional">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Emotional Connection</h4>
+                                        <p class="text-sm text-text-muted">Poetry that moves the heart and soul</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="quiz-option p-4 border-2 border-primary-200 rounded-lg hover:border-accent hover:bg-accent-50 transition-all duration-300 text-left" data-value="intellectual">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Intellectual Stimulation</h4>
+                                        <p class="text-sm text-text-muted">Complex themes and literary craftsmanship</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="quiz-option p-4 border-2 border-primary-200 rounded-lg hover:border-accent hover:bg-accent-50 transition-all duration-300 text-left" data-value="cultural">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012-2v-1a2 2 0 012-2h1.945M15 8a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Cultural Heritage</h4>
+                                        <p class="text-sm text-text-muted">Italian traditions and historical context</p>
+                                    </div>
+                                </div>
+                            </button>
+                            <button class="quiz-option p-4 border-2 border-primary-200 rounded-lg hover:border-accent hover:bg-accent-50 transition-all duration-300 text-left" data-value="contemporary">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center mr-3">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-primary">Modern Expression</h4>
+                                        <p class="text-sm text-text-muted">Contemporary themes and innovative forms</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Progress -->
+                    <div class="mt-8 flex justify-between items-center">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 bg-accent rounded-full"></div>
+                            <div class="w-3 h-3 bg-primary-200 rounded-full"></div>
+                            <div class="w-3 h-3 bg-primary-200 rounded-full"></div>
+                            <div class="w-3 h-3 bg-primary-200 rounded-full"></div>
+                        </div>
+                        <button class="btn-secondary" onclick="skipQuiz()">Skip Quiz</button>
+                    </div>
+                </div>
+                
+                <!-- Quiz Results (Hidden initially) -->
+                <div id="quiz-results" class="hidden">
+                    <div class="text-center mb-8">
+                        <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-playfair font-bold text-primary mb-4">Your Poetry Profile Created!</h3>
+                        <p class="text-text-muted mb-6">Based on your preferences, we've curated personalized recommendations just for you.</p>
+                        <button class="btn-primary" onclick="viewRecommendations()">View My Recommendations</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood-Based Discovery Interface -->
+    <section id="mood-discovery" class="py-20 bg-gradient-to-br from-primary-50 to-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-playfair font-bold text-primary mb-4">Discover by Mood</h2>
+                <p class="text-lg text-text-muted max-w-3xl mx-auto">Let your current emotional state guide you to poetry that resonates with your heart and mind</p>
+            </div>
+            
+            <!-- Mood Selection Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+                <!-- Contemplative -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('contemplative')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Contemplative</h3>
+                        <p class="text-sm text-text-muted">Deep reflection and philosophical musings</p>
+                        <div class="mt-3 text-xs text-accent">12 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Romantic -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('romantic')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-accent to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Romantic</h3>
+                        <p class="text-sm text-text-muted">Love, passion, and intimate connections</p>
+                        <div class="mt-3 text-xs text-accent">18 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Melancholic -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('melancholic')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-secondary to-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Melancholic</h3>
+                        <p class="text-sm text-text-muted">Bittersweet emotions and nostalgic reflections</p>
+                        <div class="mt-3 text-xs text-accent">15 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Joyful -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('joyful')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-warning to-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Joyful</h3>
+                        <p class="text-sm text-text-muted">Celebration, happiness, and life's pleasures</p>
+                        <div class="mt-3 text-xs text-accent">21 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Nostalgic -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('nostalgic')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-primary-400 to-secondary-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Nostalgic</h3>
+                        <p class="text-sm text-text-muted">Memories, childhood, and times past</p>
+                        <div class="mt-3 text-xs text-accent">14 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Spiritual -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('spiritual')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-accent-700 to-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Spiritual</h3>
+                        <p class="text-sm text-text-muted">Faith, transcendence, and inner peace</p>
+                        <div class="mt-3 text-xs text-accent">9 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Rebellious -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('rebellious')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-error to-warning rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Rebellious</h3>
+                        <p class="text-sm text-text-muted">Social critique and revolutionary spirit</p>
+                        <div class="mt-3 text-xs text-accent">7 poems</div>
+                    </div>
+                </div>
+                
+                <!-- Peaceful -->
+                <div class="mood-card group cursor-pointer" onclick="discoverByMood('peaceful')">
+                    <div class="card text-center hover:shadow-primary transition-all duration-600 group-hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-br from-success to-accent-300 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9 3.5a1 1 0 112 0V4h.5a1 1 0 110 2H11v.5a1 1 0 11-2 0V6H8.5a1 1 0 110-2H9v-.5z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-playfair font-semibold text-primary mb-2">Peaceful</h3>
+                        <p class="text-sm text-text-muted">Serenity, nature, and quiet moments</p>
+                        <div class="mt-3 text-xs text-accent">16 poems</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mood Discovery Results -->
+            <div id="mood-results" class="hidden">
+                <div class="poetry-focus">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-playfair font-bold text-primary">Contemplative Poetry</h3>
+                        <button onclick="clearMoodFilter()" class="text-accent hover:text-accent-600 text-sm">Clear Filter</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Sample mood-based results -->
+                        <div class="border border-primary-200 rounded-lg p-4 hover:border-accent transition-colors duration-300">
+                            <h4 class="font-playfair font-semibold text-primary mb-2">Silent Reflections</h4>
+                            <p class="text-sm text-text-muted mb-3">A meditation on solitude and inner wisdom...</p>
+                            <div class="flex items-center justify-between text-xs text-text-muted">
+                                <span>Marco Benedetti</span>
+                                <span class="text-accent">95% match</span>
+                            </div>
+                        </div>
+                        <div class="border border-primary-200 rounded-lg p-4 hover:border-accent transition-colors duration-300">
+                            <h4 class="font-playfair font-semibold text-primary mb-2">The Weight of Thoughts</h4>
+                            <p class="text-sm text-text-muted mb-3">Exploring the depths of philosophical inquiry...</p>
+                            <div class="flex items-center justify-between text-xs text-text-muted">
+                                <span>Marco Benedetti</span>
+                                <span class="text-accent">92% match</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Poetry Section -->
+    <section id="trending-section" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-playfair font-bold text-primary mb-4">Trending Poetry</h2>
+                <p class="text-lg text-text-muted">Discover what readers are connecting with right now</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Trending Poem 1 -->
+                <div class="poetry-focus group hover:shadow-primary transition-all duration-600 cursor-pointer" onclick="viewPoem('whispers-tuscany-3')">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <span class="bg-accent text-white text-xs px-2 py-1 rounded-full mr-2">#1</span>
+                            <span class="text-accent text-sm font-medium">Trending</span>
+                        </div>
+                        <div class="flex items-center text-sm text-text-muted">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                            </svg>
+                            2.3k views
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Morning Mist in Chianti</h3>
+                    <p class="text-text-muted mb-4 leading-relaxed">
+                        "Through vineyard rows the morning light<br />
+                        Dances with shadows, soft and bright..."
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-text-muted">Marco Benedetti</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-accent text-sm">♥ 156</span>
+                            <span class="text-accent text-sm">↗ 89</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trending Poem 2 -->
+                <div class="poetry-focus group hover:shadow-primary transition-all duration-600 cursor-pointer" onclick="viewPoem('urban-sonnets-7')">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <span class="bg-secondary text-white text-xs px-2 py-1 rounded-full mr-2">#2</span>
+                            <span class="text-secondary text-sm font-medium">Rising</span>
+                        </div>
+                        <div class="flex items-center text-sm text-text-muted">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                            </svg>
+                            1.8k views
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Digital Solitude</h3>
+                    <p class="text-text-muted mb-4 leading-relaxed">
+                        "In screens we seek what hearts once found<br />
+                        In whispered words and sacred ground..."
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-text-muted">Marco Benedetti</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-accent text-sm">♥ 134</span>
+                            <span class="text-accent text-sm">↗ 67</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trending Poem 3 -->
+                <div class="poetry-focus group hover:shadow-primary transition-all duration-600 cursor-pointer" onclick="viewPoem('seasons-heart-12')">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <span class="bg-primary-400 text-white text-xs px-2 py-1 rounded-full mr-2">#3</span>
+                            <span class="text-primary-400 text-sm font-medium">Steady</span>
+                        </div>
+                        <div class="flex items-center text-sm text-text-muted">
+                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                            </svg>
+                            1.5k views
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Autumn's Promise</h3>
+                    <p class="text-text-muted mb-4 leading-relaxed">
+                        "When leaves surrender to the wind<br />
+                        They teach us how to let love in..."
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-text-muted">Marco Benedetti</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-accent text-sm">♥ 198</span>
+                            <span class="text-accent text-sm">↗ 45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="btn-secondary" onclick="viewAllTrending()">View All Trending Poetry</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Similarity Scoring Visualization -->
+    <section class="py-16 bg-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-playfair font-bold text-primary mb-4">How Our AI Works</h2>
+                <p class="text-lg text-text-muted max-w-3xl mx-auto">Transparency in our recommendation process - understand why specific poems are suggested for you</p>
+            </div>
+            
+            <div class="poetry-focus max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Analysis Factors -->
+                    <div>
+                        <h3 class="text-xl font-playfair font-semibold text-primary mb-6">Analysis Factors</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                                <span class="text-primary font-medium">Emotional Tone</span>
+                                <div class="flex items-center">
+                                    <div class="w-24 h-2 bg-primary-200 rounded-full mr-3">
+                                        <div class="w-20 h-2 bg-accent rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-accent">85%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                                <span class="text-primary font-medium">Thematic Content</span>
+                                <div class="flex items-center">
+                                    <div class="w-24 h-2 bg-primary-200 rounded-full mr-3">
+                                        <div class="w-18 h-2 bg-accent rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-accent">78%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                                <span class="text-primary font-medium">Literary Style</span>
+                                <div class="flex items-center">
+                                    <div class="w-24 h-2 bg-primary-200 rounded-full mr-3">
+                                        <div class="w-22 h-2 bg-accent rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-accent">92%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                                <span class="text-primary font-medium">Reading History</span>
+                                <div class="flex items-center">
+                                    <div class="w-24 h-2 bg-primary-200 rounded-full mr-3">
+                                        <div class="w-16 h-2 bg-accent rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-accent">67%</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                                <span class="text-primary font-medium">Cultural Context</span>
+                                <div class="flex items-center">
+                                    <div class="w-24 h-2 bg-primary-200 rounded-full mr-3">
+                                        <div class="w-19 h-2 bg-accent rounded-full"></div>
+                                    </div>
+                                    <span class="text-sm text-accent">81%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Match Explanation -->
+                    <div>
+                        <h3 class="text-xl font-playfair font-semibold text-primary mb-6">Why This Match?</h3>
+                        <div class="bg-accent-50 rounded-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4">
+                                    <span class="text-white font-bold">89%</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-playfair font-semibold text-primary">High Compatibility</h4>
+                                    <p class="text-sm text-text-muted">Strong match for your preferences</p>
+                                </div>
+                            </div>
+                            <div class="space-y-3 text-sm text-text-secondary">
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 bg-accent rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                    <p>Similar emotional depth to poems you've previously engaged with</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 bg-accent rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                    <p>Matches your preference for contemplative and nature-themed poetry</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 bg-accent rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                    <p>Uses literary techniques found in your favorite poems</p>
+                                </div>
+                                <div class="flex items-start">
+                                    <div class="w-2 h-2 bg-accent rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                                    <p>Cultural themes align with your reading history</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <button class="btn-primary w-full" onclick="viewDetailedAnalysis()">View Detailed Analysis</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personal Reading List -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-playfair font-bold text-primary mb-4">Your Personal Reading List</h2>
+                <p class="text-lg text-text-muted">Curated recommendations based on your unique literary profile</p>
+            </div>
+            
+            <div class="poetry-focus max-w-4xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center">
+                        <h3 class="text-xl font-playfair font-semibold text-primary mr-4">Recommended for You</h3>
+                        <span class="bg-accent text-white text-sm px-3 py-1 rounded-full">12 new</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="btn-secondary text-sm" onclick="exportReadingList()">Export List</button>
+                        <button class="btn-secondary text-sm" onclick="shareReadingList()">Share</button>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Reading List Item 1 -->
+                    <div class="flex items-center justify-between p-4 border border-primary-200 rounded-lg hover:border-accent transition-colors duration-300">
+                        <div class="flex items-center flex-1">
+                            <div class="w-12 h-12 bg-gradient-to-br from-accent to-accent-600 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-sm">94%</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-playfair font-semibold text-primary">The Language of Silence</h4>
+                                <p class="text-sm text-text-muted">Marco Benedetti • Contemplative • 3 min read</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="text-accent hover:text-accent-600" onclick="addToFavorites('silence')">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-primary text-sm" onclick="readPoem('silence')">Read Now</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Reading List Item 2 -->
+                    <div class="flex items-center justify-between p-4 border border-primary-200 rounded-lg hover:border-accent transition-colors duration-300">
+                        <div class="flex items-center flex-1">
+                            <div class="w-12 h-12 bg-gradient-to-br from-secondary to-primary rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-sm">91%</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-playfair font-semibold text-primary">Echoes of Ancient Rome</h4>
+                                <p class="text-sm text-text-muted">Marco Benedetti • Historical • 4 min read</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="text-accent hover:text-accent-600" onclick="addToFavorites('rome')">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-primary text-sm" onclick="readPoem('rome')">Read Now</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Reading List Item 3 -->
+                    <div class="flex items-center justify-between p-4 border border-primary-200 rounded-lg hover:border-accent transition-colors duration-300">
+                        <div class="flex items-center flex-1">
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-secondary-600 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-white font-bold text-sm">88%</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-playfair font-semibold text-primary">Mediterranean Dreams</h4>
+                                <p class="text-sm text-text-muted">Marco Benedetti • Nostalgic • 2 min read</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="text-accent hover:text-accent-600" onclick="addToFavorites('mediterranean')">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </button>
+                            <button class="btn-primary text-sm" onclick="readPoem('mediterranean')">Read Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-8">
+                    <button class="btn-secondary" onclick="loadMoreRecommendations()">Load More Recommendations</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cross-Cultural Poetry Bridges -->
+    <section class="py-16 bg-gradient-to-br from-primary-50 to-surface">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-playfair font-bold text-primary mb-4">Cross-Cultural Connections</h2>
+                <p class="text-lg text-text-muted max-w-3xl mx-auto">Discover Italian poetry through familiar themes and universal human experiences</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Universal Theme 1 -->
+                <div class="card text-center hover:shadow-primary transition-all duration-600">
+                    <div class="w-16 h-16 bg-gradient-to-br from-accent to-accent-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Love & Relationships</h3>
+                    <p class="text-text-muted mb-4">Universal experiences of love, heartbreak, and human connection expressed through Italian sensibility</p>
+                    <div class="text-sm text-accent mb-4">23 poems • 5 languages</div>
+                    <button class="btn-secondary text-sm" onclick="exploreCulturalTheme('love')">Explore Theme</button>
+                </div>
+                
+                <!-- Universal Theme 2 -->
+                <div class="card text-center hover:shadow-primary transition-all duration-600">
+                    <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M5.5 16a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 16h-8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Nature & Seasons</h3>
+                    <p class="text-text-muted mb-4">The changing seasons and natural world as metaphors for life's transitions and emotions</p>
+                    <div class="text-sm text-accent mb-4">31 poems • 4 languages</div>
+                    <button class="btn-secondary text-sm" onclick="exploreCulturalTheme('nature')">Explore Theme</button>
+                </div>
+                
+                <!-- Universal Theme 3 -->
+                <div class="card text-center hover:shadow-primary transition-all duration-600">
+                    <div class="w-16 h-16 bg-gradient-to-br from-secondary to-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-playfair font-semibold text-primary mb-3">Time & Memory</h3>
+                    <p class="text-text-muted mb-4">Reflections on the passage of time, childhood memories, and the weight of history</p>
+                    <div class="text-sm text-accent mb-4">18 poems • 6 languages</div>
+                    <button class="btn-secondary text-sm" onclick="exploreCulturalTheme('time')">Explore Theme</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-playfair font-bold mb-4">Theitalianpoetry</h3>
+                    <p class="text-white opacity-75 mb-4">Where authentic Italian poetry meets contemporary digital expression</p>
+                    <div class="flex space-x-4">
+                        <a href="javascript:void(0)" class="text-white hover:text-accent transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-white hover:text-accent transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                            </svg>
+                        </a>
+                        <a href="javascript:void(0)" class="text-white hover:text-accent transition-colors duration-300">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.001z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="poet_portfolio_landing.html" class="text-white opacity-75 hover:text-accent transition-colors duration-300">Portfolio</a></li>
+                        <li><a href="dynamic_biography_timeline.html" class="text-white opacity-75 hover:text-accent transition-colors duration-300">Biography Timeline</a></li>
+                        <li><a href="qr_and_sharing_center.html" class="text-white opacity-75 hover:text-accent transition-colors duration-300">Share & Connect</a></li>
+                        <li><a href="analytics_dashboard.html" class="text-white opacity-75 hover:text-accent transition-colors duration-300">Reading Analytics</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Stay Connected</h4>
+                    <p class="text-white opacity-75 mb-4">Subscribe for new poetry releases and literary updates</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="flex-1 px-4 py-2 rounded-l-lg text-primary focus:outline-none focus:ring-2 focus:ring-accent" />
+                        <button class="bg-accent hover:bg-accent-600 px-4 py-2 rounded-r-lg transition-colors duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p class="text-white opacity-75">© 2025 Theitalianpoetry. All Rights Reserved. | AI-Powered Poetry Discovery Platform</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Discovery Quiz Functions
+        function startDiscoveryQuiz() {
+            document.getElementById('discovery-quiz').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function skipQuiz() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+        }
+
+        function viewRecommendations() {
+            document.querySelector('#mood-discovery').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Mood Discovery Functions
+        function scrollToMoodDiscovery() {
+            document.getElementById('mood-discovery').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function discoverByMood(mood) {
+            // Show mood results
+            document.getElementById('mood-results').classList.remove('hidden');
+            document.getElementById('mood-results').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // Update results based on mood
+            const moodTitle = document.querySelector('#mood-results h3');
+            moodTitle.textContent = mood.charAt(0).toUpperCase() + mood.slice(1) + ' Poetry';
+        }
+
+        function clearMoodFilter() {
+            document.getElementById('mood-results').classList.add('hidden');
+        }
+
+        // Trending Poetry Functions
+        function scrollToTrending() {
+            document.getElementById('trending-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function viewPoem(poemId) {
+            alert(`Opening poem: ${poemId}. This would navigate to the individual poem page.`);
+        }
+
+        function viewAllTrending() {
+            alert('This would show all trending poetry in an expanded view.');
+        }
+
+        // AI Analysis Functions
+        function viewDetailedAnalysis() {
+            alert('This would show a detailed breakdown of the AI analysis and recommendation factors.');
+        }
+
+        // Reading List Functions
+        function exportReadingList() {
+            alert('This would export your reading list as a PDF or text file.');
+        }
+
+        function shareReadingList() {
+            alert('This would open sharing options for your reading list.');
+        }
+
+        function addToFavorites(poemId) {
+            alert(`Added ${poemId} to favorites!`);
+        }
+
+        function readPoem(poemId) {
+            alert(`Opening poem: ${poemId} for reading.`);
+        }
+
+        function loadMoreRecommendations() {
+            alert('Loading more personalized recommendations...');
+        }
+
+        // Cultural Theme Functions
+        function exploreCulturalTheme(theme) {
+            alert(`Exploring ${theme} theme across cultures. This would show poems with similar themes from different cultural perspectives.`);
+        }
+
+        // Quiz Option Selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    quizOptions.forEach(opt => opt.classList.remove('border-accent', 'bg-accent-50'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('border-accent', 'bg-accent-50');
+                    
+                    // Simulate quiz progression
+                    setTimeout(() => {
+                        document.getElementById('quiz-container').classList.add('hidden');
+                        document.getElementById('quiz-results').classList.remove('hidden');
+                    }, 1000);
+                });
+            });
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.card, .poetry-focus, .mood-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>
