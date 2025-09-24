@@ -4093,3 +4093,6 @@ body, body * {
     line-height: 1;
   }
 }
+
+
+-webkit-text-stroke: 0 !important;
