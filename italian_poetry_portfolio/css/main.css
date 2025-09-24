@@ -1832,98 +1832,41 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
-  /* Primary Colors - Italian Garden Depth */
-  --color-primary: #1a3d2e;
-  /* Deep contemplative foundation */
-  --color-primary-50: #f0f7f4;
-  /* Lightest green tint */
-  --color-primary-100: #d1e7dd;
-  /* Very light green */
-  --color-primary-200: #a3cfbb;
-  /* Light green */
-  --color-primary-300: #75b799;
-  /* Medium light green */
-  --color-primary-400: #479f77;
-  /* Medium green */
-  --color-primary-500: #2d5a3d;
-  /* Supporting depth */
-  --color-primary-600: #1a3d2e;
-  /* Primary deep green */
-  --color-primary-700: #143126;
-  /* Darker green */
-  --color-primary-800: #0e251e;
-  /* Very dark green */
-  --color-primary-900: #081916;
-  /* Darkest green */
-  /* Secondary Colors */
-  --color-secondary: #2d5a3d;
-  /* Supporting depth, content backgrounds */
-  --color-secondary-50: #f1f8f4;
-  /* Very light secondary */
-  --color-secondary-100: #d4e7dd;
-  /* Light secondary */
-  --color-secondary-200: #a9cfbb;
-  /* Medium light secondary */
-  --color-secondary-300: #7eb799;
-  /* Medium secondary */
-  --color-secondary-400: #539f77;
-  /* Medium dark secondary */
-  --color-secondary-500: #2d5a3d;
-  /* Base secondary */
-  --color-secondary-600: #244a31;
-  /* Dark secondary */
-  --color-secondary-700: #1b3a25;
-  /* Darker secondary */
-  --color-secondary-800: #122a19;
-  /* Very dark secondary */
-  --color-secondary-900: #091a0d;
-  /* Darkest secondary */
-  /* Accent Colors */
-  --color-accent: #32cd32;
-  /* Vibrant discovery moments - lime-green */
-  --color-accent-50: #f0fff0;
-  /* Very light accent */
-  --color-accent-100: #dcfce7;
-  /* Light accent */
-  --color-accent-200: #bbf7d0;
-  /* Medium light accent */
-  --color-accent-300: #86efac;
-  /* Medium accent */
-  --color-accent-400: #4ade80;
-  /* Medium bright accent */
-  --color-accent-500: #32cd32;
-  /* Base accent */
-  --color-accent-600: #16a34a;
-  /* Dark accent */
-  --color-accent-700: #15803d;
-  /* Darker accent */
-  --color-accent-800: #166534;
-  /* Very dark accent */
-  --color-accent-900: #14532d;
-  /* Darkest accent */
-  /* Background Colors */
-  --color-background: #f8fffe;
-  /* Clean reading canvas - gray-50 */
-  --color-surface: #e8f5e8;
-  /* Subtle content elevation - green-50 */
-  /* Text Colors */
-  --color-text-primary: #ffffff;
-  /* Crisp reading clarity - white */
-  --color-text-secondary: #1a3d2e;
-  /* Hierarchical information - primary */
-  --color-text-muted: #6b7280;
-  /* Muted text - gray-500 */
-  /* Status Colors */
+  /* Superfici chiare (aree ampie) */
+  --color-background: #f6fff8; /* sfondo pagina */
+  --color-surface:    #eaf9ee; /* card / sezioni */
+
+  /* Scala “primary” CHIARA per sfondi ampi */
+  --color-primary-50:  #f0fdf4;
+  --color-primary-100: #dcfce7; /* <- uso principale per section */
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+
+  /* Verde SCURO per dettagli/testi/titoli */
+  --color-primary:   #166534; /* titoli, icone, dettagli scuri */
+  --color-secondary: #0e3b1d; /* ancora più scuro per hover/bordi strong */
+
+  /* CTA/Accent (bottoni primari) */
+  --color-accent:    #16a34a; /* green-600 */
+  --color-accent-600:#15803d;
+  --color-accent-700:#0f5f2e;
+
+  /* Testi */
+  --color-text-primary:   #ffffff; /* testo su bottoni scuri */
+  --color-text-secondary: #0f2d1f; /* testo base su sfondo chiaro */
+  --color-text-muted:     #5f7c6b;
+
+  /* Stato (lasciati coerenti) */
   --color-success: #4ade80;
-  /* Positive engagement feedback - green-400 */
   --color-warning: #fbbf24;
-  /* Gentle attention guidance - amber-400 */
-  --color-error: #ef4444;
-  /* Helpful problem indication - red-500 */
-  /* Shadows */
-  --shadow-primary: 0 4px 20px rgba(26, 61, 46, 0.1);
-  --shadow-card: 0 2px 10px rgba(26, 61, 46, 0.08);
-  --shadow-focus: 0 0 0 3px rgba(50, 205, 50, 0.2);
+  --color-error:   #ef4444;
+
+  /* Ombre */
+  --shadow-primary: 0 4px 20px rgba(14, 59, 29, 0.12);
+  --shadow-card:    0 2px 10px rgba(14, 59, 29, 0.08);
+  --shadow-focus:   0 0 0 3px rgba(22, 101, 52, 0.20);
+}
   /* Transitions */
   --transition-fast: 300ms ease-out;
   --transition-slow: 600ms ease-out;
