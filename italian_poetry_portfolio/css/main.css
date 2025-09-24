@@ -2163,3 +2163,60 @@ h1, h2, h3, h4, h5, h6 {
   --ombra:    0 4px 6px rgba(15, 77, 39, 0.05), 0 10px 15px rgba(15, 77, 39, 0.1);
   --ombra-xl: 0 20px 25px rgba(15, 77, 39, 0.1), 0 10px 10px rgba(15, 77, 39, 0.04);
 }
+
+/* === THEME OVERRIDE: Header + Footer con nuova palette verde chiaro === */
+
+/* HEADER */
+.main-header {
+  background: var(--c-primario); /* verde medio chiaro */
+  color: var(--c-superficie);   /* testo chiaro */
+  box-shadow: var(--ombra);
+}
+
+.main-header .logo,
+.main-header .logo i,
+.main-header .logo span {
+  color: var(--c-superficie); /* logo bianco su header verde */
+}
+
+.main-header .main-nav a {
+  color: var(--c-superficie);
+}
+.main-header .main-nav a:hover {
+  color: var(--c-perla); /* leggero accento chiaro */
+}
+
+/* Bottoni dentro l’header */
+.main-header .button-primary {
+  background: var(--c-secondario);      /* verde scuro */
+  border-color: var(--c-secondario);
+  color: var(--c-superficie);
+}
+.main-header .button-primary:hover {
+  background: var(--c-secondario-hover);
+}
+
+.main-header .button-secondary {
+  border-color: rgba(255,255,255,.7);
+  color: var(--c-superficie);
+}
+.main-header .button-secondary:hover {
+  background: rgba(255,255,255,.15);
+  border-color: #fff;
+  color: #fff;
+}
+
+/* FOOTER */
+.main-footer {
+  background: var(--c-secondario);    /* verde scuro */
+  color: var(--c-superficie);        /* testo chiaro */
+}
+
+.main-footer .footer-links a,
+.main-footer .footer-social a {
+  color: var(--c-perla); /* link chiari */
+}
+.main-footer .footer-links a:hover,
+.main-footer .footer-social a:hover {
+  color: var(--c-primario); /* verde medio brillante al hover */
+}
