@@ -4156,10 +4156,78 @@ body::before {
 }
 
 
-/* === GLOBAL GLASS OVER CONTENT + BLURRED BACKGROUND LAYER === */
+/* === TESTO NITIDO SOPRA IL GLASS + SFONDO SFOCATO SOTTO === */
+:root {
+  /* parametri vetro e colori testo */
+  --glass-blur: 10px;
+  --glass-saturation: 140%;
+  --glass-alpha: 0.18;                 /* ↑ se vuoi pannelli più pieni (0.22–0.28) */
+  --glass-border: 0.28;
 
-/* 0) Pulizia overlay precedenti per evitare doppi veli */
-body::before,
+  --glass-text: #0f1f17;               /* testo scuro molto leggibile */
+  --glass-heading: #0b3b22;            /* titoli ancora più scuri */
+  --glass-link: #0a7d45;               /* link coerente col tema verde */
+  --glass-link-hover: #0e9b57;
+}
+
+/* 1) Sfondo della pagina sfocato sotto a tutto */
+body {
+  position: relative;
+  isolation: isolate;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;                          /* SOTTO al contenuto */
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+          backdrop-filter: blur(14px) saturate(125%);
+  background: rgba(255,255,255,0.04);  /* velo leggerissimo sullo sfondo */
+}
+
+/* 2) TUTTO il contenuto in vetro (sopra) ma con testo super leggibile */
+:where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) {
+  position: relative;
+  z-index: 2; /* SOPRA allo sfondo */
+  background: rgba(255,255,255,var(--glass-alpha)) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+          backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  border: 1px solid rgba(255,255,255,var(--glass-border)) !important;
+  border-radius: 20px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+
+/* 3) TESTO nitido dentro ai pannelli in vetro (toglie glow/ombre) */
+:where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) * {
+  color: var(--glass-text) !important;
+  text-shadow: none !important;        /* niente sfocature */
+  -webkit-text-stroke: 0 !important;   /* niente contorno */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Titoli, link e placeholder più leggibili */
+:where(h1,h2,h3,h4,h5,h6) { color: var(--glass-heading) !important; font-weight: 700; }
+:where(a, .link)          { color: var(--glass-link) !important; text-decoration: none; }
+:where(a, .link):hover    { color: var(--glass-link-hover) !important; text-decoration: underline; }
+input::placeholder, textarea::placeholder { color: #6b7280; opacity: 1; }
+
+/* 4) Se vuoi mantenere il neon su qualche elemento specifico, aggiungi .keep-neon */
+.keep-neon { text-shadow: var(--ombra-testo-nero) !important; }
+
+/* 5) Accessibilità: focus visibile senza glow */
+*:focus-visible {
+  outline: 2px solid var(--c-primario-variante2);
+  outline-offset: 2px;
+  text-shadow: none !important;
+}
+
+/* 6) Rimuovi vecchi overlay per evitare “doppi veli” */
+body::after,
 section::after, main::after, article::after, aside::after,
 header::after, footer::after, nav::after,
 .card::after, .bg-primary-50::after, .bg-surface::after, .bg-white::after {
@@ -4170,86 +4238,26 @@ header::after, footer::after, nav::after,
           backdrop-filter: none !important;
 }
 
-/* 1) Layer sotto a TUTTO: sfoca SOLO lo sfondo (non il contenuto) */
-html, body {
-  height: 100%;
-}
-body {
-  position: relative;
-  overflow-x: hidden;
-  isolation: isolate; /* crea uno stacking context pulito */
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;                 /* sotto al contenuto */
-  pointer-events: none;
-  /* Blur/background: regola qui l'intensità */
-  -webkit-backdrop-filter: blur(14px) saturate(125%);
-          backdrop-filter: blur(14px) saturate(125%);
-  /* velo leggerissimo per contrasto sullo sfondo */
-  background: rgba(255, 255, 255, 0.04);
-}
-
-/* 2) Tutto il CONTENUTO sopra: vetro leggero + contrasto */
-:where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) {
-  position: relative;
-  z-index: 2; /* sopra al blur dello sfondo */
-  /* glass surface */
-  background: rgba(255, 255, 255, 0.16) !important;
-  -webkit-backdrop-filter: blur(8px) saturate(140%);
-          backdrop-filter: blur(8px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.28) !important;
-  border-radius: 20px;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.18),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-/* 2.b) Spaziatura armonizzata per i wrapper principali (facoltativo) */
-:where(main, section, article, .content, .page) {
-  padding: clamp(1rem, 2.5vw, 2rem);
-  margin: clamp(0.5rem, 2vw, 1rem) auto;
-  max-width: var(--container-max, 1200px);
-}
-
-/* 3) Tipografia più nitida dentro i pannelli in vetro */
-:where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) * {
-  color: var(--c-testo) !important;
-  text-shadow: none !important;          /* niente alone interno */
-  -webkit-text-stroke: 0 !important;
-}
-
-/* 4) Elementi che NON vuoi in vetro (opt-out): aggiungi class="no-glass" */
-.no-glass {
-  background: transparent !important;
-  -webkit-backdrop-filter: none !important;
-          backdrop-filter: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
-}
-
-/* 5) Hover delle card più “cristallino” */
-.card:hover, .bg-white:hover, .bg-surface:hover, .bg-primary-50:hover {
-  background: rgba(255, 255, 255, 0.20) !important;
-  border-color: rgba(255, 255, 255, 0.36) !important;
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
-  transition: all .3s ease;
-}
-
-/* 6) Mobile performance: sfocatura più leggera */
+/* 7) Mobile: blur più leggero per performance */
 @media (max-width: 768px) {
   body::before {
     -webkit-backdrop-filter: blur(8px) saturate(120%);
             backdrop-filter: blur(8px) saturate(120%);
   }
-  :where(main, section, article, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) {
-    -webkit-backdrop-filter: blur(6px) saturate(135%);
-            backdrop-filter: blur(6px) saturate(135%);
-    border-radius: 16px;
+}
+
+/* 8) Dark mode: vetro fumé + testo chiaro e nitido */
+@media (prefers-color-scheme: dark) {
+  :where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) {
+    background: rgba(20, 24, 26, 0.35) !important;
+    border-color: rgba(255,255,255,0.20) !important;
+    box-shadow:
+      0 12px 30px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.10);
   }
+  :where(main, section, article, aside, header, footer, nav, .container, .wrapper, .content, .page, .card, .bg-white, .bg-surface, .bg-primary-50) * {
+    color: #f7fafc !important;
+  }
+  :where(a, .link) { color: #7fffd4 !important; }
+  :where(a, .link):hover { color: #a7ffdf !important; }
 }
