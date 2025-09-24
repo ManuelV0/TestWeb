@@ -4331,59 +4331,28 @@ body::before {
   }
 }
 
-/* === FIX CARD BACKGROUND IMAGE === */
-
-/* 0) Spegni overlay che coprono lo sfondo immagine */
-.card::after,
-.bg-primary-50::after,
-.bg-surface::after,
-.bg-white::after {
-  content: none !important;
-  display: none !important;
-  background: none !important;
-  -webkit-backdrop-filter: none !important;
-          backdrop-filter: none !important;
-}
-
-/* 1) Resetta qualsiasi background precedente sulle card/box */
-.card, .box, .content-box {
-  position: relative;
-  overflow: hidden;
-  border-radius: 20px;
-  background: none !important;           /* azzera shorthand vecchie */
-  background-image: none !important;
-}
-
-/* 2) Imposta lo sfondo immagine in modo robusto */
-/* Usa una variabile (comodo se vuoi cambiare immagine per card) */
-.card, .box, .content-box {
-  /* Sostituisci questo percorso con quello giusto rispetto a main.css  */
-  /* Esempio: se main.css è in /css/main.css e l'immagine in /img/Autore.png: */
-  --card-bg: url("immagini/672A8DD3-0D80-4AC9-B904-1E91688A0B78_converted.JPEG.jpg");   /* <-- CAMBIA QUI SE NECESSARIO */
-  
-  background-image: var(--card-bg) !important;
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-
-  min-height: 260px;                     /* visibile anche se vuota */
-  border: 1px solid rgba(0,0,0,0.08);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-}
-
-/* 3) Testo leggibile sopra l'immagine */
-.card > *, .box > *, .content-box > * {
+/* === CARD CON SFONDO TURCHESE SFUMATO === */
+.card, .box, .content-box, 
+.bg-white, .bg-surface, .bg-primary-50 {
   position: relative;
   z-index: 2;
-  color: #fff !important;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+
+  /* Gradient turchese → scuro */
+  background: linear-gradient(
+    135deg,
+    #00CED1 0%,    /* turchese chiaro */
+    #008B8B 50%,   /* turchese medio */
+    #004F4F 100%   /* scuro */
+  ) !important;
 }
 
-/* 4) Un velo leggero opzionale per contrasto (puoi aumentare/diminuire) */
-.card::before, .box::before, .content-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.20);
-  z-index: 1;
+/* Testo sopra leggibile */
+.card *, .box *, .content-box *,
+.bg-white *, .bg-surface *, .bg-primary-50 * {
+  color: #f8faff !important; /* bianco-ghiaccio */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6); /* contrasto */
 }
