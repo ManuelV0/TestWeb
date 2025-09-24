@@ -2129,3 +2129,81 @@ h1, h2, h3, h4, h5, h6 {
     line-height: 1;
   }
 }
+
+
+/* --- Aree e testi globali --- */
+body { 
+  background: var(--color-background) !important; 
+  color: var(--color-text-secondary) !important; 
+}
+h1, h2, h3, h4, h5, h6 { 
+  color: var(--color-primary) !important; 
+}
+
+/* --- Background helper --- */
+.bg-primary      { background-color: var(--color-primary-100) !important; } /* sezioni grandi */
+.bg-primary-50   { background-color: var(--color-primary-50)  !important; }
+.bg-primary-100  { background-color: var(--color-primary-100) !important; }
+.bg-surface      { background-color: var(--color-surface)     !important; }
+.bg-secondary    { background-color: var(--color-primary)     !important; } /* dettagli scuri */
+
+/* --- Testo helper --- */
+.text-primary    { color: var(--color-primary)     !important; } /* dettagli scuri */
+.text-secondary  { color: var(--color-secondary)   !important; }
+.text-accent     { color: var(--color-accent)      !important; }
+
+/* --- Bordi --- */
+.border-accent   { border-color: var(--color-accent)    !important; }
+.border-secondary{ border-color: var(--color-primary)   !important; }
+
+/* --- Bottoni --- */
+.btn-primary{
+  background: var(--color-accent)       !important;
+  border: 2px solid var(--color-accent) !important;
+  color: var(--color-text-primary)      !important;
+  box-shadow: var(--shadow-primary);
+  transition: all .3s ease;
+}
+.btn-primary:hover{
+  background: var(--color-accent-600)   !important;
+  border-color: var(--color-accent-600) !important;
+}
+
+.btn-secondary{
+  background: transparent               !important;
+  color: var(--color-primary)           !important;
+  border: 2px solid var(--color-primary)!important;
+  transition: all .3s ease;
+}
+.btn-secondary:hover{
+  background: var(--color-primary-50)   !important;
+  border-color: var(--color-secondary)  !important;
+}
+
+/* --- Card / blocchi evidenza --- */
+.card{
+  background: var(--color-surface) !important;
+  color: var(--color-text-secondary) !important;
+  box-shadow: var(--shadow-card);
+}
+.poetry-focus{
+  background: #fff !important;
+  box-shadow: var(--shadow-primary);
+}
+
+/* --- Header / Footer --- */
+header, .site-header{
+  background: var(--color-primary-100) !important; /* verde chiaro */
+  color: var(--color-primary)          !important; /* testo scuro */
+}
+footer, .site-footer{
+  background: var(--color-primary)     !important; /* verde scuro */
+  color: var(--color-text-primary)     !important; /* testo chiaro */
+}
+
+/* --- Link / Hover --- */
+a { color: var(--color-primary) !important; }
+a:hover { color: var(--color-accent) !important; }
+
+/* --- Focus ring accessibile --- */
+:focus { outline: none; box-shadow: var(--shadow-focus); }
