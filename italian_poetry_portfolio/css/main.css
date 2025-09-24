@@ -4261,3 +4261,72 @@ header::after, footer::after, nav::after,
   :where(a, .link) { color: #7fffd4 !important; }
   :where(a, .link):hover { color: #a7ffdf !important; }
 }
+
+
+/* === GLASS SOLO SULLO SFONDO — CONTENUTO NITIDO === */
+
+/* 1) Sfondo della pagina sfocato */
+body {
+  position: relative;
+  isolation: isolate;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0; /* sotto al contenuto */
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+          backdrop-filter: blur(14px) saturate(125%);
+  background: rgba(255,255,255,0.04);
+}
+
+/* 2) Pannelli generali in vetro */
+:where(main, section, article, aside, header, footer, nav) {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.16) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+          backdrop-filter: blur(8px) saturate(140%);
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  border-radius: 20px;
+  box-shadow:
+    0 12px 30px rgba(0,0,0,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+  padding: clamp(1rem, 2.5vw, 2rem);
+  margin: clamp(0.5rem, 2vw, 1rem) auto;
+  max-width: var(--container-max, 1200px);
+}
+
+/* 3) ESCLUSIONE — Card, box e testi SENZA glass */
+:where(.card, .box, .content-box, .bg-white, .bg-surface, .bg-primary-50) {
+  background: #ffffff !important;
+  -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1) !important;
+  position: relative;
+  z-index: 2; /* sopra al vetro */
+}
+
+/* Testi sempre nitidi */
+:where(h1,h2,h3,h4,h5,h6,p,span,div,li,a,label) {
+  color: var(--c-testo, #1f2937) !important;
+  text-shadow: none !important;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* 4) Dark mode: pannelli vetro fumé, testi chiari */
+@media (prefers-color-scheme: dark) {
+  :where(main, section, article, aside, header, footer, nav) {
+    background: rgba(20,24,26,0.35) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    box-shadow:
+      0 12px 30px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  :where(.card, .box, .content-box, .bg-white, .bg-surface, .bg-primary-50) {
+    background: #1e293b !important; /* scuro pieno */
+    color: #f7fafc !important;
+  }
+}
