@@ -6,45 +6,40 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
-  /* Primary Colors - Italian Garden Depth */
-  --color-primary: #1a3d2e; /* Deep contemplative foundation */
-  --color-primary-50: #f0f7f4; /* Lightest green tint */
-  --color-primary-100: #d1e7dd; /* Very light green */
-  --color-primary-200: #a3cfbb; /* Light green */
-  --color-primary-300: #75b799; /* Medium light green */
-  --color-primary-400: #479f77; /* Medium green */
-  --color-primary-500: #2d5a3d; /* Supporting depth */
-  --color-primary-600: #1a3d2e; /* Primary deep green */
-  --color-primary-700: #143126; /* Darker green */
-  --color-primary-800: #0e251e; /* Very dark green */
-  --color-primary-900: #081916; /* Darkest green */
+  /* Primary Colors - Verde chiaro */
+  --color-primary: #7bc47f;   /* verde chiaro base */
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e; /* verde principale */
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
 
-  /* Secondary Colors */
-  --color-secondary: #2d5a3d; /* Supporting depth, content backgrounds */
-  --color-secondary-50: #f1f8f4; /* Very light secondary */
-  --color-secondary-100: #d4e7dd; /* Light secondary */
-  --color-secondary-200: #a9cfbb; /* Medium light secondary */
-  --color-secondary-300: #7eb799; /* Medium secondary */
-  --color-secondary-400: #539f77; /* Medium dark secondary */
-  --color-secondary-500: #2d5a3d; /* Base secondary */
-  --color-secondary-600: #244a31; /* Dark secondary */
-  --color-secondary-700: #1b3a25; /* Darker secondary */
-  --color-secondary-800: #122a19; /* Very dark secondary */
-  --color-secondary-900: #091a0d; /* Darkest secondary */
+  /* Secondary Colors (puoi mantenerli simili o più chiari) */
+  --color-secondary: #a3e635;
+  --color-secondary-100: #ecfccb;
+  --color-secondary-200: #d9f99d;
+  --color-secondary-300: #bef264;
+  --color-secondary-400: #a3e635;
+  --color-secondary-500: #84cc16;
+  --color-secondary-600: #65a30d;
+  --color-secondary-700: #4d7c0f;
+  --color-secondary-800: #3f6212;
+  --color-secondary-900: #365314;
 
-  /* Accent Colors */
-  --color-accent: #32cd32; /* Vibrant discovery moments - lime-green */
-  --color-accent-50: #f0fff0; /* Very light accent */
-  --color-accent-100: #dcfce7; /* Light accent */
-  --color-accent-200: #bbf7d0; /* Medium light accent */
-  --color-accent-300: #86efac; /* Medium accent */
-  --color-accent-400: #4ade80; /* Medium bright accent */
-  --color-accent-500: #32cd32; /* Base accent */
-  --color-accent-600: #16a34a; /* Dark accent */
-  --color-accent-700: #15803d; /* Darker accent */
-  --color-accent-800: #166534; /* Very dark accent */
-  --color-accent-900: #14532d; /* Darkest accent */
+  /* Accent Colors (verde lime chiaro) */
+  --color-accent: #a7f3d0;
+  --color-accent-200: #6ee7b7;
+  --color-accent-400: #34d399;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+}
 
   /* Background Colors */
   --color-background: #f8fffe; /* Clean reading canvas - gray-50 */
