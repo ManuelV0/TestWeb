@@ -4330,3 +4330,43 @@ body::before {
     color: #f7fafc !important;
   }
 }
+
+/* === CARD CON SFONDO IMMAGINE === */
+.card,
+.box,
+.content-box {
+  position: relative;
+  z-index: 2;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  background: url("/percorso/alla/tua-immagine.jpg") center/cover no-repeat !important;
+  /* fallback colore sotto l'immagine */
+  background-color: #ffffff;
+}
+
+/* Testo sopra l'immagine più leggibile */
+.card *,
+.box *,
+.content-box * {
+  color: #ffffff !important;                /* bianco nitido */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);   /* per contrasto */
+}
+
+/* Overlay leggero per migliorare leggibilità */
+.card::before,
+.box::before,
+.content-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25); /* velo scuro trasparente */
+  z-index: 1;
+}
+.card > *,
+.box > *,
+.content-box > * {
+  position: relative;
+  z-index: 2;
+}
