@@ -4379,30 +4379,12 @@ body::before {
 }
 
 
-.card,
-.box,
-.content-box {
-  position: relative;
-  z-index: 2;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-
-  background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.mostradelposter.it%2Fprodotto%2Fmichelangelo-buonarroti-la-creazione-di-adamo&psig=AOvVaw093vWQiyq1lCipa5f6t0M-&ust=1758774888917000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOizwZ3J8I8DFQAAAAAdAAAAABAE");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
-  min-height: 250px;          /* importante se la card è vuota */
-  background-color: #ffffff;  /* fallback */
+/* Forza immagine di sfondo sulle card */
+.card, .box, .content-box {
+  background: none !important;                   /* azzera shorthand precedenti */
+  background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.mostradelposter.it%2Fprodotto%2Fmichelangelo-buonarroti-la-creazione-di-adamo&psig=AOvVaw093vWQiyq1lCipa5f6t0M-&ust=1758774888917000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOizwZ3J8I8DFQAAAAAdAAAAABAE") !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  min-height: 260px;                              /* visibile anche se vuota */
 }
-
-.card::before {               /* overlay per leggibilità */
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.25);
-  z-index: 1;
-}
-.card > * { position: relative; z-index: 2; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,.6); }
