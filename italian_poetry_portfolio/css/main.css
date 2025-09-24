@@ -2132,60 +2132,34 @@ h1, h2, h3, h4, h5, h6 {
 
 
 :root {
-  /* === PALETTE PRIMARIA (Verde chiaro come base) === */
-  --color-primary-50:  #f5fdf7; /* quasi bianco con accenno verde */
-  --color-primary-100: #e6f9ec; /* sfondo chiaro per sezioni */
-  --color-primary-200: #c8f1d6; /* card leggere */
-  --color-primary-300: #a8e7c0; /* hover soft */
-  --color-primary-400: #7fdca3; /* verde chiaro medio */
-  --color-primary-500: #5acb88; /* verde chiaro principale */
-  --color-primary-600: #3fbf72; /* bottoni normali */
-  --color-primary-700: #2da65c; /* bottoni hover */
-  --color-primary-800: #1d8044; /* titoli e bordi */
-  --color-primary-900: #0f4d27; /* dettagli molto scuri */
+  /* --- Verde chiaro per superfici e sfondi --- */
+  --c-sfondo: #f6fff8;        /* background generale */
+  --c-superficie: #ffffff;    /* card e contenuti */
+  --c-perla: #f0fdf4;         /* bianco-verde per dettagli */
 
-  /* === SECONDARIA (Supporto, sfondi contrastanti) === */
-  --color-secondary-50:  #fafdfb; 
-  --color-secondary-100: #f0faf4;
-  --color-secondary-200: #d7f3e1;
-  --color-secondary-300: #ade8c9;
-  --color-secondary-400: #7cdca7;
-  --color-secondary-500: #45c07f; /* accenti medi */
-  --color-secondary-600: #2f9f63; /* dettagli scuri */
-  --color-secondary-700: #1f6f44;
-  --color-secondary-800: #13462a;
-  --color-secondary-900: #092317;
+  /* --- Verde medio/chiaro (accenti e bottoni) --- */
+  --c-primario: #5acb88;       /* verde principale (CTA, link, header light) */
+  --c-primario-hover: #3fbf72; /* hover verde medio */
 
-  /* === ACCENTI (CTA, pulsanti, link attivi) === */
-  --color-accent-50:  #f0fdf4; 
-  --color-accent-100: #dcfce7;
-  --color-accent-200: #bbf7d0;
-  --color-accent-300: #86efac;
-  --color-accent-400: #4ade80;
-  --color-accent-500: #22c55e; /* accent principale */
-  --color-accent-600: #16a34a; /* hover accent */
-  --color-accent-700: #15803d;
-  --color-accent-800: #166534;
-  --color-accent-900: #14532d;
+  /* --- Verde scuro (contrasto e dettagli) --- */
+  --c-secondario: #166534;       /* titoli, dettagli */
+  --c-secondario-hover: #0f4d27; /* hover più scuro */
 
-  /* === SFONDI E SUPERFICI === */
-  --color-background: #f9fdfb;  /* base pagina */
-  --color-surface:    #ffffff;  /* card bianche, sezioni */
-  --color-surface-alt:#f1f9f3;  /* alternative più chiare */
+  /* --- Testi --- */
+  --c-testo: #0f4d27;         /* testo principale su sfondo chiaro */
+  --c-testo-leggero: #5a7f66; /* testo secondario */
+  
+  /* --- Feedback e stati --- */
+  --c-stelle: #fbbf24;
+  --c-errore: #ef4444;
+  --c-successo: #4ade80;
+  --c-avviso: #fbbf24;
 
-  /* === TESTI === */
-  --color-text-primary:   #0f4d27;  /* verde scuro principale */
-  --color-text-secondary: #1d8044;  /* verde medio */
-  --color-text-muted:     #5a7f66;  /* grigio-verde soft */
-  --color-text-inverse:   #ffffff;  /* per testi su bottoni scuri */
+  /* --- Bordi e separatori --- */
+  --c-bordi: #c8f1d6;
 
-  /* === STATI === */
-  --color-success: #4ade80;
-  --color-warning: #fbbf24;
-  --color-error:   #ef4444;
-
-  /* === OMBRE === */
-  --shadow-primary: 0 4px 20px rgba(15, 77, 39, 0.12);
-  --shadow-card:    0 2px 10px rgba(15, 77, 39, 0.08);
-  --shadow-focus:   0 0 0 3px rgba(90, 203, 136, 0.35);
+  /* Ombre */
+  --ombra-sm: 0 1px 3px rgba(15, 77, 39, 0.08), 0 1px 2px rgba(15, 77, 39, 0.04);
+  --ombra:    0 4px 6px rgba(15, 77, 39, 0.05), 0 10px 15px rgba(15, 77, 39, 0.1);
+  --ombra-xl: 0 20px 25px rgba(15, 77, 39, 0.1), 0 10px 10px rgba(15, 77, 39, 0.04);
 }
