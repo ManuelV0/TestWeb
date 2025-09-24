@@ -4331,60 +4331,59 @@ body::before {
   }
 }
 
-/* === CARD CON SFONDO IMMAGINE === */
-.card,
-.box,
-.content-box {
-  position: relative;
-  z-index: 2;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  
-  /* ✅ sintassi giusta */
-  background-image: url("immagini/Autore.png.png");  
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+/* === FIX CARD BACKGROUND IMAGE === */
 
-  /* fallback colore sotto l'immagine */
-  background-color: #ffffff;
+/* 0) Spegni overlay che coprono lo sfondo immagine */
+.card::after,
+.bg-primary-50::after,
+.bg-surface::after,
+.bg-white::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
 }
 
-/* Testo sopra l'immagine più leggibile */
-.card *,
-.box *,
-.content-box * {
-  color: #ffffff !important;                /* bianco nitido */
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6);   /* per contrasto */
-}
-
-/* Overlay leggero per migliorare leggibilità */
-.card::before,
-.box::before,
-.content-box::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.25); /* velo scuro trasparente */
-  z-index: 1;
-}
-
-.card > *,
-.box > *,
-.content-box > * {
-  position: relative;
-  z-index: 2;
-}
-
-
-/* Forza immagine di sfondo sulle card */
+/* 1) Resetta qualsiasi background precedente sulle card/box */
 .card, .box, .content-box {
-  background: none !important;                   /* azzera shorthand precedenti */
-  background-image: url("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.mostradelposter.it%2Fprodotto%2Fmichelangelo-buonarroti-la-creazione-di-adamo&psig=AOvVaw093vWQiyq1lCipa5f6t0M-&ust=1758774888917000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOizwZ3J8I8DFQAAAAAdAAAAABAE") !important;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: none !important;           /* azzera shorthand vecchie */
+  background-image: none !important;
+}
+
+/* 2) Imposta lo sfondo immagine in modo robusto */
+/* Usa una variabile (comodo se vuoi cambiare immagine per card) */
+.card, .box, .content-box {
+  /* Sostituisci questo percorso con quello giusto rispetto a main.css  */
+  /* Esempio: se main.css è in /css/main.css e l'immagine in /img/Autore.png: */
+  --card-bg: url("");   /* <-- CAMBIA QUI SE NECESSARIO */
+  
+  background-image: var(--card-bg) !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  min-height: 260px;                              /* visibile anche se vuota */
+
+  min-height: 260px;                     /* visibile anche se vuota */
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* 3) Testo leggibile sopra l'immagine */
+.card > *, .box > *, .content-box > * {
+  position: relative;
+  z-index: 2;
+  color: #fff !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+/* 4) Un velo leggero opzionale per contrasto (puoi aumentare/diminuire) */
+.card::before, .box::before, .content-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.20);
+  z-index: 1;
 }
