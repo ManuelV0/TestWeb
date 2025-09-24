@@ -2099,38 +2099,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-:root {
-  /* --- Verde chiaro per superfici e sfondi --- */
-  --c-sfondo: #f6fff8;        /* background generale */
-  --c-superficie: #ffffff;    /* card e contenuti */
-  --c-perla: #f0fdf4;         /* bianco-verde per dettagli */
 
-  /* --- Verde medio/chiaro (accenti e bottoni) --- */
-  --c-primario: #5acb88;       /* verde principale (CTA, link, header light) */
-  --c-primario-hover: #3fbf72; /* hover verde medio */
-
-  /* --- Verde scuro (contrasto e dettagli) --- */
-  --c-secondario: #166534;       /* titoli, dettagli */
-  --c-secondario-hover: #0f4d27; /* hover più scuro */
-
-  /* --- Testi --- */
-  --c-testo: #0f4d27;         /* testo principale su sfondo chiaro */
-  --c-testo-leggero: #5a7f66; /* testo secondario */
-  
-  /* --- Feedback e stati --- */
-  --c-stelle: #fbbf24;
-  --c-errore: #ef4444;
-  --c-successo: #4ade80;
-  --c-avviso: #fbbf24;
-
-  /* --- Bordi e separatori --- */
-  --c-bordi: #c8f1d6;
-
-  /* Ombre */
-  --ombra-sm: 0 1px 3px rgba(15, 77, 39, 0.08), 0 1px 2px rgba(15, 77, 39, 0.04);
-  --ombra:    0 4px 6px rgba(15, 77, 39, 0.05), 0 10px 15px rgba(15, 77, 39, 0.1);
-  --ombra-xl: 0 20px 25px rgba(15, 77, 39, 0.1), 0 10px 10px rgba(15, 77, 39, 0.04);
-}
 
 /* === THEME OVERRIDE: Header + Footer con nuova palette verde chiaro === */
 
