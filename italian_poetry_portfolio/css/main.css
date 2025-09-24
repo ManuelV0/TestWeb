@@ -4341,7 +4341,13 @@ body::before {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  background: href ("img/Autore.png.png") center/cover no-repeat !important;
+  
+  /* ✅ sintassi giusta */
+  background-image: url("immagini/Autore.png.png");  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   /* fallback colore sotto l'immagine */
   background-color: #ffffff;
 }
@@ -4364,6 +4370,7 @@ body::before {
   background: rgba(0,0,0,0.25); /* velo scuro trasparente */
   z-index: 1;
 }
+
 .card > *,
 .box > *,
 .content-box > * {
