@@ -2246,3 +2246,57 @@ h1, h2, h3, h4, h5, h6 {
   --container-max: 1200px;
   --transizione: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+:root{
+  /* === PALETTE VERDE CHIARO + DETTAGLI SCURI === */
+
+  /* Sfondo e superfici */
+  --c-sfondo: #f6fff8;        /* sfondo pagina chiaro */
+  --c-superficie: #ffffff;    /* card, modali */
+  --c-perla: #f0fdf4;         /* bianco con accento verde soft */
+
+  /* Verde medio/chiaro (CTA e header) */
+  --c-primario: #5acb88;       /* verde principale */
+  --c-primario-hover: #3fbf72; /* hover */
+
+  /* Verde scuro (contrasto e dettagli) */
+  --c-secondario: #166534;       /* titoli, link, footer */
+  --c-secondario-hover: #0f4d27; /* hover scuro */
+
+  /* Testi */
+  --c-testo: #0f4d27;         /* testo principale */
+  --c-testo-leggero: #5a7f66; /* testo descrizioni */
+
+  /* Bordi */
+  --c-bordi: #c8f1d6;
+
+  /* Stati */
+  --c-stelle: #fbbf24;
+  --c-errore: #ef4444;
+  --c-successo: #4ade80;
+  --c-avviso: #fbbf24;
+
+  /* Ombre */
+  --bordo-arrotondato: 12px;
+  --bordo-arrotondato-sm: 8px;
+  --ombra-sm: 0 1px 3px rgba(15,77,39,0.08), 0 1px 2px rgba(15,77,39,0.04);
+  --ombra: 0 4px 6px rgba(15,77,39,0.05), 0 10px 15px rgba(15,77,39,0.1);
+  --ombra-xl: 0 20px 25px rgba(15,77,39,0.12), 0 10px 10px rgba(15,77,39,0.06);
+
+  /* Spaziature */
+  --spazio-xs: 0.5rem;
+  --spazio-sm: 0.75rem;
+  --spazio-md: 1rem;
+  --spazio-lg: 1.5rem;
+  --spazio-xl: 2.5rem;
+
+  /* Tipografia */
+  --font-body: 'Inter', 'Open Sans', system-ui, sans-serif;
+  --font-heading: 'Poppins', 'Montserrat', ui-sans-serif, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Layout */
+  --header-height: 56px;
+  --container-max: 1200px;
+  --transizione: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
