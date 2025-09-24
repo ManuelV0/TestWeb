@@ -4359,7 +4359,7 @@ body::before {
 .card, .box, .content-box {
   /* Sostituisci questo percorso con quello giusto rispetto a main.css  */
   /* Esempio: se main.css è in /css/main.css e l'immagine in /img/Autore.png: */
-  --card-bg: url("immagini/672A8DD3-0D80-4AC9-B904-1E91688A0B78_converted.JPEG.jpeg");   /* <-- CAMBIA QUI SE NECESSARIO */
+  --card-bg: url("immagini/672A8DD3-0D80-4AC9-B904-1E91688A0B78_converted.JPEG.jpg");   /* <-- CAMBIA QUI SE NECESSARIO */
   
   background-image: var(--card-bg) !important;
   background-size: cover !important;
