@@ -4341,7 +4341,7 @@ body::before {
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.25);
   box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-  background: url("immagini/card.PNG") center/cover no-repeat !important;
+  background: url("immagini/card.png") center/cover no-repeat !important;
   /* fallback colore sotto l'immagine */
   background-color: #ffffff;
 }
