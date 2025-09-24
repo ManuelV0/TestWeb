@@ -4077,6 +4077,13 @@ video::after {
     line-height: 2.5rem;
   }
 
+
+  /* Effetto rilievo su TUTTO il testo */
+body, body * {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.4);
+}
+
   .lg\:text-6xl{
     font-size: 3.75rem;
     line-height: 1;
