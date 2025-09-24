@@ -4331,28 +4331,42 @@ body::before {
   }
 }
 
-/* === CARD CON SFONDO TURCHESE SFUMATO === */
-.card, .box, .content-box, 
-.bg-white, .bg-surface, .bg-primary-50 {
-  position: relative;
-  z-index: 2;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+/* === PATCH: SFONDI BIANCHI → TURCHESE SCURO SFUMATO === */
 
-  /* Gradient turchese → scuro */
+/* Tutti i container con fondo bianco */
+.bg-white,
+.bg-surface,
+.bg-primary-50,
+.card,
+.box,
+.content-box,
+section.bg-white,
+main.bg-white,
+article.bg-white,
+aside.bg-white,
+header.bg-white,
+footer.bg-white {
+  position: relative;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+
+  /* ✅ sfondo turchese sfumato scuro */
   background: linear-gradient(
     135deg,
-    #00CED1 0%,    /* turchese chiaro */
-    #008B8B 50%,   /* turchese medio */
-    #004F4F 100%   /* scuro */
+    #00CED1 0%,   /* turchese chiaro */
+    #008B8B 50%,  /* turchese medio */
+    #003333 100%  /* scuro */
   ) !important;
 }
 
-/* Testo sopra leggibile */
-.card *, .box *, .content-box *,
-.bg-white *, .bg-surface *, .bg-primary-50 * {
-  color: #f8faff !important; /* bianco-ghiaccio */
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6); /* contrasto */
+/* Testo sopra sfondo scuro → chiaro e leggibile */
+.bg-white *, 
+.bg-surface *, 
+.bg-primary-50 *,
+.card *, 
+.box *, 
+.content-box * {
+  color: #f8faff !important; /* bianco ghiaccio */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
 }
