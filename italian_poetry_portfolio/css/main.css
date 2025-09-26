@@ -3746,3 +3746,675 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateX(10px);
   border-left-width: 6px;
 }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap');
+
+/* === PALETTA DI CONTRASTO OTTIMIZZATA === */
+:root {
+  /* Colori di base per massimo contrasto */
+  --c-testo: #2d3748;           /* Grigio scuro neutro - alto contrasto */
+  --c-testo-scuro: #1a202c;     /* Quasi nero per titoli */
+  --c-testo-chiaro: #4a5568;    /* Grigio medio per testo secondario */
+  
+  /* Colori di sfondo */
+  --c-sfondo: #f7fafc;          /* Grigio chiarissimo per sfondo */
+  --c-sfondo-card: #ffffff;     /* Bianco puro per carte */
+  --c-sfondo-hover: #edf2f7;    /* Grigio molto chiaro per hover */
+  
+  /* Colori di accento (verde) - usati strategicamente */
+  --c-primario: #2d7d32;        /* Verde scuro per massimo contrasto */
+  --c-primario-hover: #1b5e20;  /* Verde più scuro per hover */
+  --c-primario-chiaro: #4caf50; /* Verde medio per elementi secondari */
+  --c-primario-morbido: #81c784; /* Verde chiaro per sfondi soft */
+  
+  /* Colori di supporto ad alto contrasto */
+  --c-secondario: #d84315;      /* Arancione scuro per contrasto */
+  --c-secondario-hover: #bf360c; /* Arancione più scuro */
+  --c-terziario: #1565c0;       /* Blu scuro per links importanti */
+  --c-successo: #388e3c;        /* Verde successo */
+  --c-errore: #d32f2f;          /* Rosso errore */
+  --c-avviso: #f57c00;          /* Arancione avviso */
+  --c-info: #1976d2;            /* Blu info */
+  
+  /* Colori neutri per bordi e separatori */
+  --c-bordi: #cbd5e0;           /* Grigio bordi */
+  --c-bordi-scuro: #a0aec0;     /* Grigio bordi scuro */
+  --c-bordi-focus: #4a5568;     /* Grigio scuro per focus */
+  
+  /* Colori per testo su sfondi scuri */
+  --c-testo-inverso: #ffffff;   /* Bianco per testo su scuro */
+  --c-testo-inverso-chiaro: #e2e8f0; /* Grigio chiaro per testo secondario su scuro */
+  
+  /* Gradienti ad alto contrasto */
+  --gradient-primario: linear-gradient(135deg, var(--c-primario), var(--c-primario-hover));
+  --gradient-secondario: linear-gradient(135deg, var(--c-secondario), var(--c-secondario-hover));
+  --gradient-successo: linear-gradient(135deg, var(--c-successo), #2e7d32);
+  --gradient-neutro: linear-gradient(135deg, #f7fafc, #edf2f7);
+  
+  /* Ombre con buon contrasto */
+  --ombra-leggera: 0 1px 3px rgba(45, 55, 72, 0.12);
+  --ombra-media: 0 4px 6px rgba(45, 55, 72, 0.15);
+  --ombra-pesante: 0 10px 15px rgba(45, 55, 72, 0.2);
+  --ombra-focus: 0 0 0 3px rgba(45, 125, 50, 0.2);
+  
+  /* Variabili di dimensione */
+  --spazio-xs: 0.25rem;
+  --spazio-sm: 0.5rem;
+  --spazio-md: 1rem;
+  --spazio-lg: 1.5rem;
+  --spazio-xl: 2rem;
+  --spazio-xxl: 3rem;
+  
+  --bordo-sm: 0.25rem;
+  --bordo-md: 0.5rem;
+  --bordo-lg: 1rem;
+  --bordo-xl: 1.5rem;
+  
+  /* Tipografia */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Crimson Text', serif;
+  
+  /* Transizioni */
+  --transizione-veloce: all 0.2s ease;
+  --transizione-media: all 0.3s ease;
+  --transizione-lenta: all 0.5s ease;
+}
+
+/* === RESET E STILI BASE CON ALTO CONTRASTO === */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--c-testo);
+  background-color: var(--c-sfondo);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Miglioramento contrasto per tutti i testi */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--c-testo-scuro);
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 0.5em;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1.1rem;
+}
+
+p {
+  margin-bottom: 1em;
+  color: var(--c-testo);
+}
+
+strong, b {
+  font-weight: 600;
+  color: var(--c-testo-scuro);
+}
+
+/* === COMPONENTI RIVISTATI CON ALTO CONTRASTO === */
+
+/* 1. HEADER E NAVIGAZIONE */
+.header-principale {
+  background: var(--c-sfondo-card);
+  border-bottom: 2px solid var(--c-bordi);
+  box-shadow: var(--ombra-leggera);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-principale {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spazio-md) 0;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--c-primario);
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--c-primario-hover);
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: var(--spazio-xl);
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: var(--c-testo);
+  text-decoration: none;
+  font-weight: 500;
+  padding: var(--spazio-sm) var(--spazio-md);
+  border-radius: var(--bordo-sm);
+  transition: var(--transizione-veloce);
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--c-primario);
+  background-color: var(--c-sfondo-hover);
+}
+
+.nav-link.attivo {
+  color: var(--c-primario);
+  font-weight: 600;
+}
+
+.nav-link.attivo::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: var(--spazio-md);
+  right: var(--spazio-md);
+  height: 2px;
+  background: var(--c-primario);
+}
+
+/* 2. BOTTONI CON ALTO CONTRASTO */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--bordo-md);
+  cursor: pointer;
+  transition: var(--transizione-media);
+  gap: 0.5rem;
+  line-height: 1;
+}
+
+.btn-primario {
+  background: var(--gradient-primario);
+  color: var(--c-testo-inverso);
+  box-shadow: var(--ombra-media);
+}
+
+.btn-primario:hover {
+  background: linear-gradient(135deg, var(--c-primario-hover), #1b5e20);
+  color: var(--c-testo-inverso);
+  transform: translateY(-2px);
+  box-shadow: var(--ombra-pesante);
+}
+
+.btn-secondario {
+  background: var(--c-sfondo-card);
+  color: var(--c-primario);
+  border: 2px solid var(--c-primario);
+  box-shadow: var(--ombra-leggera);
+}
+
+.btn-secondario:hover {
+  background: var(--c-primario);
+  color: var(--c-testo-inverso);
+  border-color: var(--c-primario);
+}
+
+.btn-terziario {
+  background: transparent;
+  color: var(--c-terziario);
+  border: 2px solid var(--c-bordi);
+}
+
+.btn-terziario:hover {
+  background: var(--c-terziario);
+  color: var(--c-testo-inverso);
+  border-color: var(--c-terziario);
+}
+
+.btn-grande {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.btn-piccolo {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+/* 3. SCHEDE/CARD CON MASSIMA LEGGIBILITÀ */
+.scheda {
+  background: var(--c-sfondo-card);
+  border-radius: var(--bordo-lg);
+  box-shadow: var(--ombra-leggera);
+  border: 1px solid var(--c-bordi);
+  overflow: hidden;
+  transition: var(--transizione-media);
+}
+
+.scheda:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--ombra-pesante);
+}
+
+.scheda-intestazione {
+  padding: var(--spazio-lg);
+  border-bottom: 1px solid var(--c-bordi);
+}
+
+.scheda-titolo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--c-testo-scuro);
+  margin: 0;
+}
+
+.scheda-sottotitolo {
+  color: var(--c-testo-chiaro);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0 0;
+}
+
+.scheda-corpo {
+  padding: var(--spazio-lg);
+}
+
+.scheda-footer {
+  padding: var(--spazio-md) var(--spazio-lg);
+  background: var(--c-sfondo);
+  border-top: 1px solid var(--c-bordi);
+}
+
+/* 4. FORM E INPUT CON CONTRASTO OTTIMIZZATO */
+.gruppo-input {
+  margin-bottom: var(--spazio-lg);
+}
+
+.etichetta-input {
+  display: block;
+  margin-bottom: var(--spazio-sm);
+  font-weight: 600;
+  color: var(--c-testo-scuro);
+  font-size: 0.9rem;
+}
+
+.campo-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--c-bordi);
+  border-radius: var(--bordo-md);
+  background: var(--c-sfondo-card);
+  color: var(--c-testo);
+  font-size: 1rem;
+  transition: var(--transizione-veloce);
+}
+
+.campo-input:focus {
+  outline: none;
+  border-color: var(--c-primario);
+  box-shadow: var(--ombra-focus);
+  background: var(--c-sfondo-card);
+}
+
+.campo-input::placeholder {
+  color: var(--c-bordi-scuro);
+}
+
+.campo-input.errore {
+  border-color: var(--c-errore);
+  box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.messaggio-errore {
+  color: var(--c-errore);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* 5. TABELLE CON ALTA LEGGIBILITÀ */
+.tabella {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--c-sfondo-card);
+  border-radius: var(--bordo-md);
+  overflow: hidden;
+  box-shadow: var(--ombra-leggera);
+}
+
+.tabella th {
+  background: var(--c-sfondo);
+  color: var(--c-testo-scuro);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid var(--c-bordi);
+}
+
+.tabella td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--c-bordi);
+  color: var(--c-testo);
+}
+
+.tabella tr:last-child td {
+  border-bottom: none;
+}
+
+.tabella tr:hover {
+  background: var(--c-sfondo-hover);
+}
+
+/* 6. COMPONENTI DI STATO CON CONTRASTO ELEVATO */
+.avviso {
+  padding: var(--spazio-md);
+  border-radius: var(--bordo-md);
+  margin: var(--spazio-md) 0;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spazio-md);
+}
+
+.avviso-successo {
+  background: #e8f5e9;
+  border-left: 4px solid var(--c-successo);
+  color: var(--c-testo-scuro);
+}
+
+.avviso-errore {
+  background: #ffebee;
+  border-left: 4px solid var(--c-errore);
+  color: var(--c-testo-scuro);
+}
+
+.avviso-avviso {
+  background: #fff3e0;
+  border-left: 4px solid var(--c-avviso);
+  color: var(--c-testo-scuro);
+}
+
+.avviso-info {
+  background: #e3f2fd;
+  border-left: 4px solid var(--c-info);
+  color: var(--c-testo-scuro);
+}
+
+.avviso-icona {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.avviso-successo .avviso-icona { color: var(--c-successo); }
+.avviso-errore .avviso-icona { color: var(--c-errore); }
+.avviso-avviso .avviso-icona { color: var(--c-avviso); }
+.avviso-info .avviso-icona { color: var(--c-info); }
+
+/* 7. BADGE E TAG CON CONTRASTO OTTIMALE */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-primario {
+  background: var(--c-primario);
+  color: var(--c-testo-inverso);
+}
+
+.badge-secondario {
+  background: var(--c-secondario);
+  color: var(--c-testo-inverso);
+}
+
+.badge-successo {
+  background: var(--c-successo);
+  color: var(--c-testo-inverso);
+}
+
+.badge-neutro {
+  background: var(--c-bordi);
+  color: var(--c-testo-scuro);
+}
+
+/* 8. PAGINAZIONE CON ALTO CONTRASTO */
+.paginazione {
+  display: flex;
+  gap: var(--spazio-sm);
+  justify-content: center;
+  margin: var(--spazio-xl) 0;
+}
+
+.pagina-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 var(--spazio-md);
+  background: var(--c-sfondo-card);
+  color: var(--c-testo);
+  text-decoration: none;
+  border: 1px solid var(--c-bordi);
+  border-radius: var(--bordo-md);
+  font-weight: 500;
+  transition: var(--transizione-veloce);
+}
+
+.pagina-item:hover {
+  background: var(--c-sfondo-hover);
+  border-color: var(--c-bordi-scuro);
+}
+
+.pagina-item.attiva {
+  background: var(--c-primario);
+  color: var(--c-testo-inverso);
+  border-color: var(--c-primario);
+}
+
+/* 9. FOOTER CON CONTRASTO OTTIMIZZATO */
+.footer-principale {
+  background: var(--c-testo-scuro);
+  color: var(--c-testo-inverso-chiaro);
+  padding: var(--spazio-xxl) 0 var(--spazio-xl);
+  margin-top: var(--spazio-xxl);
+}
+
+.footer-contenuto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spazio-xl);
+}
+
+.footer-sezione h3 {
+  color: var(--c-testo-inverso);
+  margin-bottom: var(--spazio-md);
+}
+
+.footer-link {
+  color: var(--c-testo-inverso-chiaro);
+  text-decoration: none;
+  display: block;
+  margin-bottom: var(--spazio-sm);
+  transition: var(--transizione-veloce);
+}
+
+.footer-link:hover {
+  color: var(--c-testo-inverso);
+}
+
+.footer-base {
+  border-top: 1px solid #4a5568;
+  margin-top: var(--spazio-xl);
+  padding-top: var(--spazio-md);
+  text-align: center;
+  color: var(--c-testo-inverso-chiaro);
+  font-size: 0.9rem;
+}
+
+/* 10. COMPONENTI SPECIALI PER LEGGIBILITÀ */
+.highlight-box {
+  background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+  border-left: 4px solid var(--c-primario);
+  padding: var(--spazio-lg);
+  margin: var(--spazio-lg) 0;
+  border-radius: 0 var(--bordo-lg) var(--bordo-lg) 0;
+}
+
+.quote-box {
+  background: var(--c-sfondo-card);
+  border-left: 6px solid var(--c-secondario);
+  padding: var(--spazio-lg);
+  margin: var(--spazio-lg) 0;
+  font-style: italic;
+  position: relative;
+  box-shadow: var(--ombra-leggera);
+}
+
+.quote-box::before {
+  content: """;
+  font-size: 4rem;
+  color: var(--c-secondario);
+  opacity: 0.2;
+  position: absolute;
+  top: -1rem;
+  left: 1rem;
+}
+
+/* 11. UTILITY CLASSES PER CONTRASTO */
+.texto-alto-contrasto { color: var(--c-testo-scuro) !important; }
+.texto-contrasto-medio { color: var(--c-testo) !important; }
+.texto-contrasto-basso { color: var(--c-testo-chiaro) !important; }
+
+.fondo-alto-contrasto { background: var(--c-sfondo-card) !important; }
+.fondo-contrasto-medio { background: var(--c-sfondo) !important; }
+.fondo-contrasto-basso { background: var(--c-sfondo-hover) !important; }
+
+.borde-contrasto { border-color: var(--c-bordi-scuro) !important; }
+.borde-focus { border-color: var(--c-primario) !important; }
+
+/* 12. ACCESSIBILITÀ MIGLIORATA */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Contrasto forzato per utenti con esigenze specifiche */
+.modo-alto-contrasto {
+  --c-testo: #000000;
+  --c-testo-scuro: #000000;
+  --c-testo-chiaro: #333333;
+  --c-sfondo: #ffffff;
+  --c-sfondo-card: #ffffff;
+  --c-bordi: #000000;
+  --c-primario: #000000;
+  filter: contrast(200%);
+}
+
+/* 13. RESPONSIVE DESIGN */
+@media (max-width: 768px) {
+  :root {
+    --spazio-lg: 1rem;
+    --spazio-xl: 1.5rem;
+    --spazio-xxl: 2rem;
+  }
+  
+  .nav-menu {
+    flex-direction: column;
+    gap: var(--spazio-md);
+  }
+  
+  .footer-contenuto {
+    grid-template-columns: 1fr;
+    gap: var(--spazio-lg);
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.75rem; }
+  h3 { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .paginazione {
+    flex-wrap: wrap;
+  }
+  
+  .scheda {
+    margin: 0 -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* 14. STAMPA OTTIMIZZATA */
+@media print {
+  .header-principale,
+  .footer-principale,
+  .btn {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+  
+  .scheda {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+    break-inside: avoid;
+  }
+  
+  a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+}
