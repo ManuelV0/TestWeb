@@ -714,7 +714,7 @@ nav a:hover::before {
 }
 
 .poetic-quote::before {
-  content: """;
+  content: "";
   position: absolute;
   top: -10px;
   left: 1rem;
