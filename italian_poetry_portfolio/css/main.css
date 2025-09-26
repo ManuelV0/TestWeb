@@ -4421,14 +4421,6 @@ strong, b {
 
 
 
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
-
-/* === PALETTA DI CONTRASTO OTTIMIZZATA === */
 :root {
   /* Colori di base per massimo contrasto */
   --c-testo: #2d3748;
