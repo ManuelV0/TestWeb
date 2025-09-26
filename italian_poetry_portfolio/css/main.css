@@ -4418,3 +4418,446 @@ strong, b {
     text-decoration: underline !important;
   }
 }
+
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
+
+/* === PALETTA DI CONTRASTO OTTIMIZZATA === */
+:root {
+  /* Colori di base per massimo contrasto */
+  --c-testo: #2d3748;
+  --c-testo-scuro: #1a202c;
+  --c-testo-chiaro: #4a5568;
+  
+  /* Colori di sfondo */
+  --c-sfondo: #f7fafc;
+  --c-sfondo-card: #ffffff;
+  --c-sfondo-hover: #edf2f7;
+  
+  /* Colori di accento (verde) */
+  --c-primario: #2d7d32;
+  --c-primario-hover: #1b5e20;
+  --c-primario-chiaro: #4caf50;
+  --c-primario-morbido: #81c784;
+  
+  /* Colori di supporto ad alto contrasto */
+  --c-secondario: #d84315;
+  --c-secondario-hover: #bf360c;
+  --c-terziario: #1565c0;
+  
+  /* Colori per effetto vetro */
+  --c-vetro-bianco: rgba(255, 255, 255, 0.25);
+  --c-vetro-bianco-spesso: rgba(255, 255, 255, 0.4);
+  --c-vetro-bordo: rgba(255, 255, 255, 0.18);
+  --c-vetro-ombra: rgba(0, 0, 0, 0.1);
+  
+  /* Gradienti per effetto vetro */
+  --gradient-vetro: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.3), 
+    rgba(255, 255, 255, 0.1)
+  );
+  
+  --gradient-vetro-hover: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.5), 
+    rgba(255, 255, 255, 0.2)
+  );
+  
+  /* Variabili di dimensione */
+  --spazio-xs: 0.25rem;
+  --spazio-sm: 0.5rem;
+  --spazio-md: 1rem;
+  --spazio-lg: 1.5rem;
+  --spazio-xl: 2rem;
+  
+  --bordo-sm: 0.25rem;
+  --bordo-md: 0.5rem;
+  --bordo-lg: 1rem;
+  
+  /* Tipografia */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Crimson Text', serif;
+  --font-stiloso: 'Dancing Script', cursive;
+  --font-elegante: 'Parisienne', cursive;
+  
+  /* Transizioni */
+  --transizione-veloce: all 0.2s ease;
+  --transizione-media: all 0.3s ease;
+  --transizione-lenta: all 0.5s ease;
+}
+
+/* === EFFETTO VETRO (GLASSMORPHISM) PER LE CARD === */
+.scheda {
+  background: var(--gradient-vetro);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--bordo-lg);
+  border: 1px solid var(--c-vetro-bordo);
+  box-shadow: 
+    0 8px 32px var(--c-vetro-ombra),
+    inset 0 1px 0 var(--c-vetro-bianco);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transizione-media);
+}
+
+/* Effetto di profondità aggiuntivo */
+.scheda::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-vetro);
+  border-radius: var(--bordo-lg);
+  opacity: 0;
+  transition: var(--transizione-media);
+  z-index: -1;
+}
+
+/* Effetto di illuminazione al passaggio del mouse */
+.scheda::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: var(--transizione-lenta);
+  opacity: 0;
+}
+
+/* === HOVER EFFECT CON TESTO STILOSO === */
+.scheda:hover {
+  transform: translateY(-8px) scale(1.02);
+  background: var(--gradient-vetro-hover);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.scheda:hover::before {
+  opacity: 1;
+}
+
+.scheda:hover::after {
+  opacity: 1;
+  animation: scintillio 2s ease-in-out;
+}
+
+@keyframes scintillio {
+  0% { transform: rotate(45deg) translateX(-100%); }
+  100% { transform: rotate(45deg) translateX(100%); }
+}
+
+/* Trasformazione del testo durante l'hover */
+.scheda:hover .scheda-titolo {
+  font-family: var(--font-elegante);
+  color: #000000 !important;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 
+    2px 2px 4px rgba(255, 255, 255, 0.8),
+    0 0 10px rgba(45, 125, 50, 0.3);
+  transform: scale(1.05);
+  transition: var(--transizione-media);
+}
+
+.scheda:hover .scheda-sottotitolo {
+  font-family: var(--font-stiloso);
+  color: #000000 !important;
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-shadow: 
+    1px 1px 2px rgba(255, 255, 255, 0.8),
+    0 0 8px rgba(45, 125, 50, 0.2);
+  transform: translateX(10px);
+}
+
+.scheda:hover .scheda-corpo {
+  color: #000000 !important;
+}
+
+.scheda:hover .scheda-corpo p {
+  font-family: var(--font-stiloso);
+  color: #000000 !important;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  text-shadow: 
+    0.5px 0.5px 1px rgba(255, 255, 255, 0.8),
+    0 0 5px rgba(45, 125, 50, 0.1);
+  transform: translateY(-2px);
+  transition: var(--transizione-media);
+}
+
+/* Effetto speciale per le parole chiave nel testo */
+.scheda:hover .parola-chiave {
+  font-family: var(--font-elegante);
+  color: var(--c-primario) !important;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-shadow: 
+    1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(45, 125, 50, 0.5);
+  display: inline-block;
+  transform: rotate(-2deg);
+  animation: oscillazione 3s ease-in-out infinite;
+}
+
+@keyframes oscillazione {
+  0%, 100% { transform: rotate(-2deg) scale(1); }
+  50% { transform: rotate(2deg) scale(1.05); }
+}
+
+/* === CONTENUTO DELLE CARD === */
+.scheda-intestazione {
+  padding: var(--spazio-lg);
+  border-bottom: 1px solid var(--c-vetro-bordo);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.scheda-titolo {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--c-testo-scuro);
+  margin: 0;
+  transition: var(--transizione-media);
+}
+
+.scheda-sottotitolo {
+  color: var(--c-testo-chiaro);
+  font-size: 0.95rem;
+  margin: 0.25rem 0 0 0;
+  transition: var(--transizione-media);
+}
+
+.scheda-corpo {
+  padding: var(--spazio-lg);
+  color: var(--c-testo);
+  transition: var(--transizione-media);
+}
+
+.scheda-corpo p {
+  margin-bottom: 1em;
+  transition: var(--transizione-media);
+}
+
+.scheda-footer {
+  padding: var(--spazio-md) var(--spazio-lg);
+  background: rgba(255, 255, 255, 0.15);
+  border-top: 1px solid var(--c-vetro-bordo);
+  backdrop-filter: blur(10px);
+}
+
+/* === TIPI DI CARD SPECIALI === */
+
+/* Card con effetto vetro più pronunciato */
+.scheda-vetro-intenso {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.4), 
+    rgba(255, 255, 255, 0.15)
+  );
+  backdrop-filter: blur(30px);
+  border: 2px solid var(--c-vetro-bordo);
+}
+
+/* Card colorata con effetto vetro */
+.scheda-colorata {
+  background: linear-gradient(135deg, 
+    rgba(45, 125, 50, 0.2), 
+    rgba(45, 125, 50, 0.05)
+  );
+  border: 1px solid rgba(45, 125, 50, 0.3);
+}
+
+.scheda-colorata:hover {
+  background: linear-gradient(135deg, 
+    rgba(45, 125, 50, 0.3), 
+    rgba(45, 125, 50, 0.1)
+  );
+}
+
+/* Card con bordo luminoso */
+.scheda-bordo-luminoso {
+  position: relative;
+  overflow: hidden;
+}
+
+.scheda-bordo-luminoso::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  transition: var(--transizione-lenta);
+}
+
+.scheda-bordo-luminoso:hover::before {
+  left: 100%;
+}
+
+/* === EFFETTI SPECIALI PER IL TESTO === */
+
+/* Effetto macchina da scrivere per titoli */
+.testo-animato {
+  overflow: hidden;
+  border-right: 3px solid var(--c-primario);
+  white-space: nowrap;
+  animation: scrittura 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes scrittura {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--c-primario) }
+}
+
+/* Effetto illuminazione testo */
+.testo-illuminato {
+  position: relative;
+  display: inline-block;
+}
+
+.testo-illuminato::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--c-primario), 
+    transparent
+  );
+  transform: scaleX(0);
+  transition: var(--transizione-media);
+}
+
+.scheda:hover .testo-illuminato::after {
+  transform: scaleX(1);
+}
+
+/* === COMPONENTI AGGIUNTIVI CON EFFETTO VETRO === */
+
+/* Bottoni con effetto vetro */
+.btn-vetro {
+  background: var(--gradient-vetro);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--c-vetro-bordo);
+  color: var(--c-testo-scuro);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--bordo-md);
+  transition: var(--transizione-media);
+  font-weight: 600;
+}
+
+.btn-vetro:hover {
+  background: var(--gradient-vetro-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px var(--c-vetro-ombra);
+}
+
+/* Navbar con effetto vetro */
+.navbar-vetro {
+  background: var(--gradient-vetro);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-vetro-bordo);
+  box-shadow: 0 2px 20px var(--c-vetro-ombra);
+}
+
+/* Modal con effetto vetro */
+.modal-vetro {
+  background: var(--gradient-vetro);
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--c-vetro-bordo);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 768px) {
+  .scheda {
+    backdrop-filter: blur(15px);
+    margin: 0 -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .scheda:hover {
+    transform: translateY(-4px) scale(1.01);
+  }
+  
+  .scheda:hover .scheda-titolo {
+    font-size: 1.8rem;
+  }
+}
+
+/* === ACCESSIBILITÀ === */
+@media (prefers-reduced-motion: reduce) {
+  .scheda,
+  .scheda:hover,
+  .scheda::before,
+  .scheda::after {
+    transition: none;
+    animation: none;
+  }
+  
+  .scheda:hover {
+    transform: none;
+  }
+}
+
+/* Supporto per browser che non supportano backdrop-filter */
+@supports not (backdrop-filter: blur(20px)) {
+  .scheda {
+    background: var(--c-sfondo-card);
+    backdrop-filter: none;
+  }
+  
+  .scheda:hover {
+    background: var(--c-sfondo-hover);
+  }
+}
+
+/* === UTILITY CLASSES === */
+.testo-nero { color: #000000 !important; }
+.font-stiloso { font-family: var(--font-stiloso) !important; }
+.font-elegante { font-family: var(--font-elegante) !important; }
+
+.effetto-vetro {
+  background: var(--gradient-vetro);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--c-vetro-bordo);
+}
+
+.ombra-vetro {
+  box-shadow: 
+    0 8px 32px var(--c-vetro-ombra),
+    inset 0 1px 0 var(--c-vetro-bianco);
+}
