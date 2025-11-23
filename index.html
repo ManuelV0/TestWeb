@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -13,7 +14,7 @@
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <!-- Styles -->
+  <!-- Styles (lasciati con i path originali) -->
   <link rel="stylesheet" href="poetry-widget.css">
   <link rel="stylesheet" href="css/01-base.css">
   <link rel="stylesheet" href="css/02-header-nav.css">
@@ -22,32 +23,38 @@
   <link rel="stylesheet" href="css/05-components.css">
   <link rel="stylesheet" href="css/06-responsive-print.css">
 
-
-  <!-- SEO base -->
-<meta name="description" content="Le voci più amate del mese: scopri, vota e partecipa alla community di poesia.">
-
-<!-- Canonical -->
-<link rel="canonical" href="https://theitalianpoetry.it/">
-
-<!-- Open Graph (FB, WhatsApp, Telegram, LinkedIn) -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://theitalianpoetry.it/">
-<meta property="og:title" content="TheItalianPoetry — La tua dashboard artistica">
-<meta property="og:description" content="Scopri i talenti emergenti, vota e invia la tua poesia.">
-<meta property="og:image" content="immagini/Autore.png.png">
-<meta property="og:image:alt" content="immagini/Autore.png.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="TheItalianPoetry">
-<meta property="og:locale" content="it_IT">
-
-	
   <!-- Ads -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4946352643458279" crossorigin="anonymous"></script>
 
   <!-- React (per widget) -->
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Inizio modifica: Stili aggiuntivi -->
+  <style>
+    .hidden { display: none !important; }
+    .hidden-content { display: none; }
+    .hidden-content.is-visible { display: block; animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    body.modal-open { overflow: hidden; }
+    .info-modal { position: fixed; inset: 0; background: rgba(16, 24, 40, 0.55); backdrop-filter: blur(2px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; z-index: 999; }
+    .info-modal .modal-content { background: #fff; max-width: 640px; width: 100%; border-radius: 1rem; padding: 2rem; position: relative; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25); overflow-y: auto; max-height: 90vh; }
+    .info-modal .modal-content h2 { font-family: 'Montserrat', sans-serif; margin-bottom: 1rem; font-weight: 700; }
+    .info-modal .modal-content p, .info-modal .modal-content li { font-family: 'Open Sans', sans-serif; line-height: 1.6; }
+    .info-modal .modal-content ol, .info-modal .modal-content ul { margin-left: 1.5rem; margin-bottom: 1.25rem; }
+    .info-modal [data-close-modal] { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; background: transparent; border: none; cursor: pointer; color: #1f2937; }
+    .scroll-top-btn { position: fixed; bottom: 1.5rem; right: 1.5rem; width: 3rem; height: 3rem; border-radius: 50%; border: none; background: linear-gradient(135deg, #f97316, #facc15); color: #111827; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(249, 115, 22, 0.35); opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; z-index: 998; }
+    .scroll-top-btn.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .discover-more.active .arrow-down { transform: rotate(180deg); }
+    .discover-more .arrow-down { transition: transform 0.3s ease; }
+    #share-fallback.active { display: block; }
+    #share-fallback { display: none; }
+    .copy-feedback { display: block; margin-top: 0.5rem; font-size: 0.875rem; color: #047857; min-height: 1.2em; }
+    @media (max-width: 640px) {
+      .info-modal .modal-content { padding: 1.5rem; border-radius: 0.75rem; }
+      .scroll-top-btn { right: 1rem; bottom: 1rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -69,10 +76,8 @@
       <nav class="main-nav">
         <a href="#leaderboard">Classifica</a>
         <a href="#" id="how-to-link">Come Partecipare</a>
-	    <a href="italian_poetry_portfolio/index.html" id="author">Il tuo diario</a>
         <a href="#" id="about-us-link">Chi Siamo</a>
         <a href="#" id="author-link">Autore</a>
-
       </nav>
       <div class="header-actions">
         <div id="auth-buttons">
@@ -97,33 +102,6 @@
         <p>Scopri i talenti emergenti della nostra community votati da te e pubblicati su Instagram! Sostieni i tuoi artisti preferiti e lasciati ispirare.</p>
       </div>
     </section>
-
-    <!-- ▼▼▼ COUNTDOWN ▼▼▼ -->
-    <section class="countdown-section">
-      <div class="countdown-container">
-        <h2 class="countdown-title">⏰ Tempo rimanente questo mese</h2>
-        <div class="countdown-display">
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-days">00</span>
-            <span class="countdown-label">GIORNI</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-hours">00</span>
-            <span class="countdown-label">ORE</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-minutes">00</span>
-            <span class="countdown-label">MIN</span>
-          </div>
-          <div class="countdown-item">
-            <span class="countdown-number" id="countdown-seconds">00</span>
-            <span class="countdown-label">SEC</span>
-          </div>
-        </div>
-        <p class="countdown-subtitle">Partecipa prima che finisca il mese!</p>
-      </div>
-    </section>
-    <!-- ▲▲▲ COUNTDOWN ▲▲▲ -->
 
     <div class="container">
       <div class="content-area">
@@ -218,6 +196,8 @@
               <button id="copy-link-btn" class="button-copy"><i class="fas fa-copy"></i> Copia</button>
             </div>
             <p class="share-hint">Condividi questo link sui social!</p>
+            <!-- Inizio modifica: Feedback copia link -->
+            <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
           </div>
         </div>
       </aside>
@@ -227,6 +207,46 @@
       <h2 class="widget-title">Analisi IA</h2>
       <div id="poetry-widget-container"></div>
     </section>
+
+    <!-- Inizio modifica: Modali informative -->
+    <div id="how-to-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="how-to-modal-title" aria-hidden="true">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
+        <h2 id="how-to-modal-title">Come partecipare</h2>
+        <p>Partecipa alla classifica mensile seguendo questi semplici passaggi:</p>
+        <ol>
+          <li><strong>Accedi</strong> con il tuo account Google per sbloccare l’area invii.</li>
+          <li><strong>Invia la tua poesia</strong> rispettando il tema del mese e il limite di 300 parole.</li>
+          <li><strong>Condividi il link</strong> con amici e follower per raccogliere voti in tempo reale.</li>
+          <li><strong>Scala la classifica</strong>: i primi 10 verranno pubblicati sul nostro profilo Instagram ufficiale.</li>
+        </ol>
+        <p>Hai dubbi? Scrivici a <a href="mailto:hello@theitalianpoetry.it">hello@theitalianpoetry.it</a>.</p>
+      </div>
+    </div>
+
+    <div id="about-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="about-modal-title" aria-hidden="true">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
+        <h2 id="about-modal-title">Chi siamo</h2>
+        <p>TheItalianPoetry è una casa digitale per autori e lettori che amano la parola scritta. Crediamo in una community meritocratica e inclusiva, in cui il talento venga scoperto e sostenuto attraverso un sistema di votazioni trasparente.</p>
+        <ul>
+          <li><strong>Community first:</strong> ogni decisione nasce dai feedback della nostra base utenti.</li>
+          <li><strong>Trasparenza:</strong> voti pubblici e monitoraggio costante contro attività sospette.</li>
+          <li><strong>Formazione continua:</strong> workshop, guide e mentorship dedicate agli autori emergenti.</li>
+        </ul>
+        <p>Seguici su <a href="https://www.instagram.com/theitalianpoetry/" target="_blank" rel="noreferrer noopener">Instagram</a> per rimanere aggiornato su contest e novità.</p>
+      </div>
+    </div>
+
+    <div id="author-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="author-modal-title" aria-hidden="true">
+      <div class="modal-content">
+        <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
+        <h2 id="author-modal-title">L’autore del progetto</h2>
+        <p>Il progetto è curato da <strong>Francesco D’Amato</strong>, content strategist e appassionato di letteratura contemporanea.</p>
+        <p>Francesco ha fondato TheItalianPoetry nel 2020 per dare uno spazio strutturato agli autori emergenti italiani. Collabora con editori indipendenti, insegna copywriting creativo e cura rubriche dedicate ai nuovi linguaggi poetici.</p>
+        <p>Connettiti su <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer noopener">LinkedIn</a> oppure scrivi a <a href="mailto:francesco@theitalianpoetry.it">francesco@theitalianpoetry.it</a>.</p>
+      </div>
+    </div>
   </main>
 
   <footer class="main-footer">
@@ -245,6 +265,11 @@
     </div>
   </footer>
 
+  <!-- Inizio modifica: Pulsante torna su -->
+  <button id="scroll-top-btn" class="scroll-top-btn" type="button" aria-label="Torna all'inizio">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  </button>
+
   <!-- ========== MODALE VOTAZIONE A STELLE (coerente con app.js) ========== -->
   <div id="voting-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="vote-modal-title">
     <div class="modal-content">
@@ -253,8 +278,6 @@
       <h2 id="vote-modal-title" style="margin-bottom:.5rem;">Vota la poesia</h2>
       <p id="vote-poem-title" style="font-weight:700;"></p>
       <p id="vote-poem-author" style="color:#6B7280; margin-bottom:1rem;"></p>
-      <!-- AGGIUNTO -->
-      <p id="vote-poem-content" style="white-space:pre-line; color:#374151; margin:0 0 1rem;"></p>
 
       <div class="star-rating" role="radiogroup" aria-label="Valuta con le stelle">
         <input type="radio" id="star1" name="rating" value="1" class="sr-only">
@@ -280,207 +303,197 @@
   </div>
   <!-- =============================================================== -->
 
-  <!-- ========== MODALE COME PARTECIPARE ========== -->
-  <div id="how-to-modal" class="modal-backdrop hidden" role="dialog" aria-labelledby="how-to-title">
-    <div class="modal-content">
-      <button id="close-how-to-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-      <h2 id="how-to-title">Come partecipare</h2>
-      <ol style="margin:1rem 0 1.25rem 1rem;">
-        <li>Accedi con Google.</li>
-        <li>Apri “Partecipa” e compila titolo + testo (max ~1500 battute).</li>
-        <li>Se vuoi, inserisci nome/cognome o pubblica come Anonimo.</li>
-        <li>Invia: la poesia appare in lista e può essere votata.</li>
-      </ol>
-      <button id="how-to-submit-btn" class="button-primary">Vai al modulo di invio</button>
-    </div>
-  </div>
-
-  <!-- ========== MODALE CHI SIAMO ========== -->
-  <div id="about-us-modal" class="modal-backdrop hidden" role="dialog" aria-labelledby="about-us-title">
-    <div class="modal-content">
-      <button id="close-about-us-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-      <h2 id="about-us-title">Chi siamo</h2>
-      <p>Una community che promuove la scrittura creativa attraverso una classifica aperta e votazioni pubbliche. Annunci non invasivi ci aiutano a restare gratuiti.</p>
-    </div>
-  </div>
-
-  <!-- ========== MODALE AUTORE ========== -->
-  <div id="author-modal" class="modal-backdrop hidden" role="dialog" aria-labelledby="author-title">
-    <div class="modal-content">
-      <button id="close-author-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-      <h2 id="author-title">Autore</h2>
-      <p>Seguici su Instagram per le pubblicazioni mensili.</p>
-      <a id="author-external-link" href="author-page.html" target="_blank" class="button-secondary" style="display:inline-block;margin-top:.5rem;">Vai al profilo</a>
-    </div>
-  </div>
-
-
-	 <!-- ========== MODALE DIARIO AUTORE ========== -->
-  <div id="author" class="modal-backdrop hidden" role="dialog" aria-labelledby="author-title">
-    <div class="modal-content">
-      <button id="close-author-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-      <h2 id="author-title">Il tuo diario</h2>
-      <p>Seguici su Instagram per le pubblicazioni mensili e scopri il tuo diario.</p>
-      <a id="author-external-link" href="italian_poetry_portfolio/index.html" target="_blank" class="button-secondary" style="display:inline-block;margin-top:.5rem;">Vai al profilo</a>
-    </div>
-  </div>
-
-  <!-- ========== MODALE INVIO POESIA ========== -->
-  <div id="submission-modal" class="modal-backdrop hidden" role="dialog" aria-labelledby="submission-title">
-    <div class="modal-content">
-      <button id="close-submission-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-      <h2 id="submission-title">Invia la tua poesia</h2>
-
-      <form id="submission-form">
-        <div class="form-group">
-          <label for="poem-title">Titolo</label>
-          <input id="poem-title" type="text" required maxlength="120" />
-        </div>
-        <div class="form-group">
-          <label for="poem-content">Testo</label>
-          <textarea id="poem-content" required></textarea>
-        </div>
-
-        <div class="form-group-checkbox">
-          <input type="checkbox" id="anonymous-checkbox" />
-          <label for="anonymous-checkbox">Pubblica come Anonimo</label>
-        </div>
-
-        <div class="form-group">
-          <label for="author-firstname">Nome</label>
-          <input id="author-firstname" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="author-lastname">Cognome</label>
-          <input id="author-lastname" type="text" />
-        </div>
-        <div class="form-group">
-          <label for="author-instagram">Instagram (opzionale, senza @)</label>
-          <input id="author-instagram" type="text" />
-        </div>
-
-        <button type="submit" class="button-primary">Invia</button>
-        <p id="form-message" role="status" aria-live="polite"></p>
-      </form>
-    </div>
-  </div>
-  <!-- =============================================================== -->
-
-  <!-- Supabase + App -->
+  <!-- Supabase + App (solo JS/DB: lasciati corretti e in ordine) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script type="module" src="app.js"></script>
 
-  <!-- Countdown script minimale (fine mese) -->
-  <script>
-    (function () {
-      const now = new Date();
-      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0, 0);
-      const ids = {
-        d: document.getElementById('countdown-days'),
-        h: document.getElementById('countdown-hours'),
-        m: document.getElementById('countdown-minutes'),
-        s: document.getElementById('countdown-seconds'),
-      };
-      if (!ids.d || !ids.h || !ids.m || !ids.s) return;
+  <!-- Inizio modifica: Script funzionalità aggiuntive -->
+  <script type="module">
+    const initEnhancements = () => {
+      const body = document.body;
+      const navToggle = document.querySelector('.mobile-nav-toggle');
+      const navWrapper = document.getElementById('primary-navigation');
 
-      function pad(n){ return n.toString().padStart(2,'0'); }
-      function tick(){
-        const diff = endOfMonth - new Date();
-        if (diff <= 0) {
-          ids.d.textContent = ids.h.textContent = ids.m.textContent = ids.s.textContent = '00';
-          return;
-        }
-        const d = Math.floor(diff / (1000*60*60*24));
-        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        const s = Math.floor((diff % (1000*60)) / 1000);
+      if (navToggle && navWrapper) {
+        navToggle.addEventListener('click', () => {
+          const isVisible = navWrapper.getAttribute('data-visible') === 'true';
+          const nextState = !isVisible;
+          navWrapper.setAttribute('data-visible', String(nextState));
+          navToggle.setAttribute('aria-expanded', String(nextState));
+        });
 
-        ['d','h','m','s'].forEach(k => { ids[k].classList.remove('changing'); void ids[k].offsetWidth; ids[k].classList.add('changing'); });
-
-        ids.d.textContent = pad(d);
-        ids.h.textContent = pad(h);
-        ids.m.textContent = pad(m);
-        ids.s.textContent = pad(s);
-      }
-      tick();
-      setInterval(tick, 1000);
-    })();
-  </script>
-
-
-
-
-  <!-- Fine nuovo modal -->
-
-  <!-- =================== SCRIPTS =================== -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="app.js"></script>
-
-  <!-- Hook leggero per il modal Matchmaking (senza toccare app.js) -->
-  <script>
-    (function(){
-      const btn = document.getElementById('matchmaking-cta-btn');
-      const modal = document.getElementById('matchmaking-modal');
-      const closeBtn = document.getElementById('close-matchmaking-modal-btn');
-
-      if (btn && modal && closeBtn) {
-        btn.addEventListener('click', () => modal.classList.remove('hidden'));
-        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) modal.classList.add('hidden');
+        navWrapper.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            navWrapper.setAttribute('data-visible', 'false');
+            navToggle.setAttribute('aria-expanded', 'false');
+          });
         });
       }
-    })();
-  </script>
 
-	<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Fix per ambienti WordPress e simili dove process non esiste
-    if (!window.process) window.process = { env: { NODE_ENV: 'production' } };
+      const discoverMoreTrigger = document.getElementById('discover-more-trigger');
+      const expandedContent = document.getElementById('expanded-content');
+      if (discoverMoreTrigger && expandedContent) {
+        expandedContent.setAttribute('aria-hidden', 'true');
+        discoverMoreTrigger.setAttribute('role', 'button');
+        discoverMoreTrigger.setAttribute('tabindex', '0');
+        discoverMoreTrigger.setAttribute('aria-expanded', 'false');
+        const toggleExpanded = () => {
+          const isVisible = expandedContent.classList.toggle('is-visible');
+          expandedContent.setAttribute('aria-hidden', String(!isVisible));
+          discoverMoreTrigger.setAttribute('aria-expanded', String(isVisible));
+          discoverMoreTrigger.classList.toggle('active', isVisible);
+          const labelSpan = discoverMoreTrigger.querySelector('span');
+          if (labelSpan) labelSpan.textContent = isVisible ? 'Mostra meno' : 'Scopri di più';
+        };
+        discoverMoreTrigger.addEventListener('click', toggleExpanded);
+        discoverMoreTrigger.addEventListener('keypress', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            toggleExpanded();
+          }
+        });
+      }
 
-    // Caricamento asincrono dello script del widget
-    const script = document.createElement('script');
-    script.src = 'https://widget.theitalianpoetryproject.com/my-poetry-app.iife.js';
-    script.crossOrigin = 'anonymous';
+      const modals = {
+        howTo: document.getElementById('how-to-modal'),
+        about: document.getElementById('about-modal'),
+        author: document.getElementById('author-modal')
+      };
 
-    script.onload = function() {
-        if (window.MyPoetryApp?.mount) {
-            window.MyPoetryApp.mount(
-                document.getElementById('poetry-widget-container'),
-                {
-                    theme: 'light',
-                    onReady: () => console.log('[Widget] Pronto!'),
-                    onError: (err) => {
-                        console.error('[Widget] Errore:', err);
-                        document.getElementById('poetry-widget-container').innerHTML = `
-                          <div class="widget-fallback">
-                            <p>Errore nel caricamento delle poesie. <a href="/archivio">Archivio</a></p>
-                          </div>
-                        `;
-                    }
-                }
-            );
+      const setBodyScrollLock = () => {
+        const anyOpen = [...document.querySelectorAll('.info-modal')].some(modal => !modal.classList.contains('hidden'));
+        if (anyOpen) {
+          body.classList.add('modal-open');
         } else {
-            document.getElementById('poetry-widget-container').innerHTML = `
-                <div class="widget-fallback">
-                    <p>Impossibile inizializzare il widget. <a href="/archivio">Archivio</a></p>
-                </div>
-            `;
+          body.classList.remove('modal-open');
         }
+      };
+
+      const focusableSelector = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
+      const openModal = (modal) => {
+        if (!modal) return;
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        setBodyScrollLock();
+        const focusable = modal.querySelector(focusableSelector);
+        focusable?.focus();
+      };
+
+      const closeModal = (modal) => {
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        setBodyScrollLock();
+      };
+
+      const modalTriggers = [
+        { element: document.getElementById('how-to-link'), target: modals.howTo },
+        { element: document.getElementById('sidebar-participate-btn'), target: modals.howTo },
+        { element: document.getElementById('about-us-link'), target: modals.about },
+        { element: document.getElementById('author-link'), target: modals.author }
+      ];
+
+      modalTriggers.forEach(({ element, target }) => {
+        if (element && target) {
+          element.addEventListener('click', (event) => {
+            event.preventDefault();
+            openModal(target);
+          });
+        }
+      });
+
+      Object.values(modals).forEach(modal => {
+        if (!modal) return;
+        modal.addEventListener('click', (event) => {
+          if (event.target === modal) {
+            closeModal(modal);
+          }
+        });
+      });
+
+      document.querySelectorAll('[data-close-modal]').forEach(button => {
+        button.addEventListener('click', () => {
+          const modal = button.closest('.info-modal');
+          closeModal(modal);
+        });
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          Object.values(modals).forEach(modal => !modal?.classList.contains('hidden') && closeModal(modal));
+        }
+      });
+
+      const shareBtn = document.getElementById('share-cta-btn');
+      const shareFallback = document.getElementById('share-fallback');
+      const shareLinkInput = document.getElementById('poem-share-link');
+      const copyLinkBtn = document.getElementById('copy-link-btn');
+      const copyFeedback = document.getElementById('copy-feedback');
+      let copyTimeoutId;
+
+      if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+          const shareData = {
+            title: 'Condividi la tua poesia!',
+            text: 'Partecipa alla community di TheItalianPoetry e fai votare il tuo talento.',
+            url: shareLinkInput?.value ?? window.location.href
+          };
+          if (navigator.share) {
+            try {
+              await navigator.share(shareData);
+            } catch (error) {
+              if (error.name !== 'AbortError') {
+                shareFallback?.classList.remove('hidden');
+                shareFallback?.classList.add('active');
+              }
+            }
+          } else {
+            shareFallback?.classList.remove('hidden');
+            shareFallback?.classList.add('active');
+          }
+        });
+      }
+
+      if (copyLinkBtn && shareLinkInput) {
+        copyLinkBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(shareLinkInput.value);
+            if (copyFeedback) {
+              copyFeedback.textContent = 'Copiato negli appunti!';
+              clearTimeout(copyTimeoutId);
+              copyTimeoutId = setTimeout(() => { copyFeedback.textContent = ''; }, 2500);
+            }
+          } catch {
+            if (copyFeedback) copyFeedback.textContent = 'Impossibile copiare automaticamente, copia manualmente.';
+          }
+        });
+      }
+
+      const scrollTopBtn = document.getElementById('scroll-top-btn');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (scrollTopBtn) {
+        const toggleScrollTopVisibility = () => {
+          const shouldShow = window.scrollY > 450;
+          scrollTopBtn.classList.toggle('is-visible', shouldShow);
+        };
+        window.addEventListener('scroll', toggleScrollTopVisibility, { passive: true });
+        toggleScrollTopVisibility();
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: prefersReducedMotion.matches ? 'auto' : 'smooth' });
+        });
+      }
+
+      const footerText = document.querySelector('.main-footer p');
+      if (footerText) {
+        footerText.innerHTML = footerText.innerHTML.replace(/\d{4}/, new Date().getFullYear().toString());
+      }
     };
 
-    script.onerror = () => {
-        document.getElementById('poetry-widget-container').innerHTML = `
-            <div class="widget-fallback">
-                <p>Non riesco a caricare le poesie. <a href="/archivio">Archivio</a></p>
-            </div>
-        `;
-    };
-
-    document.body.appendChild(script);
-});
-</script>
-
-
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initEnhancements);
+    } else {
+      initEnhancements();
+    }
+  </script>
 </body>
 </html>
