@@ -770,3 +770,42 @@ if (shareInstagramBtn) {
         });
     }
 });
+
+
+<!-- Countdown script minimale (fine mese) -->
+
+    (function () {
+      const now = new Date();
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0, 0);
+      const ids = {
+        d: document.getElementById('countdown-days'),
+        h: document.getElementById('countdown-hours'),
+        m: document.getElementById('countdown-minutes'),
+        s: document.getElementById('countdown-seconds'),
+      };
+      if (!ids.d || !ids.h || !ids.m || !ids.s) return;
+
+      function pad(n){ return n.toString().padStart(2,'0'); }
+      function tick(){
+        const diff = endOfMonth - new Date();
+        if (diff <= 0) {
+          ids.d.textContent = ids.h.textContent = ids.m.textContent = ids.s.textContent = '00';
+          return;
+        }
+        const d = Math.floor(diff / (1000*60*60*24));
+        const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const s = Math.floor((diff % (1000*60)) / 1000);
+
+        ['d','h','m','s'].forEach(k => { ids[k].classList.remove('changing'); void ids[k].offsetWidth; ids[k].classList.add('changing'); });
+
+        ids.d.textContent = pad(d);
+        ids.h.textContent = pad(h);
+        ids.m.textContent = pad(m);
+        ids.s.textContent = pad(s);
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+
