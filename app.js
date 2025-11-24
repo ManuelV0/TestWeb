@@ -52,6 +52,19 @@ const authorExternalLink = document.getElementById('author-external-link'); // l
 	// AGGIUNGI QUESTA RIGA:
 const shareInstagramBtn = document.getElementById('share-cta-btn');
 						
+    // Inizio modifica/aggiunta - Ripristino preferenze di ricerca e ordinamento
+    function restoreUserPreferences() {
+        if (typeof window === 'undefined' || !window.localStorage) return;
+        const savedSearchTerm = localStorage.getItem('poetrySearchTerm');
+        const savedSortBy = localStorage.getItem('poetrySortBy');
+        if (searchInput && savedSearchTerm !== null) {
+            searchInput.value = savedSearchTerm;
+        }
+        if (sortBySelect && savedSortBy !== null) {
+            sortBySelect.value = savedSortBy;
+        }
+    }
+    restoreUserPreferences();
 
     // =======================================================
     // INIZIALIZZAZIONE
@@ -454,8 +467,12 @@ if (shareInstagramBtn) {
         });
     }
 
+    // Inizio modifica/aggiunta - Gestione stelle riutilizzabile
     function highlightStars(container, rating) {
-        container.querySelectorAll('.star-rating label.star i').forEach((icon, index) => {
+        if (!container) return;
+        const iconSelector = container.classList && container.classList.contains('star-rating') ? 'label.star i' : '.star-rating label.star i';
+        const icons = container.querySelectorAll(iconSelector);
+        icons.forEach((icon, index) => {
             if (index < rating) {
                 icon.classList.add('fa-solid', 'selected');
                 icon.classList.remove('fa-regular');
@@ -465,6 +482,56 @@ if (shareInstagramBtn) {
             }
         });
     }
+
+    // Inizio modifica/aggiunta - Inizializzazione stelle modale principale
+    function initMainStarRating() {
+        if (!starRatingContainer) return;
+        const starLabels = Array.from(starRatingContainer.querySelectorAll('label.star'));
+        const radioInputs = Array.from(starRatingContainer.querySelectorAll('input[type="radio"]'));
+        const extractValue = (label) => parseInt((label.getAttribute('for') || '').replace(/\D/g, ''), 10) || 0;
+        const setRating = (rating) => {
+            currentRating = rating;
+            radioInputs.forEach((input, index) => {
+                input.checked = index + 1 === rating;
+            });
+            starLabels.forEach((label, index) => {
+                label.setAttribute('aria-checked', index + 1 === rating ? 'true' : 'false');
+            });
+            highlightStars(starRatingContainer, rating);
+        };
+        starLabels.forEach(label => {
+            label.setAttribute('role', 'radio');
+            label.setAttribute('aria-checked', 'false');
+            label.setAttribute('tabindex', '-1');
+            label.addEventListener('click', () => {
+                setRating(extractValue(label));
+            });
+            label.addEventListener('mouseenter', () => {
+                highlightStars(starRatingContainer, extractValue(label) || currentRating);
+            });
+            label.addEventListener('mouseleave', () => {
+                highlightStars(starRatingContainer, currentRating);
+            });
+        });
+        starRatingContainer.addEventListener('mouseleave', () => {
+            highlightStars(starRatingContainer, currentRating);
+        });
+        starRatingContainer.addEventListener('keydown', (event) => {
+            if (!['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown'].includes(event.key)) return;
+            event.preventDefault();
+            const delta = event.key === 'ArrowRight' || event.key === 'ArrowUp' ? 1 : -1;
+            let newRating = currentRating + delta;
+            if (newRating < 1) newRating = 1;
+            if (newRating > starLabels.length) newRating = starLabels.length;
+            setRating(newRating);
+        });
+        if (!starRatingContainer.hasAttribute('tabindex')) {
+            starRatingContainer.setAttribute('tabindex', '0');
+        }
+        starRatingContainer.setAttribute('role', 'radiogroup');
+        highlightStars(starRatingContainer, currentRating);
+    }
+    initMainStarRating();
 
     if (poemsListContainer) {
         poemsListContainer.addEventListener('click', (event) => {
@@ -486,14 +553,17 @@ if (shareInstagramBtn) {
         });
     }
     
+    // Inizio modifica/aggiunta - Reset stelle modale principale
     function resetStars() {
         currentRating = 0;
-        starRatingContainer.querySelectorAll('label.star i').forEach(icon => {
-            icon.classList.remove('selected', 'fa-solid');
-            icon.classList.add('fa-regular');
+        if (!starRatingContainer) return;
+        highlightStars(starRatingContainer, 0);
+        starRatingContainer.querySelectorAll('input[type="radio"]').forEach(input => {
+            input.checked = false;
         });
-        const checkedRadio = starRatingContainer.querySelector('input[type="radio"]:checked');
-        if (checkedRadio) checkedRadio.checked = false;
+        starRatingContainer.querySelectorAll('label.star').forEach(label => {
+            label.setAttribute('aria-checked', 'false');
+        });
     }
 
     if (submitVoteBtn) {
@@ -560,88 +630,108 @@ if (shareInstagramBtn) {
     // FUNZIONE DI RENDER E CARICAMENTO POESIE
     // =======================================================
     function renderPoems() {
-    const searchTerm = searchInput.value.toLowerCase();
-    let filteredPoems = allPoems.filter(poesia => 
-        poesia.title.toLowerCase().includes(searchTerm) || 
-        poesia.author_name.toLowerCase().includes(searchTerm)
-    );
+        // Inizio modifica/aggiunta - Gestione stato lista poesie
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+        const sourcePoems = Array.isArray(allPoems) ? allPoems : [];
+        let filteredPoems = sourcePoems.filter(poesia => {
+            const title = (poesia.title || '').toLowerCase();
+            const author = (poesia.author_name || '').toLowerCase();
+            return !searchTerm || title.includes(searchTerm) || author.includes(searchTerm);
+        });
 
-    const now = new Date();
-    const currentMonthUTC = now.getUTCMonth();
-    const currentYearUTC = now.getUTCFullYear();
-    let monthlyPoems = filteredPoems.filter(poesia => {
-        const poemDate = new Date(poesia.created_at);
-        return poemDate.getUTCMonth() === currentMonthUTC && poemDate.getUTCFullYear() === currentYearUTC;
-    });
+        const now = new Date();
+        const currentMonthUTC = now.getUTCMonth();
+        const currentYearUTC = now.getUTCFullYear();
+        let monthlyPoems = filteredPoems.filter(poesia => {
+            const poemDate = new Date(poesia.created_at);
+            return poemDate.getUTCMonth() === currentMonthUTC && poemDate.getUTCFullYear() === currentYearUTC;
+        });
 
-    const sortBy = sortBySelect.value;
-    monthlyPoems.sort((a, b) => {
-        switch (sortBy) {
-            case 'popular': return (b.vote_count || 0) - (a.vote_count || 0);
-            case 'title-asc': return a.title.localeCompare(b.title);
-            case 'title-desc': return b.title.localeCompare(a.title);
-            default: return new Date(b.created_at) - new Date(a.created_at);
-        }
-    });
+        const sortBy = sortBySelect ? sortBySelect.value : 'recent';
+        monthlyPoems.sort((a, b) => {
+            switch (sortBy) {
+                case 'popular': return (b.vote_count || 0) - (a.vote_count || 0);
+                case 'title-asc': return (a.title || '').localeCompare(b.title || '');
+                case 'title-desc': return (b.title || '').localeCompare(a.title || '');
+                default: return new Date(b.created_at) - new Date(a.created_at);
+            }
+        });
 
-    const topTenPoems = [...allPoems].sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0)).slice(0, 10);
+        const topTenPoems = [...filteredPoems].sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0)).slice(0, 10);
 
-    if (poemsListContainer) {
-        if (topTenPoems.length === 0) {
-            poemsListContainer.innerHTML = '<p>Non ci sono ancora poesie. Sii il primo a partecipare!</p>';
-        } else {
-            poemsListContainer.innerHTML = topTenPoems.map((poesia, index) => {
-                const rankEmoji = index === 0 ? '🥇' :
-                                  index === 1 ? '🥈' :
-                                  index === 2 ? '🥉' : '';
+        if (poemsListContainer) {
+            if (topTenPoems.length === 0) {
+                const emptyMessage = sourcePoems.length === 0
+                    ? 'Non ci sono ancora poesie. Sii il primo a partecipare!'
+                    : 'Nessuna poesia corrisponde ai criteri di ricerca.';
+                poemsListContainer.innerHTML = `<p>${emptyMessage}</p>`;
+            } else {
+                poemsListContainer.innerHTML = topTenPoems.map((poesia, index) => {
+                    const rankEmoji = index === 0 ? '🥇' :
+                                      index === 1 ? '🥈' :
+                                      index === 2 ? '🥉' : '';
 
-                const rankGlowClass = index < 3 ? 'glow-rank' : '';
+                    const rankGlowClass = index < 3 ? 'glow-rank' : '';
 
-                const instagramIcon = poesia.instagram_handle ? 
-                    `<a href="https://www.instagram.com/${poesia.instagram_handle}" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>` : '';
+                    const instagramIcon = poesia.instagram_handle ? 
+                        `<a href="https://www.instagram.com/${poesia.instagram_handle}" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>` : '';
 
-                return `
-                    <article class="poem-row" data-poem-id="${poesia.id}">
-					<div class="poem-info ${rankGlowClass}" data-poem-id="${poesia.id}">
+                    return `
+                        <article class="poem-row" data-poem-id="${poesia.id}">
+    					<div class="poem-info ${rankGlowClass}" data-poem-id="${poesia.id}">
     <span class="poem-rank">${rankEmoji}</span>
     <span class="poem-title">${poesia.title}</span>
     <span class="poem-author golden-author">di ${poesia.author_name}</span>
 </div>
-                        <div class="poem-actions">
-                            ${instagramIcon}
-                            <span class="poem-votes">${poesia.vote_count || 0} Voti</span>
-                            <button class="button-vote" data-poem-id="${poesia.id}">Vota</button>
-                        </div>
-                    </article>`;
-            }).join('');
+                            <div class="poem-actions">
+                                ${instagramIcon}
+                                <span class="poem-votes">${poesia.vote_count || 0} Voti</span>
+                                <button class="button-vote" data-poem-id="${poesia.id}">Vota</button>
+                            </div>
+                        </article>`;
+                }).join('');
+                attachPoemInfoHandlers();
+            }
+        }
 
-            // Aggiungi click per aprire dettaglio
-            poemsListContainer.querySelectorAll('.poem-info').forEach(el => {
-                el.addEventListener('click', async (e) => {
-                    const poemId = el.dataset.poemId;
-                    const poem = allPoems.find(p => p.id == poemId);
-                    if (poem) showPoemDetail(poem);
-                });
+        if (monthlyPoemsListContainer) {
+            if (monthlyPoems.length === 0) {
+                monthlyPoemsListContainer.innerHTML = '<p style="font-size: 0.9rem; color: #777;">Nessuna poesia per questo mese.</p>';
+            } else {
+                monthlyPoemsListContainer.innerHTML = monthlyPoems.map(poesia => {
+                    const poemDate = new Date(poesia.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
+                    return `
+                        <div class="mini-poem-item" data-poem-id="${poesia.id}">
+                            <span class="mini-poem-title">${poesia.title}</span>
+                            <span class="mini-poem-author">di ${poesia.author_name}</span>
+                            <span class="mini-poem-date">${poemDate}</span>
+                        </div>`;
+                }).join('');
+            }
+        }
+    }
+
+    // Inizio modifica/aggiunta - Gestione interazioni elenco poesie
+    function attachPoemInfoHandlers() {
+        if (!poemsListContainer) return;
+        const infoElements = poemsListContainer.querySelectorAll('.poem-info');
+        infoElements.forEach(el => {
+            el.setAttribute('role', 'button');
+            el.setAttribute('tabindex', '0');
+            const poemId = el.dataset.poemId;
+            const handleActivation = () => {
+                const poem = allPoems.find(p => String(p.id) === String(poemId));
+                if (poem) showPoemDetail(poem);
+            };
+            el.addEventListener('click', handleActivation);
+            el.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleActivation();
+                }
             });
-        }
+        });
     }
-
-    if (monthlyPoemsListContainer) {
-        if (monthlyPoems.length === 0) {
-            monthlyPoemsListContainer.innerHTML = '<p style="font-size: 0.9rem; color: #777;">Nessuna poesia per questo mese.</p>';
-        } else {
-            monthlyPoemsListContainer.innerHTML = monthlyPoems.map(poesia => {
-                const poemDate = new Date(poesia.created_at).toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
-                return `
-                    <div class="mini-poem-item" data-poem-id="${poesia.id}">
-                        <span class="mini-poem-title">${poesia.title}</span>
-                        <span class="mini-poem-author">di ${poesia.author_name}</span>
-                        <span class="mini-poem-date">${poemDate}</span>
-                    </div>`;
-            }).join('');
-        }
-    }
-}
 
     async function caricaDatiIniziali() {
         if (poemsListContainer) poemsListContainer.innerHTML = '<p>Caricamento...</p>';
@@ -661,7 +751,22 @@ if (shareInstagramBtn) {
         }
     }
     
-    if(searchInput) searchInput.addEventListener('input', renderPoems);
-    if(sortBySelect) sortBySelect.addEventListener('change', renderPoems);
+    if(searchInput) {
+        // Inizio modifica/aggiunta - Salvataggio termine di ricerca
+        searchInput.addEventListener('input', () => {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                localStorage.setItem('poetrySearchTerm', searchInput.value);
+            }
+            renderPoems();
+        });
+    }
+    if(sortBySelect) {
+        // Inizio modifica/aggiunta - Salvataggio ordinamento selezionato
+        sortBySelect.addEventListener('change', () => {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                localStorage.setItem('poetrySortBy', sortBySelect.value);
+            }
+            renderPoems();
+        });
+    }
 });
-
