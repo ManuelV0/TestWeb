@@ -772,7 +772,7 @@ if (shareInstagramBtn) {
 });
 
 
-<!-- Countdown script minimale (fine mese) -->
+ // --- script minimale (fine mese) -->
 
     (function () {
       const now = new Date();
