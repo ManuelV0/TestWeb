@@ -523,5 +523,55 @@
       initEnhancements();
     }
   </script>
+
+	<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fix per ambienti WordPress e simili dove process non esiste
+    if (!window.process) window.process = { env: { NODE_ENV: 'production' } };
+
+    // Caricamento asincrono dello script del widget
+    const script = document.createElement('script');
+    script.src = 'https://widget.theitalianpoetryproject.com/my-poetry-app.iife.js';
+    script.crossOrigin = 'anonymous';
+
+    script.onload = function() {
+        if (window.MyPoetryApp?.mount) {
+            window.MyPoetryApp.mount(
+                document.getElementById('poetry-widget-container'),
+                {
+                    theme: 'light',
+                    onReady: () => console.log('[Widget] Pronto!'),
+                    onError: (err) => {
+                        console.error('[Widget] Errore:', err);
+                        document.getElementById('poetry-widget-container').innerHTML = `
+                          <div class="widget-fallback">
+                            <p>Errore nel caricamento delle poesie. <a href="/archivio">Archivio</a></p>
+                          </div>
+                        `;
+                    }
+                }
+            );
+        } else {
+            document.getElementById('poetry-widget-container').innerHTML = `
+                <div class="widget-fallback">
+                    <p>Impossibile inizializzare il widget. <a href="/archivio">Archivio</a></p>
+                </div>
+            `;
+        }
+    };
+
+    script.onerror = () => {
+        document.getElementById('poetry-widget-container').innerHTML = `
+            <div class="widget-fallback">
+                <p>Non riesco a caricare le poesie. <a href="/archivio">Archivio</a></p>
+            </div>
+        `;
+    };
+
+    document.body.appendChild(script);
+});
+</script>
+
+  
 </body>
 </html>
