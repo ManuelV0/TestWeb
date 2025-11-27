@@ -55,7 +55,13 @@
     }
 
     img {
-      
+      width: 150px;         /* larghezza del cerchio */
+      height: 150px;        /* altezza uguale alla larghezza */
+      border-radius: 50%;   /* rende il contenitore circolare */
+      overflow: hidden;     /* ritaglia l'immagine fuori dal cerchio */
+      display: flex;
+      align-items: center;
+      justify-content: center;
       max-width: 100%;
     }
 
