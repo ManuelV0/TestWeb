@@ -1,33 +1,41 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Profilo autore e raccolte poetiche di TheItalianPoetry." />
   <title>Autore - TheItalianPoetry</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-dQ4T9U5YJ9XQvXcOjmuTrUlW8pS/9gOq7+QXRGFF8Y99Qk+x6Q0YlU5T0iCnuUo3mCS5XjG3b9VQwn8kw3FN4g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <style>
+    /* ----------------------------------------------------------
+       Variabili globali e reset di base
+    ---------------------------------------------------------- */
     :root {
       --c-sfondo: #f9f9f9;
       --c-superficie: #ffffff;
       --c-primario: #4caf50;
-      --c-primario-hover: #45a049;
+      --c-primario-hover: #3a8d3f;
       --c-secondario: #2196f3;
-      --c-testo: #222;
-      --c-testo-leggero: #555;
+      --c-testo: #1f1f1f;
+      --c-testo-leggero: #555555;
       --ombra: 0 5px 20px rgba(0, 0, 0, 0.07);
       --bordo-arrotondato: 10px;
-      --spazio-sm: 0.5rem;
-      --spazio-md: 1rem;
-      --spazio-lg: 1.5rem;
-      --spazio-xl: 2.5rem;
+      --spazio-xs: 0.35rem;
+      --spazio-sm: 0.7rem;
+      --spazio-md: 1.2rem;
+      --spazio-lg: 1.6rem;
+      --spazio-xl: 2.4rem;
       --font-body: 'Open Sans', sans-serif;
       --font-heading: 'Montserrat', sans-serif;
       --header-height: 70px;
-      --transizione: all 0.3s ease;
+      --transizione-base: all 0.3s ease;
+      --max-larghezza: 1200px;
     }
 
     *, *::before, *::after {
@@ -37,106 +45,111 @@
     }
 
     body {
+      min-height: 100vh;
       font-family: var(--font-body);
       background-color: var(--c-sfondo);
       color: var(--c-testo);
       padding-top: var(--header-height);
       line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
     }
 
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:focus-visible {
+      outline: 3px solid var(--c-secondario);
+      outline-offset: 4px;
+      border-radius: var(--bordo-arrotondato);
+    }
+
+    /* ----------------------------------------------------------
+       Utility e layout di base
+    ---------------------------------------------------------- */
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: var(--spazio-lg);
+      width: min(100% - 2 * var(--spazio-lg), var(--max-larghezza));
+      margin-inline: auto;
     }
 
+    .skip-link {
+      position: absolute;
+      inset-inline-start: -999px;
+      inset-block-start: 1rem;
+      padding: var(--spazio-xs) var(--spazio-md);
+      background-color: var(--c-primario);
+      color: #fff;
+      border-radius: var(--bordo-arrotondato);
+      z-index: 2000;
+      transition: var(--transizione-base);
+    }
+
+    .skip-link:focus {
+      inset-inline-start: 1rem;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* ----------------------------------------------------------
+       Intestazione
+    ---------------------------------------------------------- */
     .main-header {
       background-color: var(--c-superficie);
       box-shadow: var(--ombra);
-      padding: 0 var(--spazio-lg);
+      padding-inline: var(--spazio-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--header-height);
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 1500;
+    }
+
+    .header-inner {
+      width: min(100%, var(--max-larghezza));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: var(--header-height);
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
     }
 
     .logo {
       font-family: var(--font-heading);
       font-weight: 800;
-      font-size: 1.5rem;
+      font-size: 1.45rem;
       color: var(--c-primario);
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      text-decoration: none;
+      gap: 0.6rem;
+      transition: var(--transizione-base);
     }
 
-    .poems-section {
+    .logo:hover {
+      color: var(--c-primario-hover);
+    }
+
+    /* ----------------------------------------------------------
+       Profilo autore
+    ---------------------------------------------------------- */
+    .author-section {
       margin-top: var(--spazio-xl);
-    }
-
-    .section-title {
-      font-family: var(--font-heading);
-      font-size: 1.8rem;
-      text-align: center;
-      margin-bottom: var(--spazio-lg);
-      color: var(--c-testo);
-    }
-
-    .poems-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: var(--spazio-lg);
-    }
-
-    .poem-card {
-      background-color: var(--c-superficie);
-      padding: var(--spazio-lg);
-      border-radius: var(--bordo-arrotondato);
-      box-shadow: var(--ombra);
-      transition: var(--transizione);
-    }
-
-    .poem-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    .poem-card h3 {
-      font-family: var(--font-heading);
-      color: var(--c-primario);
-      margin: 0 0 var(--spazio-sm) 0;
-    }
-
-    .poem-card .poem-text {
-      white-space: pre-line;
-      color: var(--c-testo-leggero);
-    }
-
-    .verse-line {
-      display: block;
-      margin-bottom: 0.3em;
-    }
-
-    .initial-letter {
-      display: inline-block;
-      font-weight: bold;
-      opacity: 0.1;
-      transform: scale(1);
-      transition: all 0.4s ease-out;
-      transform-origin: bottom left;
-    }
-
-    .initial-letter.visible {
-      opacity: 1;
-      transform: scale(1.05);
-      text-shadow: 0 0 6px rgba(255, 255, 255, 0.3),
-                   0 0 8px var(--c-primario);
-      color: var(--c-primario);
+      margin-bottom: var(--spazio-xl);
     }
 
     .author-profile {
@@ -144,11 +157,10 @@
       padding: var(--spazio-xl);
       border-radius: var(--bordo-arrotondato);
       box-shadow: var(--ombra);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      gap: var(--spazio-lg);
+      justify-items: center;
       text-align: center;
-      gap: var(--spazio-md);
     }
 
     .author-image-container {
@@ -157,143 +169,409 @@
       border-radius: 50%;
       overflow: hidden;
       border: 4px solid var(--c-primario);
-      margin-bottom: var(--spazio-md);
-    }
-
-    .author-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(76, 175, 80, 0.15);
     }
 
     .author-title h1 {
       font-family: var(--font-heading);
-      font-size: 2rem;
-      margin: 0;
+      font-size: clamp(1.9rem, 2.5vw, 2.4rem);
+      margin-bottom: var(--spazio-xs);
+      text-wrap: balance;
     }
 
     .author-bio {
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--c-testo-leggero);
-      max-width: 700px;
-      margin-top: var(--spazio-sm);
+      max-width: 48ch;
+      text-wrap: pretty;
+    }
+
+    /* ----------------------------------------------------------
+       Sezioni poesie
+    ---------------------------------------------------------- */
+    .poems-section {
+      margin-bottom: var(--spazio-xl);
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 2.5vw, 2rem);
+      text-align: center;
+      margin-bottom: var(--spazio-lg);
+      text-wrap: balance;
+    }
+
+    .poems-grid {
+      display: grid;
+      gap: var(--spazio-lg);
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      align-items: stretch;
+    }
+
+    .poem-card {
+      background-color: var(--c-superficie);
+      padding: var(--spazio-lg);
+      border-radius: var(--bordo-arrotondato);
+      box-shadow: var(--ombra);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spazio-sm);
+    }
+
+    .poem-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .poem-card h3 {
+      font-family: var(--font-heading);
+      color: var(--c-primario);
+      font-size: 1.2rem;
+    }
+
+    .poem-text {
+      color: var(--c-testo-leggero);
+      white-space: pre-wrap;
+    }
+
+    .verse-line {
+      display: block;
+      margin-bottom: 0.2em;
+    }
+
+    .initial-letter {
+      display: inline-block;
+      font-weight: 700;
+      opacity: 0.12;
+      transform: scale(1);
+      transform-origin: bottom left;
+      color: currentColor;
+      transition: transform 0.4s ease-out, opacity 0.4s ease-out, text-shadow 0.4s ease-out;
+    }
+
+    .initial-letter.visible {
+      opacity: 1;
+      transform: scale(1.04);
+      color: var(--c-primario);
+      text-shadow: 0 0 8px rgba(76, 175, 80, 0.35);
+    }
+
+    .loading-message,
+    .error-message,
+    .empty-message {
+      background-color: rgba(76, 175, 80, 0.08);
+      border: 1px solid rgba(76, 175, 80, 0.15);
+      color: var(--c-testo-leggero);
+      border-radius: var(--bordo-arrotondato);
+      padding: var(--spazio-md);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    .error-message {
+      background-color: rgba(244, 67, 54, 0.08);
+      border-color: rgba(244, 67, 54, 0.3);
+      color: #d84315;
+    }
+
+    /* ----------------------------------------------------------
+       Media queries
+    ---------------------------------------------------------- */
+    @media (min-width: 768px) {
+      .author-profile {
+        grid-template-columns: auto 1fr;
+        text-align: left;
+        align-items: center;
+      }
+
+      .author-bio {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(100% - 2 * var(--spazio-md), var(--max-larghezza));
+      }
+
+      .poem-card {
+        padding: var(--spazio-md);
+      }
+    }
+
+    /* ----------------------------------------------------------
+       Accessibilità - riduzione movimento
+    ---------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#contenuto-principale">Salta al contenuto principale</a>
 
-  <header class="main-header">
-    <a href="index.html" class="logo">
-      <i class="fa-solid fa-feather-pointed"></i>
-      <span>TheItalianPoetry</span>
-    </a>
+  <header class="main-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Torna alla homepage TheItalianPoetry">
+        <i class="fa-solid fa-feather-pointed" aria-hidden="true"></i>
+        <span>TheItalianPoetry</span>
+      </a>
+    </div>
   </header>
 
-  <main class="container">
-
-    <section class="author-profile">
-      <div class="author-image-container">
-        <img class="author-image" src="immagini/Autore.png.png" alt="" />
-      </div>
-      <div class="author-details">
-        <div class="author-title">
-          <h1>NoName</h1>
+  <main id="contenuto-principale">
+    <div class="container">
+      <section class="author-section" aria-labelledby="titolo-autore">
+        <div class="author-profile">
+          <div class="author-image-container">
+            <img
+              class="author-image"
+              src="immagini/autore.png"
+              alt="Ritratto dell'autore NoName"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="author-details">
+            <div class="author-title">
+              <h1 id="titolo-autore">NoName</h1>
+            </div>
+            <p class="author-bio">
+              Pagina di poesia e frammenti emotivi. Qui si scrive di assenze, identità, silenzi e desideri. Un linguaggio che inciampa, si spezza e tenta di dire l'indicibile. Scrivo per non dimenticare cosa significa sentire. Tra fratture e verità scomposte, le mie parole cercano un nome dove tutto si è perso. Vivo nel confine tra luce e ombra: lì dove la poesia non consola, ma racconta — di una persona senza nome.
+            </p>
+          </div>
         </div>
-        <p class="author-bio">
-          Pagina di poesia e frammenti emotivi. Qui si scrive di assenze, identità, silenzi e desideri. Un linguaggio che inciampa, si spezza e tenta di dire l'indicibile. Scrivo per non dimenticare cosa significa sentire. Tra fratture e verità scomposte, le mie parole cercano un nome dove tutto si è perso. Vivo nel confine tra luce e ombra: lì dove la poesia non consola, ma racconta — di una persona senza nome.
-        </p>
-      </div>
-    </section>
+      </section>
 
-    <!-- SEZIONE 1 -->
-    <section class="poems-section">
-      <h2 class="section-title">L'origine del Male</h2>
-      <div class="poems-grid" id="poems-grid">
-        Caricamento...
-      </div>
-    </section>
+      <!-- Sezione: L'origine del Male -->
+      <section class="poems-section" aria-labelledby="sezione-origine">
+        <h2 class="section-title" id="sezione-origine">L'origine del Male</h2>
+        <div class="poems-grid" id="poems-grid" role="list" aria-live="polite" aria-busy="true">
+          <p class="loading-message" role="status">Caricamento delle poesie...</p>
+        </div>
+      </section>
 
-    <!-- SEZIONE 2 -->
-    <section class="poems-section">
-      <h2 class="section-title">Frammenti</h2>
-      <div class="poems-grid" id="frammenti-poems-grid">
-        Caricamento...
-      </div>
-    </section>
-
+      <!-- Sezione: Frammenti -->
+      <section class="poems-section" aria-labelledby="sezione-frammenti">
+        <h2 class="section-title" id="sezione-frammenti">Frammenti</h2>
+        <div class="poems-grid" id="frammenti-poems-grid" role="list" aria-live="polite" aria-busy="true">
+          <p class="loading-message" role="status">Caricamento delle poesie...</p>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const supabase = window.supabase.createClient(
-      'https://djikypgmchywybjxbwar.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q'
-    );
+    /* ----------------------------------------------------------
+       Configurazione Supabase
+    ---------------------------------------------------------- */
+    const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
 
-    async function loadPoems() {
-      await loadCategoryPoems('origine', 'poems-grid');
-      await loadCategoryPoems('frammenti', 'frammenti-poems-grid');
-      animateInitialLetters();
-    }
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-	async function loadCategoryPoems(categoria, containerId) {
-  const container = document.getElementById(containerId);
-  const { data, error } = await supabase
-    .from('poems')
-    .select('*')
-    .eq('categoria', categoria)
-    .order('ordine', { ascending: true });
+    /* ----------------------------------------------------------
+       Configurazione delle categorie da caricare
+    ---------------------------------------------------------- */
+    const CATEGORY_CONFIG = [
+      { category: 'origine', containerId: 'poems-grid', enableInitials: true },
+      { category: 'frammenti', containerId: 'frammenti-poems-grid', enableInitials: false }
+    ];
 
-  if (error || !data || data.length === 0) {
-    container.innerHTML = `<p>Nessuna poesia trovata per questa sezione.</p>`;
-    return;
-  }
+    const prefersReducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  container.innerHTML = data.map(poem => {
-    const showInitials = categoria !== "frammenti"; // 👈 solo se non è frammenti
-    return `
-      <article class="poem-card">
-        <h3>${poem.title}</h3>
-        <p class="poem-text">
-          ${poem.content
-            .split('\n')
-            .map(line => {
-              const first = line.charAt(0);
-              const rest = line.slice(1);
-              if (showInitials) {
-                return `<span class="verse-line"><span class="initial-letter">${first}</span>${rest}</span>`;
-              } else {
-                return `<span class="verse-line">${line}</span>`; // no effetto
-              }
-            })
-            .join('')}
-        </p>
-      </article>
-    `;
-  }).join('');
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPoems().catch(error => {
+        console.error('Errore durante il caricamento iniziale delle poesie:', error);
+      });
+    });
 
-  // Applica effetto cometa SOLO se non è frammenti
-  if (categoria !== "frammenti") {
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const letters = entry.target.querySelectorAll('.initial-letter');
-          letters.forEach((el, i) => {
-            setTimeout(() => {
-              el.classList.add('visible');
-            }, i * 120);
-          });
+    /**
+     * Carica le poesie per tutte le categorie configurate.
+     */
+    const loadPoems = async () => {
+      const results = await Promise.all(CATEGORY_CONFIG.map(loadCategoryPoems));
+      const cardsToAnimate = results.flat();
+      setupInitialsAnimation(cardsToAnimate);
+    };
+
+    /**
+     * Recupera le poesie da Supabase e le renderizza nel contenitore indicato.
+     * @param {Object} config - Configurazione per la categoria corrente.
+     * @returns {Promise<HTMLElement[]>} - Ritorna le card con iniziali animate.
+     */
+    const loadCategoryPoems = async ({ category, containerId, enableInitials }) => {
+      const container = document.getElementById(containerId);
+
+      if (!container) {
+        console.warn(`Contenitore con id "${containerId}" non trovato.`);
+        return [];
+      }
+
+      container.setAttribute('aria-busy', 'true');
+      container.innerHTML = `<p class="loading-message" role="status">Caricamento delle poesie...</p>`;
+
+      const { data, error } = await supabaseClient
+        .from('poems')
+        .select('title, content, ordine')
+        .eq('categoria', category)
+        .order('ordine', { ascending: true });
+
+      if (error) {
+        console.error(`Errore Supabase per la categoria "${category}":`, error);
+        container.innerHTML = `<p class="error-message" role="alert">Si è verificato un problema nel recupero delle poesie. Riprova più tardi.</p>`;
+        container.removeAttribute('aria-busy');
+        return [];
+      }
+
+      if (!data || data.length === 0) {
+        container.innerHTML = `<p class="empty-message">Nessuna poesia trovata per questa sezione.</p>`;
+        container.removeAttribute('aria-busy');
+        return [];
+      }
+
+      const fragment = document.createDocumentFragment();
+      const cardsForAnimation = [];
+
+      data.forEach(poem => {
+        const card = createPoemCard(poem, enableInitials);
+        fragment.appendChild(card);
+
+        if (enableInitials) {
+          cardsForAnimation.push(card);
         }
       });
-    }, { threshold: 0.4 });
 
-    container.querySelectorAll('.poem-card').forEach(card => {
-      observer.observe(card);
-    });
-  }
-}
+      container.innerHTML = '';
+      container.appendChild(fragment);
+      container.removeAttribute('aria-busy');
 
-    document.addEventListener('DOMContentLoaded', loadPoems);
+      return cardsForAnimation;
+    };
+
+    /**
+     * Crea il markup per ogni poesia.
+     * @param {Object} poem - Dati della poesia.
+     * @param {boolean} enableInitials - Se true applica l'effetto sulle iniziali.
+     * @returns {HTMLElement} - Card della poesia.
+     */
+    const createPoemCard = (poem, enableInitials) => {
+      const article = document.createElement('article');
+      article.className = 'poem-card';
+      article.setAttribute('role', 'listitem');
+
+      const heading = document.createElement('h3');
+      heading.textContent = poem?.title?.trim() || 'Senza titolo';
+      article.appendChild(heading);
+
+      const textWrapper = document.createElement('p');
+      textWrapper.className = 'poem-text';
+
+      const lines = (poem?.content ?? '').split('\n');
+      lines.forEach(line => {
+        textWrapper.appendChild(createVerseLine(line, enableInitials));
+      });
+
+      article.appendChild(textWrapper);
+
+      if (enableInitials) {
+        article.dataset.animateInitials = 'true';
+      }
+
+      return article;
+    };
+
+    /**
+     * Genera una singola riga della poesia, con eventuale iniziale enfatizzata.
+     * @param {string} line - Verso da rendere.
+     * @param {boolean} enableInitials - Se true applica l'effetto sulle iniziali.
+     * @returns {HTMLElement} - Nodo span con la riga.
+     */
+    const createVerseLine = (line = '', enableInitials) => {
+      const verseLine = document.createElement('span');
+      verseLine.className = 'verse-line';
+
+      if (!line.trim()) {
+        verseLine.appendChild(document.createTextNode('\u00A0'));
+        return verseLine;
+      }
+
+      if (!enableInitials) {
+        verseLine.textContent = line;
+        return verseLine;
+      }
+
+      const firstNonWhitespaceIndex = line.search(/\S/);
+
+      if (firstNonWhitespaceIndex > 0) {
+        verseLine.appendChild(document.createTextNode(line.slice(0, firstNonWhitespaceIndex)));
+      }
+
+      const initialLetter = line.charAt(firstNonWhitespaceIndex);
+      const restOfLine = line.slice(firstNonWhitespaceIndex + 1);
+
+      const initialSpan = document.createElement('span');
+      initialSpan.className = 'initial-letter';
+      initialSpan.textContent = initialLetter;
+
+      verseLine.append(initialSpan, restOfLine);
+
+      return verseLine;
+    };
+
+    /**
+     * Gestisce l'animazione progressiva delle iniziali quando le card entrano nel viewport.
+     * @param {HTMLElement[]} cards - Card su cui applicare l'effetto.
+     */
+    const setupInitialsAnimation = cards => {
+      if (!cards.length) return;
+
+      const revealLetters = card => {
+        if (card.dataset.initialsAnimated === 'true') return;
+
+        const letters = card.querySelectorAll('.initial-letter');
+        letters.forEach((letter, index) => {
+          if (prefersReducedMotionQuery.matches) {
+            letter.classList.add('visible');
+          } else {
+            setTimeout(() => {
+              letter.classList.add('visible');
+            }, index * 120);
+          }
+        });
+
+        card.dataset.initialsAnimated = 'true';
+      };
+
+      if (!('IntersectionObserver' in window) || prefersReducedMotionQuery.matches) {
+        cards.forEach(revealLetters);
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              revealLetters(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.35 }
+      );
+
+      cards.forEach(card => observer.observe(card));
+    };
   </script>
 </body>
 </html>
