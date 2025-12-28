@@ -540,11 +540,20 @@
 
 
         <script>
-  document.getElementById('poetry-widget-toggle').onclick = () => {
-    document
-      .getElementById('poetry-widget-wrapper')
-      .classList.toggle('hidden');
-  };
+  function openPoetryWidget() {
+    const header = document.querySelector('header, .site-header, #header');
+    const widget = document.getElementById('poetry-widget-overlay');
+
+    const headerHeight = header ? header.offsetHeight : 0;
+
+    widget.style.top = headerHeight + 'px';
+    widget.classList.remove('hidden');
+  }
+
+  function closePoetryWidget() {
+    document.getElementById('poetry-widget-overlay')
+      .classList.add('hidden');
+  }
 </script>
   
 </body>
