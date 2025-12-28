@@ -184,3 +184,12 @@ display:flex; justify-content:center; align-items:center;
 .hidden {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .poetry-widget-fixed {
+    width: calc(100% - 32px);
+    height: 70vh;
+    right: 16px;
+    bottom: 16px;
+  }
+}
