@@ -143,54 +143,47 @@ display:flex; justify-content:center; align-items:center;
 
 
 
+
+.poetry-widget-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: #fff;
+  z-index: 900;        /* sotto header */
+}
+
+.poetry-widget-fixed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+
 #poetry-widget-toggle {
   position: fixed;
-  left: 24px;
-  bottom: 24px;
+  bottom: 1.25rem;
+  left: 1.25rem;
 
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: #16a34a;
-  color: white;
-  font-size: 26px;
+
+  background: linear-gradient(135deg, #f97316, #facc15);
+  color: #111;
+  font-size: 1.4rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
-  z-index: 10000;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.25);
-}
-
-.poetry-widget-page {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  background: white;
-  z-index: 999;
-}
-
-.poetry-widget-page iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-
-@media (max-width: 768px) {
-  .poetry-widget-fixed {
-    width: calc(100% - 32px);
-    height: 70vh;
-    left: 16px;
-    bottom: 80px;
-  }
-
-  #poetry-widget-toggle {
-    left: 16px;
-    bottom: 16px;
-  }
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  z-index: 950;
 }
