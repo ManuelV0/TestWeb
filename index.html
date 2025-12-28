@@ -537,22 +537,34 @@
   </script>
 
 
-        <script>
-  function openPoetryWidget() {
-    const header = document.querySelector('header, .site-header, #header');
-    const widget = document.getElementById('poetry-widget-overlay');
+        
+  <script>
+  const widget = document.getElementById('poetry-widget-overlay');
+  const toggle = document.getElementById('poetry-widget-toggle');
 
+  function openPoetryWidget() {
+    const header = document.querySelector('.main-header');
     const headerHeight = header ? header.offsetHeight : 0;
 
     widget.style.top = headerHeight + 'px';
     widget.classList.remove('hidden');
+    document.body.classList.add('modal-open');
   }
 
   function closePoetryWidget() {
-    document.getElementById('poetry-widget-overlay')
-      .classList.add('hidden');
+    widget.classList.add('hidden');
+    document.body.classList.remove('modal-open');
   }
+
+  toggle.addEventListener('click', () => {
+    if (widget.classList.contains('hidden')) {
+      openPoetryWidget();
+    } else {
+      closePoetryWidget();
+    }
+  });
 </script>
-  
+
+
 </body>
 </html>
