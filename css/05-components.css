@@ -144,46 +144,51 @@ display:flex; justify-content:center; align-items:center;
 
 
 
-.poetry-widget-fixed {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  background: #fff;
-  z-index: 900;        /* sotto header */
-}
-
-.poetry-widget-fixed iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.hidden {
-  display: none !important;
-}
-
-
-
+/* ===== TOGGLE 🤖 ===== */
 #poetry-widget-toggle {
   position: fixed;
   bottom: 1.25rem;
   left: 1.25rem;
 
-  width: 52px;
-  height: 52px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
 
   background: linear-gradient(135deg, #f97316, #facc15);
   color: #111;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0,0,0,.25);
-  z-index: 950;
+  box-shadow: 0 10px 25px rgba(0,0,0,.3);
+
+  z-index: 9999;
+}
+
+/* ===== OVERLAY ===== */
+.poetry-widget-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  /* top viene settato via JS per stare sotto header */
+  background: #fff;
+
+  z-index: 9998;
+}
+
+/* iframe full */
+.poetry-widget-fixed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* utility */
+.hidden {
+  display: none !important;
 }
