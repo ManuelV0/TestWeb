@@ -558,45 +558,41 @@
 (function () {
   const toggle = document.getElementById('poetry-widget-toggle');
   const overlay = document.getElementById('poetry-widget-overlay');
-
-  if (!toggle || !overlay) return;
+  const closeBtn = document.getElementById('poetry-widget-close');
 
   function getHeaderHeight() {
     const header =
       document.querySelector('header') ||
-      document.querySelector('.main-header') ||
-      document.querySelector('#header');
+      document.querySelector('.site-header') ||
+      document.getElementById('header');
+
     return header ? header.offsetHeight : 0;
   }
 
   function openWidget() {
     const headerHeight = getHeaderHeight();
-
     overlay.style.top = headerHeight + 'px';
-    overlay.style.height = `calc(100vh - ${headerHeight}px)`;
-
     overlay.classList.remove('hidden');
-    toggle.style.display = 'none';
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('widget-open');
   }
 
   function closeWidget() {
     overlay.classList.add('hidden');
-    toggle.style.display = 'flex';
-    document.body.style.overflow = '';
+    document.body.classList.remove('widget-open');
   }
 
-  // toggle click
-  toggle.addEventListener('click', openWidget);
+  if (toggle) {
+    toggle.addEventListener('click', openWidget);
+  }
 
-  // click fuori iframe per chiudere
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) {
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       closeWidget();
-    }
-  });
+    });
+  }
 
-  // ESC per chiudere
+  // ESC chiude
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
       closeWidget();
@@ -604,6 +600,7 @@
   });
 })();
 </script>
+
 
 
 </body>
