@@ -142,36 +142,41 @@ display:flex; justify-content:center; align-items:center;
 /* ANALISI IA */
 
 
+
 #poetry-widget-toggle {
   position: fixed;
-  right: 24px;
+  left: 24px;
   bottom: 24px;
+
   width: 56px;
   height: 56px;
+  border-radius: 50%;
   background: #16a34a;
   color: white;
   font-size: 26px;
-  border-radius: 50%;
-  cursor: pointer;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  cursor: pointer;
   z-index: 10000;
   box-shadow: 0 12px 24px rgba(0,0,0,0.25);
 }
 
 .poetry-widget-fixed {
   position: fixed;
-  right: 24px;
+  left: 24px;
   bottom: 96px;
 
   width: 420px;
   height: 600px;
 
-  z-index: 9999;
+  background: white;
   border-radius: 16px;
   overflow: hidden;
-  background: white;
+
+  z-index: 9999;
   box-shadow: 0 20px 40px rgba(0,0,0,0.25);
 }
 
@@ -185,11 +190,18 @@ display:flex; justify-content:center; align-items:center;
   display: none;
 }
 
+
+
 @media (max-width: 768px) {
   .poetry-widget-fixed {
     width: calc(100% - 32px);
     height: 70vh;
-    right: 16px;
+    left: 16px;
+    bottom: 80px;
+  }
+
+  #poetry-widget-toggle {
+    left: 16px;
     bottom: 16px;
   }
 }
