@@ -1,3 +1,4 @@
+
 // ========= 1. Inizializzazione di Supabase =========
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
@@ -52,6 +53,44 @@ document.addEventListener('DOMContentLoaded', () => {
         expandedContent: document.getElementById('expanded-content'),
         shareInstagramBtn: document.getElementById('share-cta-btn')
     };
+
+    // ========= Conto alla rovescia fine mese =========
+    function startMonthlyCountdown() {
+        const daysEl = document.getElementById('countdown-days');
+        const hoursEl = document.getElementById('countdown-hours');
+        const minutesEl = document.getElementById('countdown-minutes');
+        const secondsEl = document.getElementById('countdown-seconds');
+
+        if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+        function updateCountdown() {
+            const now = new Date();
+            const endOfMonth = new Date(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                1,
+                0, 0, 0
+            );
+
+            const diff = endOfMonth - now;
+            if (diff <= 0) return;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            daysEl.textContent = String(days).padStart(2, '0');
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+
+    startMonthlyCountdown();
 
     // Correzione definitiva delle stelle: assicura LTR
     if (elements.starRatingContainer) {
@@ -461,22 +500,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openVoteModal(poemData) {
         if (!poemData) return;
-        
+
         const votePoemTitle = document.getElementById('vote-poem-title');
         const votePoemAuthor = document.getElementById('vote-poem-author');
-        
+        const votePoemContent = document.getElementById('vote-poem-content');
+
         if (votePoemTitle) votePoemTitle.textContent = poemData.title;
         if (votePoemAuthor) votePoemAuthor.textContent = `di ${poemData.author_name}`;
+        if (votePoemContent) votePoemContent.textContent = poemData.content || '';
         if (elements.votePoemIdInput) elements.votePoemIdInput.value = poemData.id;
-        
-        // NON resettare lo stato qui - mantiene il rating se l'utente cambia stelle
-        // Solo highlight con rating corrente (0 se prima volta)
+
         highlightStars(currentRating);
-        
-        if (elements.votingModal) {
-            elements.votingModal.classList.remove('hidden');
-            elements.votingModal.setAttribute('aria-modal', 'true');
-        }
+
+        elements.votingModal.classList.remove('hidden');
+        elements.votingModal.setAttribute('aria-modal', 'true');
     }
 
     async function prepareAndOpenVoteModal(poemId) {
