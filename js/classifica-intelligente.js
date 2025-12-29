@@ -1,112 +1,65 @@
+
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
 // ===============================
-// CONFIG SUPABASE
+// CONFIG
 // ===============================
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
 
-// ❗ Usa SUPABASE VIA CDN (già caricato nel sito principale)
-const supabase = window.supabase.createClient(
+// ✅ CLIENT LOCALE, NESSUN window.supabase
+const supabase = createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 )
 
 // ===============================
-// ELEMENTI DOM
+// DOM
 // ===============================
 const listEl = document.getElementById('ai-poems-list')
 const statusEl = document.getElementById('ai-status')
 const emptyEl = document.getElementById('ai-empty-state')
 
 // ===============================
-// CARICAMENTO CLASSIFICA
-// ===============================
 async function loadClassificaIntelligente() {
   try {
-    // 1️⃣ sessione utente
     const { data: { session } } = await supabase.auth.getSession()
 
-    if (!session) {
-      throw new Error('Utente non autenticato')
-    }
+    if (!session) throw new Error('Utente non autenticato')
 
-    // 2️⃣ chiamata EDGE FUNCTION (PATH CORRETTO)
-    const response = await fetch(
+    const res = await fetch(
       'https://djikypgmchywybjxbwar.supabase.co/functions/v1/quick-api?limit=20',
       {
-        method: 'GET',
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${session.access_token}`
         }
       }
     )
 
-    if (!response.ok) {
-      throw new Error(`Edge Function error: ${response.status}`)
-    }
+    if (!res.ok) throw new Error('Errore Edge')
 
-    const result = await response.json()
+    const json = await res.json()
 
-    // 3️⃣ rendering
-    if (!result || !Array.isArray(result.results) || result.results.length === 0) {
-      showEmptyState()
+    if (!json.results || json.results.length === 0) {
+      emptyEl.classList.remove('hidden')
       return
     }
 
-    renderPoems(result.results)
+    listEl.innerHTML = json.results.map(poem => `
+      <li class="ci-card">
+        <h3>${poem.title}</h3>
+        <p>di ${poem.author_name}</p>
+        <p>${poem.content.slice(0, 280)}…</p>
+        <small>Affinità IA: ${poem.intelligent_score.toFixed(2)}</small>
+      </li>
+    `).join('')
 
   } catch (err) {
     console.error('[CLASSIFICA INTELLIGENTE]', err)
-    showEmptyState()
+    emptyEl.classList.remove('hidden')
   } finally {
     statusEl.classList.add('hidden')
   }
 }
 
-// ===============================
-// RENDER POESIE
-// ===============================
-function renderPoems(poems) {
-  listEl.innerHTML = poems.map(poem => `
-    <li class="ci-card">
-      <h3 class="ci-title">${poem.title}</h3>
-      <p class="ci-author">di ${poem.author_name}</p>
-
-      <div class="ci-content">
-        ${escapeHtml(poem.content.slice(0, 280))}
-        ${poem.content.length > 280 ? '…' : ''}
-      </div>
-
-      <div class="ci-score">
-        Affinità IA:
-        <strong>${Number(poem.intelligent_score).toFixed(2)}</strong>
-      </div>
-    </li>
-  `).join('')
-
-  listEl.classList.remove('hidden')
-}
-
-// ===============================
-// EMPTY STATE
-// ===============================
-function showEmptyState() {
-  emptyEl.classList.remove('hidden')
-}
-
-// ===============================
-// SICUREZZA BASE HTML
-// ===============================
-function escapeHtml(text = '') {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
-
-// ===============================
-// INIT
-// ===============================
 document.addEventListener('DOMContentLoaded', loadClassificaIntelligente)
