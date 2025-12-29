@@ -3,154 +3,70 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Classifica Intelligente – TheItalianPoetry</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classifica Intelligente | TheItalianPoetry</title>
 
-  <!-- Font -->
+  <!-- Font / Icons (opzionali, non impattano JS) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    :root {
-      --bg: #f9f9f9;
-      --card: #ffffff;
-      --primary: #4caf50;
-      --text: #1f1f1f;
-      --muted: #6b7280;
-      --radius: 14px;
-      --shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Open Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    header {
-      padding: 1.2rem;
-      text-align: center;
-      background: var(--card);
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    header h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.4rem;
-      margin: 0;
-    }
-
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 1rem;
-    }
-
-    .poem-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-
-    .poem-title {
-      font-weight: 700;
-      font-size: 1.05rem;
-      font-family: 'Montserrat', sans-serif;
-    }
-
-    .poem-author {
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
-    .poem-score {
-      margin-top: .5rem;
-      font-size: .85rem;
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .loading,
-    .error {
-      text-align: center;
-      padding: 2rem;
-      color: var(--muted);
-    }
-
-    @media (min-width: 768px) {
-      .poem-card {
-        padding: 1.3rem 1.5rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
-<header>
-  <h1>✨ Classifica Intelligente</h1>
-</header>
+  <!-- HEADER -->
+  <header class="main-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <i class="fa-solid fa-feather-pointed"></i>
+        <span>TheItalianPoetry</span>
+      </a>
+    </div>
+  </header>
 
-<main>
-  <div id="poems-container">
-    <div class="loading">Caricamento poesie…</div>
-  </div>
-</main>
+  <!-- MAIN -->
+  <main class="page-container">
 
-<script>
-  const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
-  const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+    <!-- INTRO -->
+    <section class="intro-section">
+      <h1>Classifica Intelligente</h1>
+      <p>
+        Un’esperienza personalizzata: più interagisci, più la poesia si avvicina
+        a ciò che senti davvero.
+      </p>
+    </section>
 
-  const container = document.getElementById('poems-container');
+    <!-- STATO (loading / error) -->
+    <section id="ai-status" class="status-section">
+      <p class="loading-text">Analisi delle tue preferenze in corso…</p>
+    </section>
 
-  async function loadClassificaIntelligente() {
-    const { data, error } = await supabase
-      .from('classifica_intelligente')
-      .select('*')
-      .order('score', { ascending: false })
-      .limit(20);
+    <!-- FEED POESIE -->
+    <section class="ai-feed-section" aria-live="polite">
+      <ul id="ai-poems-list" class="ai-poems-list">
+        <!-- popolato via JS -->
+      </ul>
+    </section>
 
-    if (error) {
-      console.error(error);
-      container.innerHTML = `<div class="error">Errore nel caricamento</div>`;
-      return;
-    }
+    <!-- EMPTY STATE -->
+    <section id="ai-empty-state" class="empty-state hidden">
+      <p>
+        Non abbiamo ancora abbastanza dati per suggerirti poesie.
+        Inizia a leggere, votare o salvare ✨
+      </p>
+    </section>
 
-    if (!data || data.length === 0) {
-      container.innerHTML = `<div class="loading">Nessuna poesia disponibile</div>`;
-      return;
-    }
+  </main>
 
-    container.innerHTML = data.map(poem => `
-      <article class="poem-card">
-        <div class="poem-title">${poem.title}</div>
-        <div class="poem-author">di ${poem.author_name}</div>
-        <div class="poem-score">
-          Score IA: ${Number(poem.score).toFixed(2)}
-        </div>
-      </article>
-    `).join('');
-  }
+  <!-- FOOTER -->
+  <footer class="main-footer">
+    <p>© <span id="year"></span> TheItalianPoetry</p>
+  </footer>
 
-  loadClassificaIntelligente();
-</script>
+  <!-- ========= SUPABASE + LOGICA ========= -->
+  <!-- ❗ SOLO MODULE – niente CDN globale -->
+  <script type="module" src="classifica-intelligente.js"></script>
 
 </body>
 </html>
