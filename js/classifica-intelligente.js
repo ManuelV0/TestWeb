@@ -1,113 +1,104 @@
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Classifica Intelligente di TheItalianPoetry: scopri poesie personalizzate in base alle tue interazioni." />
+  <title>Classifica Intelligente | TheItalianPoetry</title>
 
-// ===============================
-// CONFIGURAZIONE SUPABASE
-// ===============================
-const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q'
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
 
-// ✅ client corretto (NO window.supabase)
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  <!-- Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 
-// ===============================
-// DOM
-// ===============================
-const listEl = document.getElementById('ai-poems-list')
-const statusEl = document.getElementById('ai-status')
-const emptyEl = document.getElementById('ai-empty-state')
+  <!-- CSS dedicato -->
+  <link rel="stylesheet" href="css/classifica-intelligente.css">
+</head>
 
-// ===============================
-document.addEventListener('DOMContentLoaded', loadClassificaIntelligente)
+<body>
 
-// ===============================
-// CORE
-// ===============================
-async function loadClassificaIntelligente() {
-  try {
-    const { data: { session } } = await supabase.auth.getSession()
+  <!-- HEADER -->
+  <header class="main-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Torna alla homepage TheItalianPoetry">
+        <i class="fa-solid fa-feather-pointed" aria-hidden="true"></i>
+        <span>TheItalianPoetry</span>
+      </a>
+    </div>
+  </header>
 
-    if (!session?.access_token) {
-      throw new Error('Utente non autenticato')
-    }
+  <!-- MAIN -->
+  <main class="page-container" role="main">
 
-    const res = await fetch(
-      'https://djikypgmchywybjxbwar.supabase.co/functions/v1/quick-api?limit=20',
-      {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
-        }
-      }
-    )
-
-    if (!res.ok) {
-      throw new Error(`Errore Edge Function (${res.status})`)
-    }
-
-    const json = await res.json()
-
-    if (!json.results || json.results.length === 0) {
-      showEmpty()
-      return
-    }
-
-    render(json.results)
-
-  } catch (err) {
-    console.error('[CLASSIFICA INTELLIGENTE]', err)
-    showEmpty()
-  } finally {
-    statusEl.classList.add('hidden')
-  }
-}
-
-// ===============================
-// RENDER CLASSIFICA
-// ===============================
-function render(items) {
-  // ✅ Ordina per affinità IA (decrescente)
-  const sorted = [...items].sort((a, b) => {
-    const scoreA = typeof a.intelligent_score === 'number' ? a.intelligent_score : 0
-    const scoreB = typeof b.intelligent_score === 'number' ? b.intelligent_score : 0
-    return scoreB - scoreA
-  })
-
-  listEl.innerHTML = sorted.map((p, index) => `
-    <li class="ci-card">
-      <div class="ci-rank">#${index + 1}</div>
-
-      <h3 class="ci-title">
-        ${p.title ?? 'Senza titolo'}
-      </h3>
-
-      <p class="ci-author">
-        di ${p.author_name ?? 'Anonimo'}
+    <!-- INTRO -->
+    <section class="intro-section">
+      <h1>Classifica Intelligente</h1>
+      <p>
+        Un’esperienza personalizzata: più interagisci,
+        più la poesia si avvicina a ciò che senti davvero.
       </p>
+    </section>
 
-      <p class="ci-content">
-        ${(p.content ?? '').slice(0, 280)}${p.content?.length > 280 ? '…' : ''}
+    <!-- STATO (loading / error) -->
+    <section
+      id="ai-status"
+      class="status-section"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <p class="loading-text">
+        Analisi delle tue preferenze in corso…
       </p>
+    </section>
 
-      <div class="ci-score">
-        Affinità IA:
-        <strong>
-          ${
-            typeof p.intelligent_score === 'number'
-              ? p.intelligent_score.toFixed(2)
-              : '—'
-          }
-        </strong>
-      </div>
-    </li>
-  `).join('')
+    <!-- FEED POESIE -->
+    <section class="ai-feed-section" aria-live="polite">
+      <ul
+        id="ai-poems-list"
+        class="ai-poems-list"
+        role="list"
+      >
+        <!-- popolato via JS -->
+      </ul>
+    </section>
 
-  listEl.classList.remove('hidden')
-}
+    <!-- EMPTY STATE -->
+    <section
+      id="ai-empty-state"
+      class="empty-state hidden"
+      aria-hidden="true"
+    >
+      <p>
+        Non abbiamo ancora abbastanza dati per suggerirti poesie.
+        Inizia a leggere, votare o salvare ✨
+      </p>
+    </section>
 
-// ===============================
-// EMPTY STATE
-// ===============================
-function showEmpty() {
-  emptyEl.classList.remove('hidden')
-  listEl.classList.add('hidden')
-}
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="main-footer" role="contentinfo">
+    <p>© <span id="year"></span> TheItalianPoetry</p>
+  </footer>
+
+  <!-- ========= LOGICA (ES MODULE) ========= -->
+  <!-- ⚠️ IMPORTA SUPABASE SOLO DENTRO classifica-intelligente.js -->
+  <script type="module" src="js/classifica-intelligente.js"></script>
+
+  <!-- utilità minime -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
