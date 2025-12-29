@@ -1,39 +1,33 @@
-<main class="ai-ranking" id="classifica-intelligente">
 
-  <!-- HERO / INTRO -->
-  <header class="ai-hero">
-    <h1>Classifica Intelligente</h1>
-    <p>
-      Una selezione dinamica di poesie che evolve in base a come leggi,
-      voti e interagisci.
-    </p>
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Classifica Intelligente</title>
+
+  <link rel="stylesheet" href="classifica-intelligente.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="classifica-intelligente.js"></script>
+</head>
+<body>
+
+  <header class="ci-header">
+    <h1>🔥 Classifica Intelligente</h1>
+    <p>Scoperta personalizzata basata sulle tue interazioni</p>
   </header>
 
-  <!-- SEZIONE: CONSIGLIATE -->
-  <section class="ai-section" aria-labelledby="ai-consigliate-title">
-    <h2 id="ai-consigliate-title">🔥 Consigliate per te</h2>
-
-    <div class="poem-grid" data-section="recommended">
-      <!-- poem-card -->
+  <main class="ci-container">
+    <div id="ci-loading" class="ci-loading">
+      Caricamento poesie intelligenti…
     </div>
-  </section>
 
-  <!-- SEZIONE: IN CRESCITA -->
-  <section class="ai-section" aria-labelledby="ai-trending-title">
-    <h2 id="ai-trending-title">📈 In crescita</h2>
+    <div id="ci-list" class="ci-list hidden"></div>
 
-    <div class="poem-grid" data-section="trending">
-      <!-- poem-card -->
+    <div id="ci-error" class="ci-error hidden">
+      Errore nel caricamento della classifica.
     </div>
-  </section>
+  </main>
 
-  <!-- SEZIONE: NUOVE VOCI -->
-  <section class="ai-section" aria-labelledby="ai-new-title">
-    <h2 id="ai-new-title">✨ Nuove voci</h2>
-
-    <div class="poem-grid" data-section="new">
-      <!-- poem-card -->
-    </div>
-  </section>
-
-</main>
+</body>
+</html>
