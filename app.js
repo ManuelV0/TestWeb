@@ -616,9 +616,9 @@ function setupStarRating(container, poemId) {
 }
 
 
- =======================================================
     // FUNZIONE DI RENDER E CARICAMENTO POESIE
-    // =======================================================
+  
+
     function renderPoems() {
         // Inizio modifica/aggiunta - Gestione stato lista poesie
         const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
