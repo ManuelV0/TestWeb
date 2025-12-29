@@ -733,3 +733,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ===============================
+// USER INTERACTION TRACKING (CORE)
+// ===============================
+async function trackInteraction({ poemId, type }) {
+  try {
+    await supabaseClient
+      .from('user_interactions')
+      .insert({
+        poem_id: poemId,
+        interaction_type: type
+      });
+  } catch (err) {
+    console.warn('[TRACK]', err.message);
+  }
+}
