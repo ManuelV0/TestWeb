@@ -1,73 +1,112 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-// ================= CONFIG =================
+// ===============================
+// CONFIG SUPABASE
+// ===============================
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q'
 
-// ================= SUPABASE CLIENT =================
-const supabase = createClient(
+// ❗ Usa SUPABASE VIA CDN (già caricato nel sito principale)
+const supabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 )
 
-// ================= DOM =================
+// ===============================
+// ELEMENTI DOM
+// ===============================
 const listEl = document.getElementById('ai-poems-list')
-const loadingEl = document.getElementById('ai-status')
-const errorEl = document.getElementById('ai-empty-state')
+const statusEl = document.getElementById('ai-status')
+const emptyEl = document.getElementById('ai-empty-state')
 
-// ================= CORE =================
+// ===============================
+// CARICAMENTO CLASSIFICA
+// ===============================
 async function loadClassificaIntelligente() {
   try {
+    // 1️⃣ sessione utente
     const { data: { session } } = await supabase.auth.getSession()
 
     if (!session) {
       throw new Error('Utente non autenticato')
     }
 
-    const res = await fetch(
-      `${SUPABASE_URL}/functions/v1/classifica-intelligente?limit=20`,
+    // 2️⃣ chiamata EDGE FUNCTION (PATH CORRETTO)
+    const response = await fetch(
+      'https://djikypgmchywybjxbwar.supabase.co/functions/v1/quick-api?limit=20',
       {
+        method: 'GET',
         headers: {
-          Authorization: `Bearer ${session.access_token}`
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json'
         }
       }
     )
 
-    if (!res.ok) {
-      throw new Error('Errore Edge Function')
+    if (!response.ok) {
+      throw new Error(`Edge Function error: ${response.status}`)
     }
 
-    const json = await res.json()
-    renderList(json.results)
+    const result = await response.json()
+
+    // 3️⃣ rendering
+    if (!result || !Array.isArray(result.results) || result.results.length === 0) {
+      showEmptyState()
+      return
+    }
+
+    renderPoems(result.results)
 
   } catch (err) {
     console.error('[CLASSIFICA INTELLIGENTE]', err)
-    errorEl.classList.remove('hidden')
+    showEmptyState()
   } finally {
-    loadingEl.classList.add('hidden')
+    statusEl.classList.add('hidden')
   }
 }
 
-// ================= RENDER =================
-function renderList(items) {
-  if (!items || items.length === 0) {
-    listEl.innerHTML = '<li>Nessuna poesia trovata.</li>'
-    return
-  }
-
-  listEl.innerHTML = items.map(poem => `
+// ===============================
+// RENDER POESIE
+// ===============================
+function renderPoems(poems) {
+  listEl.innerHTML = poems.map(poem => `
     <li class="ci-card">
       <h3 class="ci-title">${poem.title}</h3>
       <p class="ci-author">di ${poem.author_name}</p>
-      <p class="ci-content">
-        ${poem.content.slice(0, 280)}${poem.content.length > 280 ? '…' : ''}
-      </p>
+
+      <div class="ci-content">
+        ${escapeHtml(poem.content.slice(0, 280))}
+        ${poem.content.length > 280 ? '…' : ''}
+      </div>
+
       <div class="ci-score">
-        Affinità: ${Number(poem.intelligent_score).toFixed(2)}
+        Affinità IA:
+        <strong>${Number(poem.intelligent_score).toFixed(2)}</strong>
       </div>
     </li>
   `).join('')
+
+  listEl.classList.remove('hidden')
 }
 
-// ================= INIT =================
+// ===============================
+// EMPTY STATE
+// ===============================
+function showEmptyState() {
+  emptyEl.classList.remove('hidden')
+}
+
+// ===============================
+// SICUREZZA BASE HTML
+// ===============================
+function escapeHtml(text = '') {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+// ===============================
+// INIT
+// ===============================
 document.addEventListener('DOMContentLoaded', loadClassificaIntelligente)
