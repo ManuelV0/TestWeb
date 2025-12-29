@@ -1,17 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Classifica Intelligente di TheItalianPoetry: scopri poesie personalizzate in base alle tue interazioni." />
   <title>Classifica Intelligente | TheItalianPoetry</title>
 
-  <!-- Fonts / Icons (non impattano JS) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
     rel="stylesheet"
   >
+
+  <!-- Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -24,9 +28,9 @@
 <body>
 
   <!-- HEADER -->
-  <header class="main-header">
+  <header class="main-header" role="banner">
     <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="Torna alla homepage">
+      <a href="index.html" class="logo" aria-label="Torna alla homepage TheItalianPoetry">
         <i class="fa-solid fa-feather-pointed" aria-hidden="true"></i>
         <span>TheItalianPoetry</span>
       </a>
@@ -34,7 +38,7 @@
   </header>
 
   <!-- MAIN -->
-  <main class="page-container">
+  <main class="page-container" role="main">
 
     <!-- INTRO -->
     <section class="intro-section">
@@ -45,8 +49,13 @@
       </p>
     </section>
 
-    <!-- STATO -->
-    <section id="ai-status" class="status-section" aria-live="polite">
+    <!-- STATO (loading / error) -->
+    <section
+      id="ai-status"
+      class="status-section"
+      aria-live="polite"
+      aria-atomic="true"
+    >
       <p class="loading-text">
         Analisi delle tue preferenze in corso…
       </p>
@@ -54,13 +63,21 @@
 
     <!-- FEED POESIE -->
     <section class="ai-feed-section" aria-live="polite">
-      <ul id="ai-poems-list" class="ai-poems-list">
+      <ul
+        id="ai-poems-list"
+        class="ai-poems-list"
+        role="list"
+      >
         <!-- popolato via JS -->
       </ul>
     </section>
 
     <!-- EMPTY STATE -->
-    <section id="ai-empty-state" class="empty-state hidden">
+    <section
+      id="ai-empty-state"
+      class="empty-state hidden"
+      aria-hidden="true"
+    >
       <p>
         Non abbiamo ancora abbastanza dati per suggerirti poesie.
         Inizia a leggere, votare o salvare ✨
@@ -70,15 +87,15 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="main-footer">
+  <footer class="main-footer" role="contentinfo">
     <p>© <span id="year"></span> TheItalianPoetry</p>
   </footer>
 
   <!-- ========= LOGICA (ES MODULE) ========= -->
-  <!-- ❗ NESSUN CDN SUPABASE QUI -->
+  <!-- ⚠️ IMPORTA SUPABASE SOLO DENTRO classifica-intelligente.js -->
   <script type="module" src="js/classifica-intelligente.js"></script>
 
-  <!-- utilità minime non invasive -->
+  <!-- utilità minime -->
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
