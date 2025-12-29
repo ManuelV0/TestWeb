@@ -1,33 +1,156 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Classifica Intelligente</title>
+  <title>Classifica Intelligente – TheItalianPoetry</title>
 
-  <link rel="stylesheet" href="css/classifica-intelligente.css" />
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/classifica-intelligente.js"></script>
+
+  <style>
+    :root {
+      --bg: #f9f9f9;
+      --card: #ffffff;
+      --primary: #4caf50;
+      --text: #1f1f1f;
+      --muted: #6b7280;
+      --radius: 14px;
+      --shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 1.2rem;
+      text-align: center;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      margin: 0;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .poem-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+
+    .poem-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .poem-author {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .poem-score {
+      margin-top: .5rem;
+      font-size: .85rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .loading,
+    .error {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+    }
+
+    @media (min-width: 768px) {
+      .poem-card {
+        padding: 1.3rem 1.5rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-  <header class="ci-header">
-    <h1>🔥 Classifica Intelligente</h1>
-    <p>Scoperta personalizzata basata sulle tue interazioni</p>
-  </header>
+<header>
+  <h1>✨ Classifica Intelligente</h1>
+</header>
 
-  <main class="ci-container">
-    <div id="ci-loading" class="ci-loading">
-      Caricamento poesie intelligenti…
-    </div>
+<main>
+  <div id="poems-container">
+    <div class="loading">Caricamento poesie…</div>
+  </div>
+</main>
 
-    <div id="ci-list" class="ci-list hidden"></div>
+<script>
+  const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
+  const SUPABASE_ANON_KEY = 'INSERISCI_LA_TUA_ANON_KEY';
 
-    <div id="ci-error" class="ci-error hidden">
-      Errore nel caricamento della classifica.
-    </div>
-  </main>
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+  const container = document.getElementById('poems-container');
+
+  async function loadClassificaIntelligente() {
+    const { data, error } = await supabase
+      .from('classifica_intelligente')
+      .select('*')
+      .order('score', { ascending: false })
+      .limit(20);
+
+    if (error) {
+      console.error(error);
+      container.innerHTML = `<div class="error">Errore nel caricamento</div>`;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<div class="loading">Nessuna poesia disponibile</div>`;
+      return;
+    }
+
+    container.innerHTML = data.map(poem => `
+      <article class="poem-card">
+        <div class="poem-title">${poem.title}</div>
+        <div class="poem-author">di ${poem.author_name}</div>
+        <div class="poem-score">
+          Score IA: ${Number(poem.score).toFixed(2)}
+        </div>
+      </article>
+    `).join('');
+  }
+
+  loadClassificaIntelligente();
+</script>
 
 </body>
 </html>
