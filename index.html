@@ -658,5 +658,29 @@
 
 
 
+<script>
+(function () {
+  window.addEventListener('message', async (event) => {
+    // 🔐 (opzionale ma consigliato)
+    // if (event.origin !== 'https://widget.theitalianpoetryproject.com') return;
+
+    if (event.data?.type === 'COPY_POEM_TEXT') {
+      const text = event.data.payload;
+
+      if (!text) return;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        console.log('[PARENT] Testo copiato correttamente');
+      } catch (err) {
+        console.error('[PARENT COPY ERROR]', err);
+        alert('Impossibile copiare automaticamente il testo.');
+      }
+    }
+  });
+})();
+</script>
+
+
 </body>
 </html>
