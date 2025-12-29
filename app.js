@@ -7,6 +7,7 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ========= 2. Stato Globale =========
 let allPoems = [];
 let currentRating = 0;
+let currentPoemForVoting = null;
 
 // ========= 3. Esegui il resto del codice quando la pagina è pronta =========
 document.addEventListener('DOMContentLoaded', () => {
@@ -52,6 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
         expandedContent: document.getElementById('expanded-content'),
         shareInstagramBtn: document.getElementById('share-cta-btn')
     };
+
+    // Correzione definitiva delle stelle: rimuovi direction: rtl se presente
+    if (elements.starRatingContainer) {
+        elements.starRatingContainer.style.direction = 'ltr';
+        const computedStyle = window.getComputedStyle(elements.starRatingContainer);
+        if (computedStyle.flexDirection === 'row-reverse') {
+            elements.starRatingContainer.style.flexDirection = 'row';
+        }
+    }
 
     // --- Ripristino preferenze di ricerca e ordinamento ---
     function restoreUserPreferences() {
@@ -174,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ========= 7. GESTIONE MODALI =========
-    function setupModal(modal, openTriggers, closeTriggers, onClose = null) {
+    function setupModal(modal, openTriggers, closeTriggers, onOpen = null, onClose = null) {
         if (!modal) return;
         
         // Apertura modal
@@ -184,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.preventDefault();
                     modal.classList.remove('hidden');
                     modal.setAttribute('aria-modal', 'true');
+                    if (onOpen) onOpen();
                 });
             }
         });
@@ -211,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Configurazione modali
     setupModal(elements.submissionModal, [elements.openSubmissionModalBtn], [elements.closeSubmissionModalBtn]);
-    setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], resetVotingModal);
+    setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], null, resetVotingModalState);
     setupModal(elements.howToModal, [elements.howToLink, elements.sidebarParticipateBtn], [elements.closeHowToModalBtn]);
     setupModal(elements.aboutUsModal, [elements.aboutUsLink], [elements.closeAboutUsModalBtn]);
     setupModal(elements.authorModal, [elements.authorLink], [elements.closeAuthorModalBtn]);
@@ -248,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         elements.anonymousCheckbox.addEventListener('change', toggleAnonymousFields);
-        toggleAnonymousFields(); // Imposta stato iniziale
+        toggleAnonymousFields();
     }
 
     if (elements.submissionForm) {
@@ -277,7 +288,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? 'Anonimo' 
                 : `${firstName} ${lastName}`.trim();
             
-            // Validazione
             if (!title || !content || (!isAnonymous && !authorName)) {
                 if (elements.formMessage) {
                     elements.formMessage.textContent = 'Per favore, compila tutti i campi richiesti.';
@@ -292,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             try {
-                // Inserimento poesia
                 const { error: insertError } = await supabaseClient
                     .from('poesie')
                     .insert([{
@@ -305,7 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (insertError) throw insertError;
                 
-                // Aggiornamento profilo (solo se non anonimo)
                 if (!isAnonymous) {
                     await supabaseClient
                         .from('profiles')
@@ -347,9 +355,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!elements.poemsListContainer) return;
         
         const searchTerm = elements.searchInput ? elements.searchInput.value.toLowerCase() : '';
+        const sortBy = elements.sortBySelect ? elements.sortBySelect.value : 'votes';
         
         // Filtra poesie
-        const filteredPoems = allPoems.filter(poem => {
+        let filteredPoems = allPoems.filter(poem => {
             if (!searchTerm) return true;
             
             const titleMatch = (poem.title || '').toLowerCase().includes(searchTerm);
@@ -358,12 +367,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return titleMatch || authorMatch;
         });
         
-        // Ordina per voti e prendi top 10
-        const topTenPoems = [...filteredPoems]
-            .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-            .slice(0, 10);
+        // Ordina deterministicamente
+        filteredPoems.sort((a, b) => {
+            switch (sortBy) {
+                case 'recent':
+                    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+                case 'title':
+                    return (a.title || '').localeCompare(b.title || '');
+                case 'author':
+                    return (a.author_name || '').localeCompare(b.author_name || '');
+                case 'votes':
+                default:
+                    return (b.vote_count || 0) - (a.vote_count || 0);
+            }
+        });
         
-        // Genera HTML
+        // Prendi top 10
+        const topTenPoems = filteredPoems.slice(0, 10);
+        
         if (topTenPoems.length === 0) {
             elements.poemsListContainer.innerHTML = '<p>Nessuna poesia disponibile.</p>';
             return;
@@ -404,10 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const poemInfo = row.querySelector('.poem-info');
             if (poemInfo) {
                 poemInfo.addEventListener('click', () => {
-                    const poem = allPoems.find(p => String(p.id) === String(poemId));
-                    if (poem) {
-                        showPoemDetail(poem);
-                    }
+                    console.log(`Mostra dettaglio poesia ${poemId}`);
+                    // Rimuoviamo la chiamata a showPoemDetail per evitare errori
+                    // showPoemDetail sarà implementata separatamente quando necessario
                 });
             }
             
@@ -416,27 +436,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (voteButton) {
                 voteButton.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    apriModaleVoto(poemId);
+                    prepareAndOpenVoteModal(poemId);
                 });
             }
         });
     }
 
-    function showPoemDetail(poem) {
-        // Implementa la logica per mostrare il dettaglio della poesia
-        console.log('Mostra dettaglio poesia:', poem);
-        // Qui puoi implementare un modal di dettaglio o altra UI
-    }
-
-    // ========= 10. GESTIONE VOTAZIONE =========
-    async function apriModaleVoto(poemId) {
-        if (!poemId) return;
-        
-        // Controlla se l'utente ha già votato
-        if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
-            alert('Hai già votato questa poesia.');
-            return;
-        }
+    // ========= 10. GESTIONE VOTAZIONE (Separazione responsabilità) =========
+    async function loadPoemForVoting(poemId) {
+        if (!poemId) return null;
         
         try {
             const { data: poem, error } = await supabaseClient
@@ -446,46 +454,66 @@ document.addEventListener('DOMContentLoaded', () => {
                 .single();
             
             if (error) throw error;
-            
-            // Popola il modal di voto
-            const votePoemTitle = document.getElementById('vote-poem-title');
-            const votePoemAuthor = document.getElementById('vote-poem-author');
-            
-            if (votePoemTitle) votePoemTitle.textContent = poem.title;
-            if (votePoemAuthor) votePoemAuthor.textContent = `di ${poem.author_name}`;
-            if (elements.votePoemIdInput) elements.votePoemIdInput.value = poem.id;
-            
-            resetVotingModal();
-            
-            // Mostra il modal
-            if (elements.votingModal) {
-                elements.votingModal.classList.remove('hidden');
-                elements.votingModal.setAttribute('aria-modal', 'true');
-            }
-            
+            return poem;
         } catch (error) {
-            console.error('Errore nell\'apertura della votazione:', error);
-            alert('Errore nel caricamento della votazione.');
+            console.error('Errore nel caricamento della poesia per voto:', error);
+            return null;
         }
     }
 
-    function resetVotingModal() {
+    function openVoteModal(poemData) {
+        if (!poemData) return;
+        
+        const votePoemTitle = document.getElementById('vote-poem-title');
+        const votePoemAuthor = document.getElementById('vote-poem-author');
+        
+        if (votePoemTitle) votePoemTitle.textContent = poemData.title;
+        if (votePoemAuthor) votePoemAuthor.textContent = `di ${poemData.author_name}`;
+        if (elements.votePoemIdInput) elements.votePoemIdInput.value = poemData.id;
+        
+        currentPoemForVoting = poemData;
+        
+        // NON resettare lo stato qui - mantiene il rating se l'utente cambia stelle
+        // Solo highlight con rating corrente (0 se prima volta)
+        highlightStars(currentRating);
+        
+        if (elements.votingModal) {
+            elements.votingModal.classList.remove('hidden');
+            elements.votingModal.setAttribute('aria-modal', 'true');
+        }
+    }
+
+    async function prepareAndOpenVoteModal(poemId) {
+        if (!poemId) return;
+        
+        // Controlla se l'utente ha già votato
+        if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
+            alert('Hai già votato questa poesia.');
+            return;
+        }
+        
+        const poemData = await loadPoemForVoting(poemId);
+        if (poemData) {
+            openVoteModal(poemData);
+        } else {
+            alert('Errore nel caricamento della poesia per la votazione.');
+        }
+    }
+
+    function resetVotingModalState() {
+        // Resetta SOLO quando il modal viene chiuso
         currentRating = 0;
+        currentPoemForVoting = null;
         
         if (elements.voteMessage) {
             elements.voteMessage.textContent = '';
             elements.voteMessage.style.color = '';
         }
         
-        if (elements.votePoemIdInput) {
-            elements.votePoemIdInput.value = '';
-        }
-        
         resetStars();
     }
 
     function resetStars() {
-        currentRating = 0;
         highlightStars(0);
     }
 
@@ -495,7 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const stars = elements.starRatingContainer.querySelectorAll('label.star i');
         
         stars.forEach((star, index) => {
-            // Stelle da sinistra a destra: indice 0 = prima stella
+            // Correzione definitiva: stelle da sinistra a destra
+            // Prima stella (indice 0) = rating 1
             if (index < rating) {
                 star.classList.remove('fa-regular');
                 star.classList.add('fa-solid');
@@ -506,13 +535,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Configurazione stelle
-    if (elements.starRatingContainer) {
+    // Configurazione stelle corretta
+    function setupStarRating() {
+        if (!elements.starRatingContainer) return;
+        
         const stars = elements.starRatingContainer.querySelectorAll('label.star');
         
         stars.forEach((star, index) => {
+            const starIndex = index;
+            
             star.addEventListener('mouseenter', () => {
-                highlightStars(index + 1);
+                highlightStars(starIndex + 1);
             });
             
             star.addEventListener('mouseleave', () => {
@@ -520,13 +553,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             star.addEventListener('click', () => {
-                currentRating = index + 1;
+                currentRating = starIndex + 1;
                 highlightStars(currentRating);
             });
         });
     }
+    
+    // Inizializza il sistema di stelle
+    setupStarRating();
 
-    // Invio voto
+    // Invio voto con gestione completa della risposta
     if (elements.submitVoteBtn) {
         elements.submitVoteBtn.addEventListener('click', async () => {
             if (currentRating === 0) {
@@ -539,21 +575,44 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const poemId = Number(elements.votePoemIdInput?.value);
             
-            if (!poemId) {
+            if (!poemId || !currentPoemForVoting) {
                 if (elements.voteMessage) {
-                    elements.voteMessage.textContent = 'Errore: ID poesia non valido.';
+                    elements.voteMessage.textContent = 'Errore: dati della poesia non validi.';
                     elements.voteMessage.style.color = 'red';
                 }
                 return;
             }
             
+            if (elements.voteMessage) {
+                elements.voteMessage.textContent = 'Invio voto in corso...';
+                elements.voteMessage.style.color = 'inherit';
+            }
+            
             try {
-                // Chiama la Edge Function con il payload corretto
-                const { error } = await supabaseClient.functions.invoke('invia-voto', {
-                    body: { poem_id: poemId, rating: currentRating }
+                // Payload corretto per la Edge Function
+                const payload = { poem_id: poemId, rating: currentRating };
+                
+                const { data, error } = await supabaseClient.functions.invoke('invia-voto', {
+                    body: payload
                 });
                 
-                if (error) throw error;
+                // Gestione completa della risposta
+                if (error) {
+                    throw new Error(`Errore Edge Function: ${error.message}`);
+                }
+                
+                if (!data) {
+                    throw new Error('Nessuna risposta dalla Edge Function');
+                }
+                
+                // Validazione aggiuntiva della risposta
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                if (data.success !== true) {
+                    throw new Error('Voto non registrato correttamente');
+                }
                 
                 // Salva cookie per evitare voti multipli
                 document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
@@ -566,19 +625,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Ricarica i dati
                 await caricaDatiIniziali();
                 
-                // Chiudi il modal dopo un breve delay
                 setTimeout(() => {
                     if (elements.votingModal) {
                         elements.votingModal.classList.add('hidden');
                         elements.votingModal.removeAttribute('aria-modal');
                     }
-                    resetVotingModal();
+                    resetVotingModalState();
                 }, 1500);
                 
             } catch (error) {
                 console.error('Errore durante il voto:', error);
                 if (elements.voteMessage) {
-                    elements.voteMessage.textContent = 'Errore durante il voto.';
+                    elements.voteMessage.textContent = `Errore durante il voto: ${error.message}`;
                     elements.voteMessage.style.color = 'red';
                 }
             }
@@ -595,19 +653,16 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             try {
-                // Prima prova con la Web Share API (mobile)
                 if (navigator.share) {
                     await navigator.share(shareData);
                     return;
                 }
                 
-                // Fallback per Instagram diretto su mobile
                 if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                     window.location.href = `instagram://library?AssetPath=${encodeURIComponent(shareData.url)}`;
                     return;
                 }
                 
-                // Fallback per desktop
                 showInstagramShareFallback();
                 
             } catch (error) {
@@ -627,7 +682,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 shareInput.value = window.location.href;
             }
             
-            // Copia automatica
             navigator.clipboard.writeText(window.location.href).then(() => {
                 const originalText = elements.shareInstagramBtn.innerHTML;
                 elements.shareInstagramBtn.innerHTML = '<i class="fas fa-check"></i> Link copiato!';
