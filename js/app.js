@@ -1,4 +1,6 @@
 
+import { trackInteraction } from './js/ai-interactions-core.js';
+
 // ========= 1. Inizializzazione di Supabase =========
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
@@ -788,9 +790,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Click sulla poesia per dettaglio
             const poemInfo = row.querySelector('.poem-info');
             if (poemInfo) {
-                poemInfo.addEventListener('click', () => {
+                poemInfo.addEventListener('click', async () => {
                     console.log(`Mostra dettaglio poesia ${poemId}`);
-                    // Rimuoviamo la chiamata a showPoemDetail per evitare errori
+
+                    // 👉 TRACK LETTURA CLASSIFICA PRINCIPALE
+                    await trackInteraction({
+                        action: 'read',
+                        poemId,
+                        weight: 1
+                    });
+
+                    // eventuale apertura modale / dettaglio
                 });
             }
             
@@ -993,20 +1003,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ========= TRACKING INTERAZIONI UTENTE (Classifica Intelligente) =========
-
-async function trackInteraction({ poemId, action, value = 1 }) {
-  try {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (!session) return; // SOLO utenti loggati
-
-    await supabaseClient.from('user_interactions').insert({
-      user_id: session.user.id,
-      poem_id: poemId,
-      action,
-      value
-    });
-  } catch (err) {
-    console.warn('Tracking fallito:', err.message);
-  }
-}
