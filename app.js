@@ -7,7 +7,6 @@ const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // ========= 2. Stato Globale =========
 let allPoems = [];
 let currentRating = 0;
-let currentPoemForVoting = null;
 
 // ========= 3. Esegui il resto del codice quando la pagina è pronta =========
 document.addEventListener('DOMContentLoaded', () => {
@@ -54,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         shareInstagramBtn: document.getElementById('share-cta-btn')
     };
 
-    // Correzione definitiva delle stelle: rimuovi direction: rtl se presente
+    // Correzione definitiva delle stelle: assicura LTR
     if (elements.starRatingContainer) {
         elements.starRatingContainer.style.direction = 'ltr';
         const computedStyle = window.getComputedStyle(elements.starRatingContainer);
@@ -427,7 +426,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 poemInfo.addEventListener('click', () => {
                     console.log(`Mostra dettaglio poesia ${poemId}`);
                     // Rimuoviamo la chiamata a showPoemDetail per evitare errori
-                    // showPoemDetail sarà implementata separatamente quando necessario
                 });
             }
             
@@ -471,8 +469,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (votePoemAuthor) votePoemAuthor.textContent = `di ${poemData.author_name}`;
         if (elements.votePoemIdInput) elements.votePoemIdInput.value = poemData.id;
         
-        currentPoemForVoting = poemData;
-        
         // NON resettare lo stato qui - mantiene il rating se l'utente cambia stelle
         // Solo highlight con rating corrente (0 se prima volta)
         highlightStars(currentRating);
@@ -503,7 +499,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetVotingModalState() {
         // Resetta SOLO quando il modal viene chiuso
         currentRating = 0;
-        currentPoemForVoting = null;
         
         if (elements.voteMessage) {
             elements.voteMessage.textContent = '';
@@ -562,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inizializza il sistema di stelle
     setupStarRating();
 
-    // Invio voto con gestione completa della risposta
+    // ========= CORREZIONE CRITICA: LOGICA DI SUBMIT VOTO =========
     if (elements.submitVoteBtn) {
         elements.submitVoteBtn.addEventListener('click', async () => {
             if (currentRating === 0) {
@@ -575,9 +570,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const poemId = Number(elements.votePoemIdInput?.value);
             
-            if (!poemId || !currentPoemForVoting) {
+            if (!poemId) {
                 if (elements.voteMessage) {
-                    elements.voteMessage.textContent = 'Errore: dati della poesia non validi.';
+                    elements.voteMessage.textContent = 'Errore: ID poesia non valido.';
                     elements.voteMessage.style.color = 'red';
                 }
                 return;
@@ -592,29 +587,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Payload corretto per la Edge Function
                 const payload = { poem_id: poemId, rating: currentRating };
                 
-                const { data, error } = await supabaseClient.functions.invoke('invia-voto', {
+                // Chiamata alla Edge Function con gestione semplificata della risposta
+                const { error } = await supabaseClient.functions.invoke('invia-voto', {
                     body: payload
                 });
                 
-                // Gestione completa della risposta
+                // CORREZIONE CRITICA: considera il voto riuscito quando error è nullo
+                // Non controllare data.success o data obbligatorio
                 if (error) {
                     throw new Error(`Errore Edge Function: ${error.message}`);
                 }
                 
-                if (!data) {
-                    throw new Error('Nessuna risposta dalla Edge Function');
-                }
-                
-                // Validazione aggiuntiva della risposta
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                
-                if (data.success !== true) {
-                    throw new Error('Voto non registrato correttamente');
-                }
-                
-                // Salva cookie per evitare voti multipli
+                // Se non c'è errore, il voto è andato a buon fine
                 document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
                 
                 if (elements.voteMessage) {
@@ -622,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     elements.voteMessage.style.color = 'green';
                 }
                 
-                // Ricarica i dati
+                // Ricarica i dati per aggiornare la classifica
                 await caricaDatiIniziali();
                 
                 setTimeout(() => {
