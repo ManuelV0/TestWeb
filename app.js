@@ -734,18 +734,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ===============================
-// USER INTERACTION TRACKING (CORE)
-// ===============================
-async function trackInteraction({ poemId, type }) {
+// ========= TRACKING INTERAZIONI UTENTE (Classifica Intelligente) =========
+
+async function trackInteraction({ poemId, action, value = 1 }) {
   try {
-    await supabaseClient
-      .from('user_interactions')
-      .insert({
-        poem_id: poemId,
-        interaction_type: type
-      });
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) return; // SOLO utenti loggati
+
+    await supabaseClient.from('user_interactions').insert({
+      user_id: session.user.id,
+      poem_id: poemId,
+      action,
+      value
+    });
   } catch (err) {
-    console.warn('[TRACK]', err.message);
+    console.warn('Tracking fallito:', err.message);
   }
 }
