@@ -325,133 +325,216 @@ if (shareInstagramBtn) {
     // LOGICA VOTAZIONE
     // =======================================================
     
-    
-// =======================================================
-// FUNZIONE DI RENDER E CARICAMENTO POESIE (AGGIORNATA)
-// =======================================================
-function renderPoems() {
-  // --- Ricerca e filtraggio base ---
-  const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
-  const sourcePoems = Array.isArray(allPoems) ? allPoems : [];
+  
+// ===============================
+// STATO VOTO
+// ===============================
+let currentRating = 0;
 
-  let filteredPoems = sourcePoems.filter(poesia => {
-    const title = (poesia.title || '').toLowerCase();
-    const author = (poesia.author_name || '').toLowerCase();
-    return !searchTerm || title.includes(searchTerm) || author.includes(searchTerm);
+// ===============================
+// RESET MODALE VOTO
+// ===============================
+function resetVotingModal() {
+  if (voteMessage) {
+    voteMessage.textContent = '';
+    voteMessage.style.color = '';
+  }
+  if (votePoemIdInput) {
+    votePoemIdInput.value = '';
+  }
+  resetStars();
+}
+
+if (closeVotingModalBtn) {
+  closeVotingModalBtn.addEventListener('click', () => {
+    votingModal.classList.add('hidden');
+    votingModal.removeAttribute('aria-modal');
+    resetVotingModal();
   });
+}
 
-  // --- Filtraggio poesie del mese corrente ---
-  const now = new Date();
-  const currentMonthUTC = now.getUTCMonth();
-  const currentYearUTC = now.getUTCFullYear();
+// ===============================
+// APERTURA MODALE VOTO
+// ===============================
+async function apriModaleVoto(poemId) {
+  if (!poemId) return;
 
-  let monthlyPoems = filteredPoems.filter(poesia => {
-    const poemDate = new Date(poesia.created_at);
-    return poemDate.getUTCMonth() === currentMonthUTC && poemDate.getUTCFullYear() === currentYearUTC;
-  });
-
-  // --- Ordinamento ---
-  const sortBy = sortBySelect ? sortBySelect.value : 'recent';
-  monthlyPoems.sort((a, b) => {
-    switch (sortBy) {
-      case 'popular':
-        return (Number(b.vote_count ?? b.votes ?? 0)) - (Number(a.vote_count ?? a.votes ?? 0));
-      case 'title-asc':
-        return (a.title || '').localeCompare(b.title || '');
-      case 'title-desc':
-        return (b.title || '').localeCompare(a.title || '');
-      default:
-        return new Date(b.created_at) - new Date(a.created_at);
-    }
-  });
-
-  // --- Classifica principale (TOP 10) ---
-  const topTenPoems = [...filteredPoems]
-    .sort((a, b) => {
-      const votesA = Number(a.vote_count ?? a.votes ?? 0);
-      const votesB = Number(b.vote_count ?? b.votes ?? 0);
-      return votesB - votesA;
-    })
-    .slice(0, 10);
-
-  // --- Debug opzionale (per verificare dati) ---
-  console.log('[DEBUG RENDER POESIE]', {
-    total: sourcePoems.length,
-    topTen: topTenPoems.map(p => ({
-      id: p.id,
-      title: p.title,
-      vote_count: p.vote_count ?? p.votes ?? 0
-    }))
-  });
-
-  // --- Rendering della classifica principale ---
-  if (poemsListContainer) {
-    if (topTenPoems.length === 0) {
-      const emptyMessage =
-        sourcePoems.length === 0
-          ? 'Non ci sono ancora poesie. Sii il primo a partecipare!'
-          : 'Nessuna poesia corrisponde ai criteri di ricerca.';
-      poemsListContainer.innerHTML = `<p>${emptyMessage}</p>`;
-    } else {
-      poemsListContainer.innerHTML = topTenPoems
-        .map((poesia, index) => {
-          const rankEmoji =
-            index === 0 ? '🥇' :
-            index === 1 ? '🥈' :
-            index === 2 ? '🥉' : '';
-          const rankGlowClass = index < 3 ? 'glow-rank' : '';
-
-          const instagramIcon = poesia.instagram_handle
-            ? `<a href="https://www.instagram.com/${poesia.instagram_handle}" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>`
-            : '';
-
-          const votes = Number(poesia.vote_count ?? poesia.votes ?? 0);
-          const votesLabel = votes > 0 ? `${votes} voto${votes === 1 ? '' : 'i'}` : 'Nessun voto';
-
-          return `
-            <article class="poem-row" data-poem-id="${poesia.id}">
-              <div class="poem-info ${rankGlowClass}" data-poem-id="${poesia.id}">
-                <span class="poem-rank">${rankEmoji}</span>
-                <span class="poem-title">${poesia.title}</span>
-                <span class="poem-author golden-author">di ${poesia.author_name}</span>
-              </div>
-              <div class="poem-actions">
-                ${instagramIcon}
-                <span class="poem-votes">${votesLabel}</span>
-                <button class="button-vote" data-poem-id="${poesia.id}">Vota</button>
-              </div>
-            </article>`;
-        })
-        .join('');
-
-      attachPoemInfoHandlers();
-    }
+  if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
+    alert('Hai già votato questa poesia.');
+    return;
   }
 
-  // --- Rendering poesie del mese ---
-  if (monthlyPoemsListContainer) {
-    if (monthlyPoems.length === 0) {
-      monthlyPoemsListContainer.innerHTML =
-        '<p style="font-size: 0.9rem; color: #777;">Nessuna poesia per questo mese.</p>';
-    } else {
-      monthlyPoemsListContainer.innerHTML = monthlyPoems
-        .map(poesia => {
-          const poemDate = new Date(poesia.created_at).toLocaleDateString('it-IT', {
-            day: 'numeric',
-            month: 'long'
-          });
-          return `
-            <div class="mini-poem-item" data-poem-id="${poesia.id}">
-              <span class="mini-poem-title">${poesia.title}</span>
-              <span class="mini-poem-author">di ${poesia.author_name}</span>
-              <span class="mini-poem-date">${poemDate}</span>
-            </div>`;
-        })
-        .join('');
-    }
+  try {
+    const { data: poem, error } = await supabaseClient
+      .from('poesie')
+      .select('*')
+      .eq('id', poemId)
+      .single();
+
+    if (error) throw error;
+
+    document.getElementById('vote-poem-title').textContent = poem.title;
+    document.getElementById('vote-poem-author').textContent = `di ${poem.author_name}`;
+    votePoemIdInput.value = poem.id;
+
+    resetStars();
+    votingModal.classList.remove('hidden');
+    votingModal.setAttribute('aria-modal', 'true');
+  } catch (err) {
+    console.error('Errore apertura voto:', err);
+    alert('Errore nel caricamento della votazione');
   }
 }
 
+// ===============================
+// RENDER CLASSIFICA PRINCIPALE
+// ===============================
+function renderPoems() {
+  if (!poemsListContainer) return;
+
+  const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+  const sourcePoems = Array.isArray(allPoems) ? allPoems : [];
+
+  let filteredPoems = sourcePoems.filter(p => {
+    const t = (p.title || '').toLowerCase();
+    const a = (p.author_name || '').toLowerCase();
+    return !searchTerm || t.includes(searchTerm) || a.includes(searchTerm);
+  });
+
+  const topTenPoems = [...filteredPoems]
+    .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
+    .slice(0, 10);
+
+  if (topTenPoems.length === 0) {
+    poemsListContainer.innerHTML = '<p>Nessuna poesia disponibile.</p>';
+    return;
+  }
+
+  poemsListContainer.innerHTML = topTenPoems.map((poesia, index) => {
+    const rankEmoji = index === 0 ? '🥇' :
+                      index === 1 ? '🥈' :
+                      index === 2 ? '🥉' : '';
+
+    return `
+      <article class="poem-row" data-poem-id="${poesia.id}">
+        <div class="poem-info" data-poem-id="${poesia.id}">
+          <span class="poem-rank">${rankEmoji}</span>
+          <span class="poem-title">${poesia.title}</span>
+          <span class="poem-author">di ${poesia.author_name}</span>
+        </div>
+
+        <div class="poem-actions">
+          <span class="poem-votes">${poesia.vote_count || 0} Voti</span>
+
+          <button
+            type="button"
+            class="button-vote"
+            data-poem-id="${poesia.id}"
+          >
+            Vota
+          </button>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  attachPoemHandlers();
+}
+
+// ===============================
+// HANDLER CLICK POESIE
+// ===============================
+function attachPoemHandlers() {
+  if (!poemsListContainer) return;
+
+  poemsListContainer.querySelectorAll('.poem-row').forEach(row => {
+    const poemId = row.dataset.poemId;
+
+    const info = row.querySelector('.poem-info');
+    const voteBtn = row.querySelector('.button-vote');
+
+    // click riga → dettaglio
+    if (info) {
+      info.addEventListener('click', () => {
+        const poem = allPoems.find(p => String(p.id) === String(poemId));
+        if (poem) showPoemDetail(poem);
+      });
+    }
+
+    // click voto → modale voto
+    if (voteBtn) {
+      voteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        apriModaleVoto(poemId);
+      });
+    }
+  });
+}
+
+// ===============================
+// STELLE VOTO
+// ===============================
+function resetStars() {
+  currentRating = 0;
+  if (!starRatingContainer) return;
+
+  highlightStars(starRatingContainer, 0);
+  starRatingContainer
+    .querySelectorAll('input[type="radio"]')
+    .forEach(i => (i.checked = false));
+}
+
+function highlightStars(container, rating) {
+  const icons = container.querySelectorAll('label.star i');
+  icons.forEach((icon, index) => {
+    if (index < rating) {
+      icon.classList.add('fa-solid');
+      icon.classList.remove('fa-regular');
+    } else {
+      icon.classList.remove('fa-solid');
+      icon.classList.add('fa-regular');
+    }
+  });
+}
+
+// ===============================
+// INVIO VOTO
+// ===============================
+if (submitVoteBtn) {
+  submitVoteBtn.addEventListener('click', async () => {
+    if (currentRating === 0) {
+      voteMessage.textContent = 'Seleziona da 1 a 5 stelle.';
+      voteMessage.style.color = 'red';
+      return;
+    }
+
+    const poemId = parseInt(votePoemIdInput.value, 10);
+
+    try {
+      await supabaseClient.functions.invoke('invia-voto', {
+        body: {
+          poemId,
+          rating: currentRating
+        }
+      });
+
+      document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
+      voteMessage.textContent = 'Grazie per aver votato!';
+      voteMessage.style.color = 'green';
+
+      await caricaDatiIniziali();
+
+      setTimeout(() => {
+        votingModal.classList.add('hidden');
+        resetVotingModal();
+      }, 1500);
+    } catch (err) {
+      console.error(err);
+      voteMessage.textContent = 'Errore durante il voto.';
+      voteMessage.style.color = 'red';
+    }
+  });
+}
 
 // =======================================================
 // ⭐ GESTIONE VOTAZIONE
