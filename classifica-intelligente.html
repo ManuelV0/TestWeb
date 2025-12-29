@@ -1,104 +1,154 @@
+// ===============================
+// Classifica Intelligente – CORE
+// ===============================
 
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Classifica Intelligente di TheItalianPoetry: scopri poesie personalizzate in base alle tue interazioni." />
-  <title>Classifica Intelligente | TheItalianPoetry</title>
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
-    rel="stylesheet"
-  >
+// 🔐 CONFIG SUPABASE
+const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
+const SUPABASE_ANON_KEY = 'INSERISCI_LA_TUA_ANON_KEY';
 
-  <!-- Icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-  >
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  <!-- CSS dedicato -->
-  <link rel="stylesheet" href="css/classifica-intelligente.css">
-</head>
+// 🎯 ELEMENTI DOM
+const statusSection = document.getElementById('ai-status');
+const poemsList = document.getElementById('ai-poems-list');
+const emptyState = document.getElementById('ai-empty-state');
 
-<body>
+// ===============================
+// INIT
+// ===============================
+document.addEventListener('DOMContentLoaded', init);
 
-  <!-- HEADER -->
-  <header class="main-header" role="banner">
-    <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="Torna alla homepage TheItalianPoetry">
-        <i class="fa-solid fa-feather-pointed" aria-hidden="true"></i>
-        <span>TheItalianPoetry</span>
-      </a>
-    </div>
-  </header>
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
 
-  <!-- MAIN -->
-  <main class="page-container" role="main">
+  if (!session) {
+    showError('Devi effettuare l’accesso per vedere la classifica intelligente.');
+    return;
+  }
 
-    <!-- INTRO -->
-    <section class="intro-section">
-      <h1>Classifica Intelligente</h1>
-      <p>
-        Un’esperienza personalizzata: più interagisci,
-        più la poesia si avvicina a ciò che senti davvero.
-      </p>
-    </section>
+  await loadClassificaIntelligente();
+}
 
-    <!-- STATO (loading / error) -->
-    <section
-      id="ai-status"
-      class="status-section"
-      aria-live="polite"
-      aria-atomic="true"
-    >
-      <p class="loading-text">
-        Analisi delle tue preferenze in corso…
-      </p>
-    </section>
+// ===============================
+// LOAD DATA
+// ===============================
+async function loadClassificaIntelligente() {
+  setLoading(true);
 
-    <!-- FEED POESIE -->
-    <section class="ai-feed-section" aria-live="polite">
-      <ul
-        id="ai-poems-list"
-        class="ai-poems-list"
-        role="list"
-      >
-        <!-- popolato via JS -->
-      </ul>
-    </section>
+  const { data, error } = await supabase
+    .rpc('classifica_intelligente');
 
-    <!-- EMPTY STATE -->
-    <section
-      id="ai-empty-state"
-      class="empty-state hidden"
-      aria-hidden="true"
-    >
-      <p>
-        Non abbiamo ancora abbastanza dati per suggerirti poesie.
-        Inizia a leggere, votare o salvare ✨
-      </p>
-    </section>
+  if (error) {
+    console.error('[AI CLASSIFICA ERROR]', error);
+    showError('Errore nel caricamento delle poesie.');
+    return;
+  }
 
-  </main>
+  if (!data || data.length === 0) {
+    showEmptyState();
+    return;
+  }
 
-  <!-- FOOTER -->
-  <footer class="main-footer" role="contentinfo">
-    <p>© <span id="year"></span> TheItalianPoetry</p>
-  </footer>
+  renderPoems(data);
+  setLoading(false);
+}
 
-  <!-- ========= LOGICA (ES MODULE) ========= -->
-  <!-- ⚠️ IMPORTA SUPABASE SOLO DENTRO classifica-intelligente.js -->
-  <script type="module" src="js/classifica-intelligente.js"></script>
+// ===============================
+// RENDER
+// ===============================
+function renderPoems(poems) {
+  poemsList.innerHTML = '';
 
-  <!-- utilità minime -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  poems.forEach((poem, index) => {
+    const li = document.createElement('li');
+    li.className = 'ai-poem-card';
+    li.dataset.poemId = poem.id;
 
-</body>
-</html>
+    li.innerHTML = `
+      <article>
+        <header class="ai-poem-header">
+          <span class="ai-rank">#${index + 1}</span>
+          <h2 class="ai-poem-title">${escapeHTML(poem.title)}</h2>
+        </header>
+
+        <p class="ai-poem-author">di ${escapeHTML(poem.author_name)}</p>
+
+        <div class="ai-poem-content">
+          ${formatContent(poem.content)}
+        </div>
+
+        <footer class="ai-poem-footer">
+          <span class="ai-score">
+            Affinità: ${Number(poem.score).toFixed(2)}
+          </span>
+        </footer>
+      </article>
+    `;
+
+    // 🔥 TRACK INTERACTION (OPEN)
+    li.addEventListener('click', () => {
+      trackInteraction(poem.id, 'open_poem', 1);
+    });
+
+    poemsList.appendChild(li);
+  });
+
+  emptyState.classList.add('hidden');
+  emptyState.setAttribute('aria-hidden', 'true');
+}
+
+// ===============================
+// TRACK INTERACTIONS
+// ===============================
+async function trackInteraction(poemId, type, value = 1) {
+  try {
+    await supabase.from('user_interactions').insert({
+      poem_id: poemId,
+      interaction_type: type,
+      value
+    });
+  } catch (err) {
+    console.warn('[TRACK INTERACTION FAILED]', err);
+  }
+}
+
+// ===============================
+// UI STATES
+// ===============================
+function setLoading(isLoading) {
+  if (isLoading) {
+    statusSection.innerHTML = `<p class="loading-text">Analisi delle tue preferenze in corso…</p>`;
+  } else {
+    statusSection.innerHTML = '';
+  }
+}
+
+function showError(message) {
+  statusSection.innerHTML = `<p class="error-text">${message}</p>`;
+}
+
+function showEmptyState() {
+  setLoading(false);
+  emptyState.classList.remove('hidden');
+  emptyState.setAttribute('aria-hidden', 'false');
+}
+
+// ===============================
+// UTILS
+// ===============================
+function escapeHTML(str = '') {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function formatContent(text = '') {
+  return text
+    .split('\n')
+    .slice(0, 6)
+    .map(line => `<p>${escapeHTML(line)}</p>`)
+    .join('');
+}
