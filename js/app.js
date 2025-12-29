@@ -1,5 +1,6 @@
 
-import { trackInteraction } from './js/ai-interactions-core.js';
+import { trackInteraction } from './ai-interactions-core.js';
+
 
 // ========= 1. Inizializzazione di Supabase =========
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
