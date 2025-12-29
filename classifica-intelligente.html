@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -6,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classifica Intelligente | TheItalianPoetry</title>
 
-  <!-- Font / Icons (opzionali, non impattano JS) -->
+  <!-- Fonts / Icons (non impattano JS) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
+
+  <!-- CSS dedicato -->
   <link rel="stylesheet" href="css/classifica-intelligente.css">
 </head>
 
@@ -19,8 +26,8 @@
   <!-- HEADER -->
   <header class="main-header">
     <div class="header-inner">
-      <a href="index.html" class="logo">
-        <i class="fa-solid fa-feather-pointed"></i>
+      <a href="index.html" class="logo" aria-label="Torna alla homepage">
+        <i class="fa-solid fa-feather-pointed" aria-hidden="true"></i>
         <span>TheItalianPoetry</span>
       </a>
     </div>
@@ -33,14 +40,16 @@
     <section class="intro-section">
       <h1>Classifica Intelligente</h1>
       <p>
-        Un’esperienza personalizzata: più interagisci, più la poesia si avvicina
-        a ciò che senti davvero.
+        Un’esperienza personalizzata: più interagisci,
+        più la poesia si avvicina a ciò che senti davvero.
       </p>
     </section>
 
-    <!-- STATO (loading / error) -->
-    <section id="ai-status" class="status-section">
-      <p class="loading-text">Analisi delle tue preferenze in corso…</p>
+    <!-- STATO -->
+    <section id="ai-status" class="status-section" aria-live="polite">
+      <p class="loading-text">
+        Analisi delle tue preferenze in corso…
+      </p>
     </section>
 
     <!-- FEED POESIE -->
@@ -65,9 +74,14 @@
     <p>© <span id="year"></span> TheItalianPoetry</p>
   </footer>
 
-  <!-- ========= SUPABASE + LOGICA ========= -->
-  <!-- ❗ SOLO MODULE – niente CDN globale -->
+  <!-- ========= LOGICA (ES MODULE) ========= -->
+  <!-- ❗ NESSUN CDN SUPABASE QUI -->
   <script type="module" src="js/classifica-intelligente.js"></script>
+
+  <!-- utilità minime non invasive -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 
 </body>
 </html>
