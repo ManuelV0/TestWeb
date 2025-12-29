@@ -324,309 +324,173 @@ if (shareInstagramBtn) {
     // =======================================================
     // LOGICA VOTAZIONE
     // =======================================================
-    let currentRating = 0;
     
-    function resetVotingModal() {
-        voteMessage.textContent = '';
-        voteMessage.style.color = '';
-        votePoemIdInput.value = '';
-        resetStars();
-    }
     
-    if (closeVotingModalBtn) {
-        closeVotingModalBtn.addEventListener('click', resetVotingModal);
+
+// =======================================================
+// ⭐ GESTIONE VOTAZIONE
+// =======================================================
+
+let currentRating = 0;
+
+function resetVotingModal() {
+  voteMessage.textContent = '';
+  voteMessage.style.color = '';
+  votePoemIdInput.value = '';
+  resetStars();
+}
+
+if (closeVotingModalBtn) {
+  closeVotingModalBtn.addEventListener('click', resetVotingModal);
+}
+
+// -------------------------------------------------------
+// APERTURA MODALE VOTO
+// -------------------------------------------------------
+async function apriModaleVoto(poemId) {
+  if (!poemId) return;
+
+  // Anti doppio voto lato cookie
+  if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
+    alert("Hai già votato questa poesia. Grazie!");
+    return;
+  }
+
+  try {
+    const { data: poem, error } = await supabaseClient
+      .from('poesie')
+      .select('*')
+      .eq('id', poemId)
+      .single();
+
+    if (error) throw error;
+
+    if (poem) {
+      document.getElementById('vote-poem-title').textContent = poem.title;
+      document.getElementById('vote-poem-author').textContent = `di ${poem.author_name}`;
+      votePoemIdInput.value = poem.id;
+      resetStars();
+      votingModal.classList.remove('hidden');
+      votingModal.setAttribute('aria-modal', 'true');
+    }
+  } catch (error) {
+    console.error('Errore caricamento poesia:', error);
+    alert('Errore nel caricamento della poesia.');
+  }
+}
+
+// -------------------------------------------------------
+// VOTO DALLA MODALE PRINCIPALE
+// -------------------------------------------------------
+if (submitVoteBtn) {
+  submitVoteBtn.addEventListener('click', async () => {
+    if (currentRating === 0 || currentRating > 5) {
+      voteMessage.textContent = 'Seleziona da 1 a 5 stelle.';
+      voteMessage.style.color = 'red';
+      return;
     }
 
-    async function apriModaleVoto(poemId) {
-        if (!poemId) return;
-        
-        // Controlla se l'utente ha già votato
-        if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
-            alert("Hai già votato questa poesia. Grazie!");
-            return;
+    const poemId = Number(votePoemIdInput.value);
+    if (!Number.isFinite(poemId)) {
+      voteMessage.textContent = 'ID poesia non valido.';
+      voteMessage.style.color = 'red';
+      return;
+    }
+
+    voteMessage.textContent = 'Invio in corso...';
+    voteMessage.style.color = 'inherit';
+
+    try {
+      const { error } = await supabaseClient.functions.invoke('invia-voto', {
+        body: {
+          poem_id: poemId,     // ✅ FIX FONDAMENTALE
+          rating: currentRating
         }
-        
-        try {
-            const { data: poem, error } = await supabaseClient.from('poesie').select('*').eq('id', poemId).single();
-            
-            if (error) throw error;
-            
-            if (poem) {
-                document.getElementById('vote-poem-title').textContent = poem.title;
-                document.getElementById('vote-poem-author').textContent = `di ${poem.author_name}`;
-                document.getElementById('vote-poem-content').textContent = poem.content;
-                votePoemIdInput.value = poem.id;
-                resetStars();
-                votingModal.classList.remove('hidden');
-                votingModal.setAttribute('aria-modal', 'true');
-            }
-        } catch (error) {
-            console.error('Errore nel caricamento della poesia:', error);
-            alert("Si è verificato un errore nel caricamento della poesia. Riprova più tardi.");
+      });
+
+      if (error) {
+        console.error('[VOTE ERROR]', error);
+        voteMessage.textContent = error.message || 'Errore durante il voto.';
+        voteMessage.style.color = 'red';
+        return;
+      }
+
+      voteMessage.textContent = 'Grazie per aver votato!';
+      voteMessage.style.color = 'green';
+
+      document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
+      await caricaDatiIniziali();
+
+      setTimeout(() => {
+        votingModal.classList.add('hidden');
+        votingModal.removeAttribute('aria-modal');
+        resetVotingModal();
+      }, 2000);
+
+    } catch (err) {
+      console.error('Errore voto:', err);
+      voteMessage.textContent = 'Errore durante la votazione.';
+      voteMessage.style.color = 'red';
+    }
+  });
+}
+
+// -------------------------------------------------------
+// VOTO DALLA POEM DETAIL BOX
+// -------------------------------------------------------
+function setupStarRating(container, poemId) {
+  let localRating = 0;
+  const stars = container.querySelectorAll('.star-rating label.star');
+  const submitBtn = container.querySelector('#detail-submit-vote-btn');
+  const messageEl = container.querySelector('#detail-vote-message');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      localRating = parseInt(star.getAttribute('for').replace('detail-star', ''), 10);
+      highlightStars(container, localRating);
+    });
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    if (localRating === 0) {
+      messageEl.textContent = 'Seleziona da 1 a 5 stelle.';
+      messageEl.style.color = 'red';
+      return;
+    }
+
+    messageEl.textContent = 'Invio in corso...';
+
+    try {
+      const { error } = await supabaseClient.functions.invoke('invia-voto', {
+        body: {
+          poem_id: poemId,   // ✅ FIX FONDAMENTALE
+          rating: localRating
         }
+      });
+
+      if (error) throw error;
+
+      messageEl.textContent = 'Grazie per aver votato!';
+      messageEl.style.color = 'green';
+
+      document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
+      await caricaDatiIniziali();
+
+      setTimeout(() => {
+        document.querySelector('.poem-detail-overlay')?.remove();
+        document.querySelector('.poem-detail-box')?.remove();
+      }, 2000);
+
+    } catch (err) {
+      console.error('Errore voto detail:', err);
+      messageEl.textContent = 'Errore durante il voto.';
+      messageEl.style.color = 'red';
     }
+  });
+}
 
-    function showPoemDetail(poem) {
-        const overlay = document.createElement('div');
-        overlay.className = 'poem-detail-overlay';
-        
-        const detailBox = document.createElement('div');
-        detailBox.className = 'poem-detail-box';
-        
-        detailBox.innerHTML = `
-            <button class="close-poem-detail" aria-label="Chiudi">&times;</button>
-            <div class="poem-detail-content">
-                <h2>${poem.title}</h2>
-                <p class="poem-author">di ${poem.author_name}</p>
-                <div class="poem-text">${poem.content.replace(/\n/g, '<br>')}</div>
-            </div>
-            <div class="voting-area">
-                <h3>Il tuo voto:</h3>
-                <div class="star-rating" role="radiogroup" aria-label="Valuta questa poesia con le stelle">
-                    <input type="radio" id="detail-star1" name="detail-rating" value="1" class="sr-only">
-                    <label for="detail-star1" class="star" aria-label="1 stella"><i class="fa-regular fa-star"></i></label>
-                    <input type="radio" id="detail-star2" name="detail-rating" value="2" class="sr-only">
-                    <label for="detail-star2" class="star" aria-label="2 stelle"><i class="fa-regular fa-star"></i></label>
-                    <input type="radio" id="detail-star3" name="detail-rating" value="3" class="sr-only">
-                    <label for="detail-star3" class="star" aria-label="3 stelle"><i class="fa-regular fa-star"></i></label>
-                    <input type="radio" id="detail-star4" name="detail-rating" value="4" class="sr-only">
-                    <label for="detail-star4" class="star" aria-label="4 stelle"><i class="fa-regular fa-star"></i></label>
-                    <input type="radio" id="detail-star5" name="detail-rating" value="5" class="sr-only">
-                    <label for="detail-star5" class="star" aria-label="5 stelle"><i class="fa-regular fa-star"></i></label>
-                </div>
-                <input type="hidden" id="detail-poem-id" value="${poem.id}">
-                <button id="detail-submit-vote-btn" class="button-primary">Invia Voto</button>
-                <p id="detail-vote-message" role="status" aria-live="polite"></p>
-            </div>
-        `;
-        
-        document.body.appendChild(overlay);
-        document.body.appendChild(detailBox);
-        
-        // Gestione chiusura
-        const closeBtn = detailBox.querySelector('.close-poem-detail');
-        closeBtn.addEventListener('click', () => {
-            document.body.removeChild(overlay);
-            document.body.removeChild(detailBox);
-        });
-        
-        // Gestione votazione nella detail box
-        setupStarRating(detailBox, poem.id);
-    }
 
-    function setupStarRating(container, poemId) {
-        let currentRating = 0;
-        const stars = container.querySelectorAll('.star-rating label.star');
-        const submitBtn = container.querySelector('#detail-submit-vote-btn');
-        const messageEl = container.querySelector('#detail-vote-message');
-        
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                currentRating = parseInt(star.getAttribute('for').replace('detail-star', ''), 10);
-                highlightStars(container, currentRating);
-            });
-        });
-        
-        submitBtn.addEventListener('click', async () => {
-            if (currentRating === 0) {
-                messageEl.textContent = 'Per favore, seleziona da 1 a 5 stelle.';
-                messageEl.style.color = 'red';
-                return;
-            }
-            
-            messageEl.textContent = 'Invio in corso...';
-            messageEl.style.color = 'inherit';
-            
-            try {
-                const { data, error } = await supabaseClient.functions.invoke('invia-voto', {
-                    body: { 
-                        poemId: poemId,
-                        rating: currentRating
-                    }
-                });
-                
-                if (error) throw error;
-                
-                messageEl.textContent = 'Grazie per aver votato!';
-                messageEl.style.color = 'green';
-                
-                // Aggiorna la classifica
-                await caricaDatiIniziali();
-                
-                setTimeout(() => {
-                    const overlay = document.querySelector('.poem-detail-overlay');
-                    const detailBox = document.querySelector('.poem-detail-box');
-                    if (overlay) document.body.removeChild(overlay);
-                    if (detailBox) document.body.removeChild(detailBox);
-                }, 2000);
-            } catch (error) {
-                console.error('Errore durante la votazione:', error);
-                messageEl.textContent = 'Si è verificato un errore durante la votazione. Riprova.';
-                messageEl.style.color = 'red';
-            }
-        });
-    }
-
-    // Inizio modifica/aggiunta - Gestione stelle riutilizzabile
-    function highlightStars(container, rating) {
-        if (!container) return;
-        const iconSelector = container.classList && container.classList.contains('star-rating') ? 'label.star i' : '.star-rating label.star i';
-        const icons = container.querySelectorAll(iconSelector);
-        icons.forEach((icon, index) => {
-            if (index < rating) {
-                icon.classList.add('fa-solid', 'selected');
-                icon.classList.remove('fa-regular');
-            } else {
-                icon.classList.remove('fa-solid', 'selected');
-                icon.classList.add('fa-regular');
-            }
-        });
-    }
-
-    // Inizio modifica/aggiunta - Inizializzazione stelle modale principale
-    function initMainStarRating() {
-        if (!starRatingContainer) return;
-        const starLabels = Array.from(starRatingContainer.querySelectorAll('label.star'));
-        const radioInputs = Array.from(starRatingContainer.querySelectorAll('input[type="radio"]'));
-        const extractValue = (label) => parseInt((label.getAttribute('for') || '').replace(/\D/g, ''), 10) || 0;
-        const setRating = (rating) => {
-            currentRating = rating;
-            radioInputs.forEach((input, index) => {
-                input.checked = index + 1 === rating;
-            });
-            starLabels.forEach((label, index) => {
-                label.setAttribute('aria-checked', index + 1 === rating ? 'true' : 'false');
-            });
-            highlightStars(starRatingContainer, rating);
-        };
-        starLabels.forEach(label => {
-            label.setAttribute('role', 'radio');
-            label.setAttribute('aria-checked', 'false');
-            label.setAttribute('tabindex', '-1');
-            label.addEventListener('click', () => {
-                setRating(extractValue(label));
-            });
-            label.addEventListener('mouseenter', () => {
-                highlightStars(starRatingContainer, extractValue(label) || currentRating);
-            });
-            label.addEventListener('mouseleave', () => {
-                highlightStars(starRatingContainer, currentRating);
-            });
-        });
-        starRatingContainer.addEventListener('mouseleave', () => {
-            highlightStars(starRatingContainer, currentRating);
-        });
-        starRatingContainer.addEventListener('keydown', (event) => {
-            if (!['ArrowRight', 'ArrowUp', 'ArrowLeft', 'ArrowDown'].includes(event.key)) return;
-            event.preventDefault();
-            const delta = event.key === 'ArrowRight' || event.key === 'ArrowUp' ? 1 : -1;
-            let newRating = currentRating + delta;
-            if (newRating < 1) newRating = 1;
-            if (newRating > starLabels.length) newRating = starLabels.length;
-            setRating(newRating);
-        });
-        if (!starRatingContainer.hasAttribute('tabindex')) {
-            starRatingContainer.setAttribute('tabindex', '0');
-        }
-        starRatingContainer.setAttribute('role', 'radiogroup');
-        highlightStars(starRatingContainer, currentRating);
-    }
-    initMainStarRating();
-
-    if (poemsListContainer) {
-        poemsListContainer.addEventListener('click', (event) => {
-            const voteButton = event.target.closest('.button-vote');
-            if (voteButton) {
-                const poemId = voteButton.dataset.poemId;
-                apriModaleVoto(poemId);
-            }
-        });
-    }
-
-    if (monthlyPoemsListContainer) {
-        monthlyPoemsListContainer.addEventListener('click', (event) => {
-            const miniPoemItem = event.target.closest('.mini-poem-item');
-            if (miniPoemItem) {
-                const poemId = miniPoemItem.dataset.poemId;
-                apriModaleVoto(poemId);
-            }
-        });
-    }
-    
-    // Inizio modifica/aggiunta - Reset stelle modale principale
-    function resetStars() {
-        currentRating = 0;
-        if (!starRatingContainer) return;
-        highlightStars(starRatingContainer, 0);
-        starRatingContainer.querySelectorAll('input[type="radio"]').forEach(input => {
-            input.checked = false;
-        });
-        starRatingContainer.querySelectorAll('label.star').forEach(label => {
-            label.setAttribute('aria-checked', 'false');
-        });
-    }
-
-    if (submitVoteBtn) {
-        submitVoteBtn.addEventListener('click', async () => {
-            if (currentRating === 0 || currentRating > 5) {
-                voteMessage.textContent = 'Per favore, seleziona da 1 a 5 stelle.';
-                voteMessage.style.color = 'red';
-                return;
-            }
-
-            const poemId = parseInt(votePoemIdInput.value, 10);
-            const rating = currentRating;
-
-            if (isNaN(poemId)) {
-                voteMessage.textContent = 'Errore: ID della poesia non valido.';
-                voteMessage.style.color = 'red';
-                return;
-            }
-            
-            voteMessage.textContent = 'Invio in corso...';
-            voteMessage.style.color = 'inherit';
-
-            try {
-                const { data, error } = await supabaseClient.functions.invoke('invia-voto', {
-                    body: { 
-                        poemId: poemId,
-                        rating: rating
-                    }
-                });
-
-                if (error) {
-                    if (error.context && error.context.status === 409) {
-                        const errorData = await error.context.json();
-                        voteMessage.textContent = errorData.error;
-                    } else {
-                        console.error("Dettaglio errore da Supabase:", error);
-                        voteMessage.textContent = 'Si è verificato un errore imprevisto.';
-                    }
-                    voteMessage.style.color = 'red';
-                    return;
-                }
-
-                voteMessage.textContent = 'Grazie per aver votato!';
-                voteMessage.style.color = 'green';
-                
-                // Imposta un cookie per ricordare che l'utente ha già votato
-                document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
-                await caricaDatiIniziali(); 
-                
-                setTimeout(() => {
-                    votingModal.classList.add('hidden');
-                    votingModal.removeAttribute('aria-modal');
-                    resetVotingModal();
-                }, 2000);
-            } catch (error) {
-                console.error('Errore durante la votazione:', error);
-                voteMessage.textContent = 'Si è verificato un errore durante la votazione. Riprova.';
-                voteMessage.style.color = 'red';
-            }
-        });
-    }
-
-    // =======================================================
+ =======================================================
     // FUNZIONE DI RENDER E CARICAMENTO POESIE
     // =======================================================
     function renderPoems() {
