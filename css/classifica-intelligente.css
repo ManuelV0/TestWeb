@@ -1,0 +1,97 @@
+:root {
+  --bg: #0f172a;
+  --card: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #f97316;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.ci-header {
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.ci-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.ci-header p {
+  margin-top: .25rem;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.ci-container {
+  padding: 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.ci-loading,
+.ci-error {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+}
+
+.ci-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.ci-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+
+.ci-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.ci-author {
+  font-size: .85rem;
+  color: var(--muted);
+  margin-bottom: .5rem;
+}
+
+.ci-content {
+  font-size: .95rem;
+  line-height: 1.5;
+  color: #d1d5db;
+}
+
+.ci-score {
+  margin-top: .75rem;
+  font-size: .75rem;
+  color: var(--accent);
+}
+
+/* desktop */
+@media (min-width: 768px) {
+  .ci-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .ci-card {
+    padding: 1.25rem;
+  }
+}
+
+.hidden {
+  display: none;
+}
