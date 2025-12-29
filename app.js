@@ -326,6 +326,132 @@ if (shareInstagramBtn) {
     // =======================================================
     
     
+// =======================================================
+// FUNZIONE DI RENDER E CARICAMENTO POESIE (AGGIORNATA)
+// =======================================================
+function renderPoems() {
+  // --- Ricerca e filtraggio base ---
+  const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+  const sourcePoems = Array.isArray(allPoems) ? allPoems : [];
+
+  let filteredPoems = sourcePoems.filter(poesia => {
+    const title = (poesia.title || '').toLowerCase();
+    const author = (poesia.author_name || '').toLowerCase();
+    return !searchTerm || title.includes(searchTerm) || author.includes(searchTerm);
+  });
+
+  // --- Filtraggio poesie del mese corrente ---
+  const now = new Date();
+  const currentMonthUTC = now.getUTCMonth();
+  const currentYearUTC = now.getUTCFullYear();
+
+  let monthlyPoems = filteredPoems.filter(poesia => {
+    const poemDate = new Date(poesia.created_at);
+    return poemDate.getUTCMonth() === currentMonthUTC && poemDate.getUTCFullYear() === currentYearUTC;
+  });
+
+  // --- Ordinamento ---
+  const sortBy = sortBySelect ? sortBySelect.value : 'recent';
+  monthlyPoems.sort((a, b) => {
+    switch (sortBy) {
+      case 'popular':
+        return (Number(b.vote_count ?? b.votes ?? 0)) - (Number(a.vote_count ?? a.votes ?? 0));
+      case 'title-asc':
+        return (a.title || '').localeCompare(b.title || '');
+      case 'title-desc':
+        return (b.title || '').localeCompare(a.title || '');
+      default:
+        return new Date(b.created_at) - new Date(a.created_at);
+    }
+  });
+
+  // --- Classifica principale (TOP 10) ---
+  const topTenPoems = [...filteredPoems]
+    .sort((a, b) => {
+      const votesA = Number(a.vote_count ?? a.votes ?? 0);
+      const votesB = Number(b.vote_count ?? b.votes ?? 0);
+      return votesB - votesA;
+    })
+    .slice(0, 10);
+
+  // --- Debug opzionale (per verificare dati) ---
+  console.log('[DEBUG RENDER POESIE]', {
+    total: sourcePoems.length,
+    topTen: topTenPoems.map(p => ({
+      id: p.id,
+      title: p.title,
+      vote_count: p.vote_count ?? p.votes ?? 0
+    }))
+  });
+
+  // --- Rendering della classifica principale ---
+  if (poemsListContainer) {
+    if (topTenPoems.length === 0) {
+      const emptyMessage =
+        sourcePoems.length === 0
+          ? 'Non ci sono ancora poesie. Sii il primo a partecipare!'
+          : 'Nessuna poesia corrisponde ai criteri di ricerca.';
+      poemsListContainer.innerHTML = `<p>${emptyMessage}</p>`;
+    } else {
+      poemsListContainer.innerHTML = topTenPoems
+        .map((poesia, index) => {
+          const rankEmoji =
+            index === 0 ? '🥇' :
+            index === 1 ? '🥈' :
+            index === 2 ? '🥉' : '';
+          const rankGlowClass = index < 3 ? 'glow-rank' : '';
+
+          const instagramIcon = poesia.instagram_handle
+            ? `<a href="https://www.instagram.com/${poesia.instagram_handle}" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>`
+            : '';
+
+          const votes = Number(poesia.vote_count ?? poesia.votes ?? 0);
+          const votesLabel = votes > 0 ? `${votes} voto${votes === 1 ? '' : 'i'}` : 'Nessun voto';
+
+          return `
+            <article class="poem-row" data-poem-id="${poesia.id}">
+              <div class="poem-info ${rankGlowClass}" data-poem-id="${poesia.id}">
+                <span class="poem-rank">${rankEmoji}</span>
+                <span class="poem-title">${poesia.title}</span>
+                <span class="poem-author golden-author">di ${poesia.author_name}</span>
+              </div>
+              <div class="poem-actions">
+                ${instagramIcon}
+                <span class="poem-votes">${votesLabel}</span>
+                <button class="button-vote" data-poem-id="${poesia.id}">Vota</button>
+              </div>
+            </article>`;
+        })
+        .join('');
+
+      attachPoemInfoHandlers();
+    }
+  }
+
+  // --- Rendering poesie del mese ---
+  if (monthlyPoemsListContainer) {
+    if (monthlyPoems.length === 0) {
+      monthlyPoemsListContainer.innerHTML =
+        '<p style="font-size: 0.9rem; color: #777;">Nessuna poesia per questo mese.</p>';
+    } else {
+      monthlyPoemsListContainer.innerHTML = monthlyPoems
+        .map(poesia => {
+          const poemDate = new Date(poesia.created_at).toLocaleDateString('it-IT', {
+            day: 'numeric',
+            month: 'long'
+          });
+          return `
+            <div class="mini-poem-item" data-poem-id="${poesia.id}">
+              <span class="mini-poem-title">${poesia.title}</span>
+              <span class="mini-poem-author">di ${poesia.author_name}</span>
+              <span class="mini-poem-date">${poemDate}</span>
+            </div>`;
+        })
+        .join('');
+    }
+  }
+}
+
 
 // =======================================================
 // ⭐ GESTIONE VOTAZIONE
