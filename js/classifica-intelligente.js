@@ -1,154 +1,118 @@
-// ===============================
-// Classifica Intelligente – CORE
-// ===============================
+/* =========================================================
+   CLASSIFICA INTELLIGENTE – CORE LOGIC
+   TheItalianPoetry
+========================================================= */
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-// 🔐 CONFIG SUPABASE
+/* ================= CONFIG ================= */
+
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
-const SUPABASE_ANON_KEY = 'INSERISCI_LA_TUA_ANON_KEY';
+const SUPABASE_ANON_KEY = 'INSERISCI_LA_TUA_ANON_KEY_QUI'; // 👈 OBBLIGATORIO
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// 🎯 ELEMENTI DOM
-const statusSection = document.getElementById('ai-status');
+/* ================= DOM ================= */
+
+const statusBox = document.getElementById('ai-status');
 const poemsList = document.getElementById('ai-poems-list');
 const emptyState = document.getElementById('ai-empty-state');
 
-// ===============================
-// INIT
-// ===============================
-document.addEventListener('DOMContentLoaded', init);
+/* ================= UTILS ================= */
 
-async function init() {
+function setStatus(text) {
+  statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
+}
+
+function clearStatus() {
+  statusBox.innerHTML = '';
+}
+
+/* ================= AUTH CHECK ================= */
+
+async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession();
 
   if (!session) {
-    showError('Devi effettuare l’accesso per vedere la classifica intelligente.');
-    return;
+    setStatus('Devi essere loggato per vedere la classifica intelligente.');
+    throw new Error('NOT_AUTHENTICATED');
   }
 
-  await loadClassificaIntelligente();
+  return session.user.id;
 }
 
-// ===============================
-// LOAD DATA
-// ===============================
-async function loadClassificaIntelligente() {
-  setLoading(true);
+/* ================= RENDER ================= */
 
-  const { data, error } = await supabase
-    .rpc('classifica_intelligente');
-
-  if (error) {
-    console.error('[AI CLASSIFICA ERROR]', error);
-    showError('Errore nel caricamento delle poesie.');
-    return;
-  }
-
-  if (!data || data.length === 0) {
-    showEmptyState();
-    return;
-  }
-
-  renderPoems(data);
-  setLoading(false);
-}
-
-// ===============================
-// RENDER
-// ===============================
 function renderPoems(poems) {
   poemsList.innerHTML = '';
 
-  poems.forEach((poem, index) => {
+  poems.forEach(poem => {
     const li = document.createElement('li');
     li.className = 'ai-poem-card';
-    li.dataset.poemId = poem.id;
 
     li.innerHTML = `
-      <article>
-        <header class="ai-poem-header">
-          <span class="ai-rank">#${index + 1}</span>
-          <h2 class="ai-poem-title">${escapeHTML(poem.title)}</h2>
-        </header>
-
-        <p class="ai-poem-author">di ${escapeHTML(poem.author_name)}</p>
-
-        <div class="ai-poem-content">
-          ${formatContent(poem.content)}
-        </div>
-
-        <footer class="ai-poem-footer">
-          <span class="ai-score">
-            Affinità: ${Number(poem.score).toFixed(2)}
-          </span>
-        </footer>
-      </article>
+      <h3>${poem.title}</h3>
+      <p class="author">di ${poem.author_name}</p>
+      <p class="preview">${poem.content.slice(0, 160)}…</p>
+      <span class="score">Affinità: ${poem.affinity_score.toFixed(2)}</span>
     `;
 
-    // 🔥 TRACK INTERACTION (OPEN)
     li.addEventListener('click', () => {
-      trackInteraction(poem.id, 'open_poem', 1);
+      trackInteraction(poem.id, 'open');
+      window.location.href = `index.html#poem-${poem.id}`;
     });
 
     poemsList.appendChild(li);
   });
-
-  emptyState.classList.add('hidden');
-  emptyState.setAttribute('aria-hidden', 'true');
 }
 
-// ===============================
-// TRACK INTERACTIONS
-// ===============================
-async function trackInteraction(poemId, type, value = 1) {
+/* ================= INTERACTION TRACKING ================= */
+
+async function trackInteraction(poemId, type) {
   try {
     await supabase.from('user_interactions').insert({
       poem_id: poemId,
-      interaction_type: type,
-      value
+      interaction_type: type
     });
   } catch (err) {
-    console.warn('[TRACK INTERACTION FAILED]', err);
+    console.warn('[TRACK ERROR]', err.message);
   }
 }
 
-// ===============================
-// UI STATES
-// ===============================
-function setLoading(isLoading) {
-  if (isLoading) {
-    statusSection.innerHTML = `<p class="loading-text">Analisi delle tue preferenze in corso…</p>`;
-  } else {
-    statusSection.innerHTML = '';
+/* ================= CORE LOAD ================= */
+
+async function loadIntelligentRanking() {
+  try {
+    setStatus('Analisi delle tue preferenze in corso…');
+
+    const userId = await requireAuth();
+
+    const { data, error } = await supabase.rpc(
+      'get_intelligent_poems_for_user',
+      { p_user_id: userId }
+    );
+
+    if (error) throw error;
+
+    clearStatus();
+
+    if (!data || data.length === 0) {
+      emptyState.classList.remove('hidden');
+      emptyState.setAttribute('aria-hidden', 'false');
+      return;
+    }
+
+    renderPoems(data);
+
+  } catch (err) {
+    console.error('[AI CLASSIFICA ERROR]', err);
+
+    if (err.message !== 'NOT_AUTHENTICATED') {
+      setStatus('Errore nel caricamento della classifica intelligente.');
+    }
   }
 }
 
-function showError(message) {
-  statusSection.innerHTML = `<p class="error-text">${message}</p>`;
-}
+/* ================= INIT ================= */
 
-function showEmptyState() {
-  setLoading(false);
-  emptyState.classList.remove('hidden');
-  emptyState.setAttribute('aria-hidden', 'false');
-}
-
-// ===============================
-// UTILS
-// ===============================
-function escapeHTML(str = '') {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-}
-
-function formatContent(text = '') {
-  return text
-    .split('\n')
-    .slice(0, 6)
-    .map(line => `<p>${escapeHTML(line)}</p>`)
-    .join('');
-}
+document.addEventListener('DOMContentLoaded', loadIntelligentRanking);
