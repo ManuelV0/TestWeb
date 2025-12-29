@@ -2,12 +2,12 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
 // ===============================
-// CONFIG
+// CONFIGURAZIONE SUPABASE
 // ===============================
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q'
 
-// ✅ client corretto
+// ✅ client corretto (NO window.supabase)
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 // ===============================
@@ -20,6 +20,8 @@ const emptyEl = document.getElementById('ai-empty-state')
 // ===============================
 document.addEventListener('DOMContentLoaded', loadClassificaIntelligente)
 
+// ===============================
+// CORE
 // ===============================
 async function loadClassificaIntelligente() {
   try {
@@ -38,11 +40,13 @@ async function loadClassificaIntelligente() {
       }
     )
 
-    if (!res.ok) throw new Error('Errore Edge Function')
+    if (!res.ok) {
+      throw new Error(`Errore Edge Function (${res.status})`)
+    }
 
     const json = await res.json()
 
-    if (!json.results?.length) {
+    if (!json.results || json.results.length === 0) {
       showEmpty()
       return
     }
@@ -58,19 +62,41 @@ async function loadClassificaIntelligente() {
 }
 
 // ===============================
+// RENDER CLASSIFICA
+// ===============================
 function render(items) {
-  listEl.innerHTML = items.map(p => `
+  // ✅ Ordina per affinità IA (decrescente)
+  const sorted = [...items].sort((a, b) => {
+    const scoreA = typeof a.intelligent_score === 'number' ? a.intelligent_score : 0
+    const scoreB = typeof b.intelligent_score === 'number' ? b.intelligent_score : 0
+    return scoreB - scoreA
+  })
+
+  listEl.innerHTML = sorted.map((p, index) => `
     <li class="ci-card">
-      <h3>${p.title ?? 'Senza titolo'}</h3>
-      <p class="ci-author">di ${p.author_name ?? 'Anonimo'}</p>
+      <div class="ci-rank">#${index + 1}</div>
+
+      <h3 class="ci-title">
+        ${p.title ?? 'Senza titolo'}
+      </h3>
+
+      <p class="ci-author">
+        di ${p.author_name ?? 'Anonimo'}
+      </p>
+
       <p class="ci-content">
         ${(p.content ?? '').slice(0, 280)}${p.content?.length > 280 ? '…' : ''}
       </p>
+
       <div class="ci-score">
-        Affinità IA: <strong>${typeof p.intelligent_score === 'number'
-          ? p.intelligent_score.toFixed(2)
-          : '—'
-        }</strong>
+        Affinità IA:
+        <strong>
+          ${
+            typeof p.intelligent_score === 'number'
+              ? p.intelligent_score.toFixed(2)
+              : '—'
+          }
+        </strong>
       </div>
     </li>
   `).join('')
@@ -78,6 +104,8 @@ function render(items) {
   listEl.classList.remove('hidden')
 }
 
+// ===============================
+// EMPTY STATE
 // ===============================
 function showEmpty() {
   emptyEl.classList.remove('hidden')
