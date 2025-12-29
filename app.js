@@ -321,16 +321,7 @@ if (shareInstagramBtn) {
         });
     }
     
-    // =======================================================
-    // LOGICA VOTAZIONE
-    // =======================================================
-    
-  
-// ===============================
-// STATO VOTO
-// ===============================
-let currentRating = 0;
-
+    // 
 // ===============================
 // RESET MODALE VOTO
 // ===============================
@@ -536,113 +527,6 @@ if (submitVoteBtn) {
   });
 }
 
-// =======================================================
-// ⭐ GESTIONE VOTAZIONE
-// =======================================================
-
-let currentRating = 0;
-
-function resetVotingModal() {
-  voteMessage.textContent = '';
-  voteMessage.style.color = '';
-  votePoemIdInput.value = '';
-  resetStars();
-}
-
-if (closeVotingModalBtn) {
-  closeVotingModalBtn.addEventListener('click', resetVotingModal);
-}
-
-// -------------------------------------------------------
-// APERTURA MODALE VOTO
-// -------------------------------------------------------
-async function apriModaleVoto(poemId) {
-  if (!poemId) return;
-
-  // Anti doppio voto lato cookie
-  if (document.cookie.includes(`voted-poem-${poemId}=true`)) {
-    alert("Hai già votato questa poesia. Grazie!");
-    return;
-  }
-
-  try {
-    const { data: poem, error } = await supabaseClient
-      .from('poesie')
-      .select('*')
-      .eq('id', poemId)
-      .single();
-
-    if (error) throw error;
-
-    if (poem) {
-      document.getElementById('vote-poem-title').textContent = poem.title;
-      document.getElementById('vote-poem-author').textContent = `di ${poem.author_name}`;
-      votePoemIdInput.value = poem.id;
-      resetStars();
-      votingModal.classList.remove('hidden');
-      votingModal.setAttribute('aria-modal', 'true');
-    }
-  } catch (error) {
-    console.error('Errore caricamento poesia:', error);
-    alert('Errore nel caricamento della poesia.');
-  }
-}
-
-// -------------------------------------------------------
-// VOTO DALLA MODALE PRINCIPALE
-// -------------------------------------------------------
-if (submitVoteBtn) {
-  submitVoteBtn.addEventListener('click', async () => {
-    if (currentRating === 0 || currentRating > 5) {
-      voteMessage.textContent = 'Seleziona da 1 a 5 stelle.';
-      voteMessage.style.color = 'red';
-      return;
-    }
-
-    const poemId = Number(votePoemIdInput.value);
-    if (!Number.isFinite(poemId)) {
-      voteMessage.textContent = 'ID poesia non valido.';
-      voteMessage.style.color = 'red';
-      return;
-    }
-
-    voteMessage.textContent = 'Invio in corso...';
-    voteMessage.style.color = 'inherit';
-
-    try {
-      const { error } = await supabaseClient.functions.invoke('invia-voto', {
-        body: {
-          poem_id: poemId,     // ✅ FIX FONDAMENTALE
-          rating: currentRating
-        }
-      });
-
-      if (error) {
-        console.error('[VOTE ERROR]', error);
-        voteMessage.textContent = error.message || 'Errore durante il voto.';
-        voteMessage.style.color = 'red';
-        return;
-      }
-
-      voteMessage.textContent = 'Grazie per aver votato!';
-      voteMessage.style.color = 'green';
-
-      document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
-      await caricaDatiIniziali();
-
-      setTimeout(() => {
-        votingModal.classList.add('hidden');
-        votingModal.removeAttribute('aria-modal');
-        resetVotingModal();
-      }, 2000);
-
-    } catch (err) {
-      console.error('Errore voto:', err);
-      voteMessage.textContent = 'Errore durante la votazione.';
-      voteMessage.style.color = 'red';
-    }
-  });
-}
 
 // -------------------------------------------------------
 // VOTO DALLA POEM DETAIL BOX
