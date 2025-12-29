@@ -1,5 +1,4 @@
 
-
 // ========= 1. Inizializzazione di Supabase =========
 const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
@@ -52,8 +51,408 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileNavToggle: document.querySelector('.mobile-nav-toggle'),
         discoverMoreTrigger: document.getElementById('discover-more-trigger'),
         expandedContent: document.getElementById('expanded-content'),
-        shareInstagramBtn: document.getElementById('share-cta-btn')
+        shareInstagramBtn: document.getElementById('share-cta-btn'),
+        primaryNavigation: document.getElementById('primary-navigation') || document.querySelector('.nav-wrapper'),
+        shareFallback: document.getElementById('share-fallback'),
+        shareLinkInput: document.getElementById('poem-share-link'),
+        copyLinkBtn: document.getElementById('copy-link-btn'),
+        copyFeedback: document.getElementById('copy-feedback'),
+        scrollTopBtn: document.getElementById('scroll-top-btn'),
+        footerParagraph: document.querySelector('.main-footer p')
     };
+
+    const body = document.body;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const focusableSelector = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
+    const modalCallbacks = new WeakMap();
+    const modalStack = [];
+    let copyTimeoutId;
+
+    // ===== Helpers Modali / UI =====
+    function openModalElement(modal, options = {}) {
+        if (!modal) return;
+
+        const config = modalCallbacks.get(modal) || {};
+        const shouldFocus = options.focus !== undefined ? options.focus : config.focus !== false;
+        const onOpenCallback = options.onOpen ?? config.onOpen;
+
+        if (modal.classList.contains('hidden')) {
+            modal.classList.remove('hidden');
+            modal.setAttribute('aria-hidden', 'false');
+            modal.setAttribute('aria-modal', 'true');
+            modalStack.push(modal);
+        }
+
+        body.classList.add('modal-open');
+
+        if (shouldFocus) {
+            const focusable = modal.querySelector(focusableSelector);
+            focusable?.focus();
+        }
+
+        if (typeof onOpenCallback === 'function') {
+            onOpenCallback();
+        }
+    }
+
+    function closeModalElement(modal, options = {}) {
+        if (!modal || modal.classList.contains('hidden')) return;
+
+        const config = modalCallbacks.get(modal) || {};
+        const onCloseCallback = options.onClose ?? config.onClose;
+
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.removeAttribute('aria-modal');
+
+        const index = modalStack.lastIndexOf(modal);
+        if (index > -1) {
+            modalStack.splice(index, 1);
+        }
+
+        if (modalStack.length === 0) {
+            body.classList.remove('modal-open');
+        }
+
+        if (typeof onCloseCallback === 'function') {
+            onCloseCallback();
+        }
+    }
+
+    function setupModal(modal, openTriggers = [], closeTriggers = [], config = {}) {
+        if (!modal) return;
+
+        const normalizedConfig = {
+            onOpen: config.onOpen,
+            onClose: config.onClose,
+            focus: config.focus !== undefined ? config.focus : true
+        };
+
+        modalCallbacks.set(modal, normalizedConfig);
+
+        modal.setAttribute('aria-hidden', modal.classList.contains('hidden') ? 'true' : 'false');
+
+        const openHandler = (event) => {
+            event?.preventDefault();
+            openModalElement(modal);
+        };
+
+        const closeHandler = (event) => {
+            event?.preventDefault();
+            closeModalElement(modal);
+        };
+
+        openTriggers.forEach(trigger => {
+            if (!trigger) return;
+            trigger.addEventListener('click', openHandler);
+        });
+
+        closeTriggers.forEach(trigger => {
+            if (!trigger) return;
+            trigger.addEventListener('click', closeHandler);
+        });
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModalElement(modal);
+            }
+        });
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            const lastModal = modalStack[modalStack.length - 1];
+            if (lastModal) {
+                closeModalElement(lastModal);
+            }
+        }
+    });
+
+    document.querySelectorAll('[data-close-modal]').forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.info-modal, .modal, .modal-container');
+            if (modal) {
+                closeModalElement(modal);
+            }
+        });
+    });
+
+    function initMobileNav() {
+        const navToggle = elements.mobileNavToggle;
+        const navWrapper = elements.primaryNavigation;
+
+        if (!navToggle || !navWrapper) return;
+
+        const setNavState = (isVisible) => {
+            navWrapper.setAttribute('data-visible', String(isVisible));
+            navToggle.setAttribute('aria-expanded', String(isVisible));
+            navToggle.classList.toggle('is-active', isVisible);
+
+            const icon = navToggle.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars', !isVisible);
+                icon.classList.toggle('fa-times', isVisible);
+            }
+        };
+
+        setNavState(navWrapper.getAttribute('data-visible') === 'true');
+
+        navToggle.addEventListener('click', () => {
+            const currentVisible = navWrapper.getAttribute('data-visible') === 'true';
+            setNavState(!currentVisible);
+        });
+
+        navWrapper.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => setNavState(false));
+        });
+    }
+
+    function initDiscoverMore() {
+        const trigger = elements.discoverMoreTrigger;
+        const content = elements.expandedContent;
+
+        if (!trigger || !content) return;
+
+        const labelSpan = trigger.querySelector('span');
+        const initialVisible = content.classList.contains('is-visible');
+
+        content.setAttribute('aria-hidden', String(!initialVisible));
+        trigger.setAttribute('role', 'button');
+        trigger.setAttribute('tabindex', '0');
+        trigger.setAttribute('aria-expanded', String(initialVisible));
+        trigger.classList.toggle('active', initialVisible);
+
+        const setVisualState = (isVisible) => {
+            content.classList.toggle('is-visible', isVisible);
+            content.classList.toggle('hidden-content', !isVisible);
+            content.classList.toggle('slide-down', isVisible);
+            content.setAttribute('aria-hidden', String(!isVisible));
+            trigger.setAttribute('aria-expanded', String(isVisible));
+            trigger.classList.toggle('active', isVisible);
+
+            if (labelSpan) {
+                labelSpan.textContent = isVisible ? 'Mostra meno' : 'Scopri di più';
+            }
+
+            const arrow = trigger.querySelector('.arrow-down');
+            if (arrow) {
+                arrow.style.transform = isVisible ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        };
+
+        setVisualState(initialVisible);
+
+        const toggle = () => {
+            setVisualState(!content.classList.contains('is-visible'));
+        };
+
+        trigger.addEventListener('click', toggle);
+        trigger.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                toggle();
+            }
+        });
+    }
+
+    function initScrollTop() {
+        const scrollTopBtn = elements.scrollTopBtn;
+        if (!scrollTopBtn) return;
+
+        const toggleVisibility = () => {
+            const shouldShow = window.scrollY > 450;
+            scrollTopBtn.classList.toggle('is-visible', shouldShow);
+        };
+
+        window.addEventListener('scroll', toggleVisibility, { passive: true });
+        toggleVisibility();
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: prefersReducedMotion.matches ? 'auto' : 'smooth'
+            });
+        });
+    }
+
+    function setShareButtonTemporaryLabel(labelHtml, timeout = 2000) {
+        const button = elements.shareInstagramBtn;
+        if (!button) return;
+
+        if (!button.dataset.originalLabel) {
+            button.dataset.originalLabel = button.innerHTML;
+        }
+
+        button.innerHTML = labelHtml;
+
+        if (button._shareLabelTimeout) {
+            clearTimeout(button._shareLabelTimeout);
+        }
+
+        button._shareLabelTimeout = setTimeout(() => {
+            button.innerHTML = button.dataset.originalLabel;
+        }, timeout);
+    }
+
+    function showShareFallback(url) {
+        const fallback = elements.shareFallback;
+        const shareInput = elements.shareLinkInput;
+        const shareUrl = url || window.location.href;
+
+        if (shareInput) {
+            shareInput.value = shareUrl;
+        }
+
+        if (fallback) {
+            fallback.classList.remove('hidden');
+            fallback.classList.add('active');
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                if (elements.copyFeedback) {
+                    elements.copyFeedback.textContent = 'Link copiato negli appunti!';
+                    clearTimeout(copyTimeoutId);
+                    copyTimeoutId = setTimeout(() => {
+                        elements.copyFeedback.textContent = '';
+                    }, 2500);
+                }
+                setShareButtonTemporaryLabel('<i class="fas fa-check"></i> Link copiato!');
+            }).catch(() => {
+                setShareButtonTemporaryLabel('<i class="fas fa-share-alt"></i> Condividi');
+            });
+        }
+    }
+
+    function initShareFeatures() {
+        const shareBtn = elements.shareInstagramBtn;
+        const shareInput = elements.shareLinkInput;
+
+        if (shareBtn) {
+            shareBtn.addEventListener('click', async (event) => {
+                event.preventDefault();
+
+                const shareUrl = (shareInput?.value?.trim()) || window.location.href;
+                const shareData = {
+                    title: 'TheItalianPoetry',
+                    text: 'Scopri la community di scrittura creativa! ✍️📖 #Poesia #ScritturaCreativa',
+                    url: shareUrl
+                };
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share(shareData);
+                        return;
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+                    }
+                }
+
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                if (isMobile) {
+                    try {
+                        window.location.href = `instagram://library?AssetPath=${encodeURIComponent(shareUrl)}`;
+                    } catch {
+                        // Ignora, continueremo con il fallback
+                    }
+                }
+
+                showShareFallback(shareUrl);
+            });
+        }
+
+        if (elements.copyLinkBtn && shareInput) {
+            elements.copyLinkBtn.addEventListener('click', async () => {
+                const textToCopy = shareInput.value;
+                if (!textToCopy) return;
+
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    if (elements.copyFeedback) {
+                        elements.copyFeedback.textContent = 'Copiato negli appunti!';
+                        clearTimeout(copyTimeoutId);
+                        copyTimeoutId = setTimeout(() => {
+                            elements.copyFeedback.textContent = '';
+                        }, 2500);
+                    }
+                    setShareButtonTemporaryLabel('<i class="fas fa-check"></i> Link copiato!');
+                } catch {
+                    if (elements.copyFeedback) {
+                        elements.copyFeedback.textContent = 'Impossibile copiare automaticamente, copia manualmente.';
+                        clearTimeout(copyTimeoutId);
+                        copyTimeoutId = setTimeout(() => {
+                            elements.copyFeedback.textContent = '';
+                        }, 3500);
+                    }
+                }
+            });
+        }
+    }
+
+    function initPoetryWidget() {
+        const toggle = document.getElementById('poetry-widget-toggle');
+        const overlay = document.getElementById('poetry-widget-overlay');
+        const closeBtn = document.getElementById('poetry-widget-close');
+
+        if (!toggle && !overlay && !closeBtn) return;
+
+        const getHeaderHeight = () => {
+            const header =
+                document.querySelector('header') ||
+                document.querySelector('.site-header') ||
+                document.getElementById('header');
+
+            return header ? header.offsetHeight : 0;
+        };
+
+        const openWidget = () => {
+            if (!overlay) return;
+            overlay.style.top = `${getHeaderHeight()}px`;
+            overlay.classList.remove('hidden');
+            body.classList.add('widget-open');
+        };
+
+        const closeWidget = () => {
+            if (!overlay) return;
+            overlay.classList.add('hidden');
+            body.classList.remove('widget-open');
+        };
+
+        toggle?.addEventListener('click', (event) => {
+            event.preventDefault();
+            openWidget();
+        });
+
+        closeBtn?.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            closeWidget();
+        });
+
+        overlay?.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                closeWidget();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+                closeWidget();
+            }
+        });
+    }
+
+    if (elements.footerParagraph) {
+        elements.footerParagraph.innerHTML = elements.footerParagraph.innerHTML.replace(/\b\d{4}\b/, new Date().getFullYear().toString());
+    }
+
+    initMobileNav();
+    initDiscoverMore();
+    initScrollTop();
+    initShareFeatures();
+    initPoetryWidget();
 
     // ========= Conto alla rovescia fine mese =========
     function startMonthlyCountdown() {
@@ -188,80 +587,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAuthUI(session);
     });
 
-    // ========= 5. GESTIONE MENU MOBILE =========
-    if (elements.mobileNavToggle) {
-        elements.mobileNavToggle.addEventListener('click', () => {
-            const navWrapper = document.querySelector('.nav-wrapper');
-            const isExpanded = elements.mobileNavToggle.getAttribute('aria-expanded') === 'true';
-            
-            elements.mobileNavToggle.setAttribute('aria-expanded', !isExpanded);
-            navWrapper.setAttribute('data-visible', !isExpanded);
-            
-            // Cambia icona
-            const icon = elements.mobileNavToggle.querySelector('i');
-            if (icon) {
-                icon.classList.toggle('fa-bars');
-                icon.classList.toggle('fa-times');
-            }
-        });
-    }
-
-    // ========= 6. GESTIONE "SCOPRI DI PIÙ" =========
-    if (elements.discoverMoreTrigger && elements.expandedContent) {
-        elements.discoverMoreTrigger.addEventListener('click', () => {
-            elements.expandedContent.classList.toggle('hidden-content');
-            elements.expandedContent.classList.toggle('slide-down');
-            
-            // Ruota la freccia
-            const arrow = elements.discoverMoreTrigger.querySelector('.arrow-down');
-            if (arrow) {
-                arrow.style.transform = elements.expandedContent.classList.contains('hidden-content') 
-                    ? 'rotate(0deg)' 
-                    : 'rotate(180deg)';
-            }
-        });
-    }
-
     // ========= 7. GESTIONE MODALI =========
-    function setupModal(modal, openTriggers, closeTriggers, onOpen = null, onClose = null) {
-        if (!modal) return;
-        
-        // Apertura modal
-        openTriggers.forEach(trigger => {
-            if (trigger) {
-                trigger.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    modal.classList.remove('hidden');
-                    modal.setAttribute('aria-modal', 'true');
-                    if (onOpen) onOpen();
-                });
-            }
-        });
-        
-        // Chiusura modal
-        closeTriggers.forEach(trigger => {
-            if (trigger) {
-                trigger.addEventListener('click', () => {
-                    modal.classList.add('hidden');
-                    modal.removeAttribute('aria-modal');
-                    if (onClose) onClose();
-                });
-            }
-        });
-        
-        // Chiusura click esterno
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.removeAttribute('aria-modal');
-                if (onClose) onClose();
-            }
-        });
-    }
-
-    // Configurazione modali
     setupModal(elements.submissionModal, [elements.openSubmissionModalBtn], [elements.closeSubmissionModalBtn]);
-    setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], null, resetVotingModalState);
+    setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], { onClose: resetVotingModalState });
     setupModal(elements.howToModal, [elements.howToLink, elements.sidebarParticipateBtn], [elements.closeHowToModalBtn]);
     setupModal(elements.aboutUsModal, [elements.aboutUsLink], [elements.closeAboutUsModalBtn]);
     setupModal(elements.authorModal, [elements.authorLink], [elements.closeAuthorModalBtn]);
@@ -269,14 +597,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gestione pulsante "Come Partecipare" -> Invio poesia
     if (elements.howToSubmitBtn) {
         elements.howToSubmitBtn.addEventListener('click', async () => {
-            elements.howToModal.classList.add('hidden');
-            elements.howToModal.removeAttribute('aria-modal');
+            closeModalElement(elements.howToModal);
             
             const { data: { session } } = await supabaseClient.auth.getSession();
             
             if (session) {
-                elements.submissionModal.classList.remove('hidden');
-                elements.submissionModal.setAttribute('aria-modal', 'true');
+                openModalElement(elements.submissionModal);
             } else {
                 alert("Per favore, accedi con Google prima di inviare una poesia.");
             }
@@ -372,8 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await caricaDatiIniziali();
                 
                 setTimeout(() => {
-                    elements.submissionModal.classList.add('hidden');
-                    elements.submissionModal.removeAttribute('aria-modal');
+                    closeModalElement(elements.submissionModal);
                     if (elements.formMessage) {
                         elements.formMessage.textContent = '';
                     }
@@ -513,8 +838,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         highlightStars(currentRating);
 
-        elements.votingModal.classList.remove('hidden');
-        elements.votingModal.setAttribute('aria-modal', 'true');
+        openModalElement(elements.votingModal, { focus: true });
     }
 
     async function prepareAndOpenVoteModal(poemId) {
@@ -535,7 +859,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetVotingModalState() {
-        // Resetta SOLO quando il modal viene chiuso
         currentRating = 0;
         
         if (elements.voteMessage) {
@@ -556,8 +879,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const stars = elements.starRatingContainer.querySelectorAll('label.star i');
         
         stars.forEach((star, index) => {
-            // Correzione definitiva: stelle da sinistra a destra
-            // Prima stella (indice 0) = rating 1
             if (index < rating) {
                 star.classList.remove('fa-regular');
                 star.classList.add('fa-solid');
@@ -568,7 +889,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Configurazione stelle corretta
     function setupStarRating() {
         if (!elements.starRatingContainer) return;
         
@@ -592,10 +912,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Inizializza il sistema di stelle
     setupStarRating();
 
-    // ========= CORREZIONE CRITICA: LOGICA DI SUBMIT VOTO =========
     if (elements.submitVoteBtn) {
         elements.submitVoteBtn.addEventListener('click', async () => {
             if (currentRating === 0) {
@@ -622,21 +940,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             try {
-                // Payload corretto per la Edge Function
                 const payload = { poem_id: poemId, rating: currentRating };
                 
-                // Chiamata alla Edge Function con gestione semplificata della risposta
                 const { error } = await supabaseClient.functions.invoke('invia-voto', {
                     body: payload
                 });
                 
-                // CORREZIONE CRITICA: considera il voto riuscito quando error è nullo
-                // Non controllare data.success o data obbligatorio
                 if (error) {
                     throw new Error(`Errore Edge Function: ${error.message}`);
                 }
                 
-                // Se non c'è errore, il voto è andato a buon fine
                 document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
                 
                 if (elements.voteMessage) {
@@ -644,15 +957,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     elements.voteMessage.style.color = 'green';
                 }
                 
-                // Ricarica i dati per aggiornare la classifica
                 await caricaDatiIniziali();
                 
                 setTimeout(() => {
-                    if (elements.votingModal) {
-                        elements.votingModal.classList.add('hidden');
-                        elements.votingModal.removeAttribute('aria-modal');
-                    }
-                    resetVotingModalState();
+                    closeModalElement(elements.votingModal);
                 }, 1500);
                 
             } catch (error) {
@@ -663,56 +971,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    }
-
-    // ========= 11. CONDIVISIONE INSTAGRAM =========
-    if (elements.shareInstagramBtn) {
-        elements.shareInstagramBtn.addEventListener('click', async function() {
-            const shareData = {
-                title: 'TheItalianPoetry',
-                text: 'Scopri la community di scrittura creativa! ✍️📖 #Poesia #ScritturaCreativa',
-                url: window.location.href
-            };
-            
-            try {
-                if (navigator.share) {
-                    await navigator.share(shareData);
-                    return;
-                }
-                
-                if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    window.location.href = `instagram://library?AssetPath=${encodeURIComponent(shareData.url)}`;
-                    return;
-                }
-                
-                showInstagramShareFallback();
-                
-            } catch (error) {
-                console.log('Errore condivisione:', error);
-                showInstagramShareFallback();
-            }
-        });
-        
-        function showInstagramShareFallback() {
-            const shareFallback = document.getElementById('share-fallback');
-            if (!shareFallback) return;
-            
-            shareFallback.classList.remove('hidden');
-            
-            const shareInput = document.getElementById('poem-share-link');
-            if (shareInput) {
-                shareInput.value = window.location.href;
-            }
-            
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                const originalText = elements.shareInstagramBtn.innerHTML;
-                elements.shareInstagramBtn.innerHTML = '<i class="fas fa-check"></i> Link copiato!';
-                
-                setTimeout(() => {
-                    elements.shareInstagramBtn.innerHTML = originalText;
-                }, 2000);
-            });
-        }
     }
 
     // ========= 12. RICERCA E ORDINAMENTO =========
