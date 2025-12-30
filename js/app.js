@@ -8,6 +8,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// 🔥 RENDE L'ISTANZA CONDIVISA
+window.supabaseClient = supabaseClient;
+
 // ========= 2. Stato Globale =========
 let allPoems = [];
 let currentRating = 0;
