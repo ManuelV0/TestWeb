@@ -223,8 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const initialVisible = content.classList.contains('is-visible');
 
         content.setAttribute('aria-hidden', String(!initialVisible));
-        trigger.setAttribute('role', 'button');
-        trigger.setAttribute('tabindex', '0');
         trigger.setAttribute('aria-expanded', String(initialVisible));
         trigger.classList.toggle('active', initialVisible);
 
@@ -956,6 +954,12 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const payload = { poem_id: poemId, rating: currentRating };
                 
+                await trackInteraction({
+                    action: 'vote',
+                    poemId,
+                    weight: 5
+                });
+                
                 const { error } = await supabaseClient.functions.invoke('invia-voto', {
                     body: payload
                 });
@@ -963,6 +967,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (error) {
                     throw new Error(`Errore Edge Function: ${error.message}`);
                 }
+                
+                // ✅ TRACK VOTO PER CLASSIFICA INTELLIGENTE
+                await trackInteraction({
+                    action: 'vote',
+                    poemId,
+                    weight: 5
+                });
                 
                 document.cookie = `voted-poem-${poemId}=true; max-age=31536000; path=/`;
                 
@@ -1006,4 +1017,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
