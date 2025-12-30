@@ -415,9 +415,15 @@
   </div>
   <!-- =============================================================== -->
 
-  <!-- Supabase + App (solo JS/DB: lasciati corretti e in ordine) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/app.js"></script>
+<!-- ================= SUPABASE CORE ================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="module" src="js/supabase-init.js"></script>
+
+<!-- ================= AI INTERACTIONS ================= -->
+<script type="module" src="js/ai-interactions-core.js"></script>
+
+<!-- ================= APP PRINCIPALE ================= -->
+<script type="module" src="js/app.js"></script>
   
 
 <script>
