@@ -1,32 +1,34 @@
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+// ai-interactions-core.js
 
-// ⚠️ USA SEMPRE LA STESSA CONFIG DEL SITO
-const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
-const SUPABASE_ANON_KEY = 'TUO_ANON_KEY';
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/**
- * Traccia un'interazione utente
- */
-export async function trackInteraction({ action, poemId }) {
+export async function trackInteraction({ action, poemId, weight = 1 }) {
   if (!poemId) return;
 
+  // ✅ PRENDIAMO SEMPRE L’ISTANZA DAL WINDOW
+  const supabase = window.supabaseClient;
+  if (!supabase) {
+    console.error('[TRACK] supabaseClient non trovato');
+    return;
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
-  if (!session) return; // SOLO UTENTI LOGGATI
+  if (!session?.user) {
+    console.warn('[TRACK] utente non loggato');
+    return;
+  }
 
-  const weight =
-    action === 'widget' ? 4 :
-    action === 'vote'   ? 3 :
-    action === 'read'   ? 1 :
-    0.5;
-
-  await supabase
+  const { data, error } = await supabase
     .from('user_interactions')
     .insert({
       user_id: session.user.id,
-      poem_id: poemId,
+      poem_id: Number(poemId),
       action,
       weight
-    });
+    })
+    .select(); // 🔥 OBBLIGATORIO
+
+  if (error) {
+    console.error('[TRACK INSERT ERROR]', error);
+  } else {
+    console.log('[TRACK OK]', data);
+  }
 }
