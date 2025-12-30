@@ -1,18 +1,21 @@
-
-// js/interaction-tracker.js
-// USA l'istanza già autenticata del sito
+// interaction-tracker.js
+// USA l'istanza Supabase globale del sito
 
 export async function trackInteraction({ action, poemId, weight = 1 }) {
   if (!poemId) return;
 
-  // 👇 usa la stessa istanza Supabase di app.js
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (!window.supabaseClient) {
+    console.error('[TRACK] supabaseClient non disponibile');
+    return;
+  }
+
+  const { data: { session } } = await window.supabaseClient.auth.getSession();
   if (!session) {
     console.warn('[TRACK] utente non loggato');
     return;
   }
 
-  const { error } = await supabaseClient
+  const { error } = await window.supabaseClient
     .from('user_interactions')
     .insert({
       user_id: session.user.id,
