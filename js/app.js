@@ -18,12 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
  
 
-// ========= 2. Stato Globale =========
-let allPoems = [];
-let currentRating = 0;
 
-// ========= 3. Esegui il resto del codice quando la pagina è pronta =========
-document.addEventListener('DOMContentLoaded', () => {
     // --- Selezione di tutti gli elementi HTML ---
     const elements = {
         poemsListContainer: document.querySelector('.poems-list'),
