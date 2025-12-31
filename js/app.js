@@ -1,10 +1,12 @@
 import { trackInteraction } from './ai-interactions-core.js';
 
 let supabaseClient = null;
+let allPoems = [];
+let currentRating = 0;
 
-// ========= 3. Esegui il resto del codice quando la pagina è pronta =========
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ✅ prende l’istanza globale
   supabaseClient = window.supabaseClient;
 
   if (!supabaseClient) {
@@ -12,9 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  console.log('✅ Supabase pronto', supabaseClient);
+  console.log('✅ Supabase pronto');
 
-
+ 
 
 // ========= 2. Stato Globale =========
 let allPoems = [];
