@@ -1,13 +1,20 @@
-
-
 import { trackInteraction } from './ai-interactions-core.js';
 
-// usa l’istanza globale già pronta
-const supabaseClient = window.supabaseClient;
+let supabaseClient = null;
 
-if (!supabaseClient) {
-  console.error('❌ Supabase non inizializzato');
-}
+// ========= 3. Esegui il resto del codice quando la pagina è pronta =========
+document.addEventListener('DOMContentLoaded', () => {
+
+  supabaseClient = window.supabaseClient;
+
+  if (!supabaseClient) {
+    console.error('❌ Supabase non inizializzato');
+    return;
+  }
+
+  console.log('✅ Supabase pronto', supabaseClient);
+
+
 
 // ========= 2. Stato Globale =========
 let allPoems = [];
