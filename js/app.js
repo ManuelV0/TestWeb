@@ -1,12 +1,13 @@
 
+
 import { trackInteraction } from './ai-interactions-core.js';
 
+// usa l’istanza globale già pronta
+const supabaseClient = window.supabaseClient;
 
-// ========= 1. Inizializzazione di Supabase =========
-
-
-// 🔥 RENDE L'ISTANZA CONDIVISA
-window.supabaseClient = supabaseClient;
+if (!supabaseClient) {
+  console.error('❌ Supabase non inizializzato');
+}
 
 // ========= 2. Stato Globale =========
 let allPoems = [];
