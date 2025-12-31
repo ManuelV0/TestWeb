@@ -1,19 +1,19 @@
-
 export async function trackInteraction({ action, poemId, weight = 1 }) {
   if (!poemId) return;
 
-  if (!window.supabaseClient) {
-    console.error('[TRACK] supabaseClient NON inizializzato');
+  const client = window.supabaseClient;
+  if (!client) {
+    console.error('[TRACK] supabaseClient assente');
     return;
   }
 
-  const { data: { session } } = await window.supabaseClient.auth.getSession();
-  if (!session) {
-    console.warn('[TRACK] utente non loggato');
-    return;
-  }
+  const { data: { session } } = await client.auth.getSession();
 
-  const { error } = await window.supabaseClient
+  console.log('[TRACK USER]', session?.user?.id);
+
+  if (!session) return;
+
+  const { error } = await client
     .from('user_interactions')
     .insert({
       user_id: session.user.id,
@@ -25,6 +25,6 @@ export async function trackInteraction({ action, poemId, weight = 1 }) {
   if (error) {
     console.error('[TRACK INSERT ERROR]', error);
   } else {
-    console.log('[TRACK OK]', action, poemId, weight);
+    console.log('[TRACK OK]', action, poemId);
   }
 }
