@@ -1,72 +1,18 @@
+// ❌ niente createClient qui
+const supabase = window.supabaseClient;
 
-/* =========================================================
-   CLASSIFICA INTELLIGENTE – CORE LOGIC
-   TheItalianPoetry
-========================================================= */
-
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-/* ================= CONFIG ================= */
-
-const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
-const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-/* ================= DOM ================= */
-
-const statusBox = document.getElementById('ai-status');
-const poemsList = document.getElementById('ai-poems-list');
-const emptyState = document.getElementById('ai-empty-state');
-
-/* ================= STATUS ================= */
-
-function setStatus(text) {
-  statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
-  statusBox.classList.remove('hidden');
+if (!supabase) {
+  throw new Error('Supabase non inizializzato');
 }
-
-function clearStatus() {
-  statusBox.innerHTML = '';
-  statusBox.classList.add('hidden');
-}
-
-/* ================= AUTH ================= */
 
 async function requireAuth() {
   const { data: { session } } = await supabase.auth.getSession();
-
   if (!session) {
     setStatus('Devi essere loggato per vedere la classifica intelligente.');
     throw new Error('NOT_AUTHENTICATED');
   }
-
   return session.user.id;
 }
-
-/* ================= RENDER ================= */
-
-function renderPoems(poems) {
-  poemsList.innerHTML = '';
-
-  poems.forEach(poem => {
-    const li = document.createElement('li');
-    li.className = 'ai-poem-card';
-    li.dataset.poemId = poem.id;
-
-    li.innerHTML = `
-      <h3>${poem.title}</h3>
-      <p class="author">di ${poem.author_name}</p>
-      <p class="preview">${(poem.content || '').slice(0, 160)}…</p>
-      <span class="score">Affinità: ${Number(poem.affinity_score).toFixed(2)}</span>
-    `;
-
-    poemsList.appendChild(li);
-  });
-}
-
-/* ================= CORE LOAD ================= */
 
 async function loadIntelligentRanking() {
   try {
@@ -75,31 +21,20 @@ async function loadIntelligentRanking() {
     await requireAuth();
 
     const { data, error } = await supabase.rpc('get_intelligent_poems');
-
     if (error) throw error;
 
     clearStatus();
 
     if (!data || data.length === 0) {
       emptyState.classList.remove('hidden');
-      emptyState.setAttribute('aria-hidden', 'false');
       return;
     }
-
-    emptyState.classList.add('hidden');
-    emptyState.setAttribute('aria-hidden', 'true');
 
     renderPoems(data);
 
   } catch (err) {
     console.error('[AI CLASSIFICA ERROR]', err);
-
-    if (err.message !== 'NOT_AUTHENTICATED') {
-      setStatus('Errore nel caricamento della classifica intelligente.');
-    }
   }
 }
-
-/* ================= INIT ================= */
 
 document.addEventListener('DOMContentLoaded', loadIntelligentRanking);
