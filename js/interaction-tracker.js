@@ -1,13 +1,17 @@
 
-import { supabaseClient } from './app.js';
-
 export async function trackInteraction({ action, poemId, weight = 1 }) {
   if (!poemId) return;
 
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const client = window.supabaseClient;
+  if (!client) {
+    console.error('[TRACK] supabaseClient assente');
+    return;
+  }
+
+  const { data: { session } } = await client.auth.getSession();
   if (!session) return;
 
-  const { error } = await supabaseClient
+  const { error } = await client
     .from('user_interactions')
     .insert({
       user_id: session.user.id,
@@ -20,8 +24,16 @@ export async function trackInteraction({ action, poemId, weight = 1 }) {
     console.error('[TRACK ERROR]', error);
   } else {
     console.log('[TRACK OK]', action, poemId, weight);
+
+    // 🔥 EVENTO GLOBALE
+    window.dispatchEvent(
+      new CustomEvent('interaction-updated', {
+        detail: { action, poemId, weight }
+      })
+    );
   }
 }
 
+// helper
 export const trackVote = (poemId) =>
   trackInteraction({ action: 'vote', poemId, weight: 5 });
