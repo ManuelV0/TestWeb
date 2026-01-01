@@ -1,8 +1,5 @@
 import { trackInteraction } from './ai-interactions-core.js';
 
-
-import { trackInteraction } from './ai-interactions-core.js';
-
 /* =========================================
    LISTENER INTERAZIONI DAL WIDGET (IFRAME)
 ========================================= */
@@ -19,6 +16,9 @@ window.addEventListener('message', async (event) => {
   window.dispatchEvent(new Event('interaction-updated'));
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+  // TUTTO il tuo codice enorme qui
 
 let supabaseClient = null;
 let allPoems = [];
@@ -1034,4 +1034,5 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPoems();
         });
     }
+});
 });
