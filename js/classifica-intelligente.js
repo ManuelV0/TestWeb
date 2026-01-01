@@ -1,5 +1,6 @@
+
 /* =========================================================
-   CLASSIFICA INTELLIGENTE – FULL UX VERSION
+   CLASSIFICA INTELLIGENTE – FULL UX VERSION (FINAL)
 ========================================================= */
 
 const supabase = window.supabaseClient;
@@ -16,10 +17,13 @@ const emptyState = document.getElementById('ai-empty-state');
 const SEEN_KEY = 'ai_seen_poems';
 const AB_KEY = 'ai_ab_variant';
 
-const getSeen = () => new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || '[]'));
-const saveSeen = set => localStorage.setItem(SEEN_KEY, JSON.stringify([...set]));
+const getSeen = () =>
+  new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || '[]'));
 
-// 🧪 A/B test (A = spiegazione, B = no)
+const saveSeen = set =>
+  localStorage.setItem(SEEN_KEY, JSON.stringify([...set]));
+
+/* 🧪 A/B test (A = con spiegazione, B = senza) */
 const AB_VARIANT =
   localStorage.getItem(AB_KEY) ||
   (Math.random() > 0.5 ? 'A' : 'B');
@@ -45,7 +49,7 @@ function clearStatus() {
 async function requireAuth() {
   const { data } = await supabase.auth.getSession();
   if (!data?.session) {
-    setStatus('❌ Devi essere loggato.');
+    setStatus('❌ Devi essere loggato per vedere la classifica.');
     throw new Error('NOT_AUTH');
   }
 }
@@ -53,10 +57,12 @@ async function requireAuth() {
 /* ================= RENDER ================= */
 
 function renderPoems(poems) {
-  poemsList.innerHTML = '';
+  if (!poemsList) return;
 
   const seen = getSeen();
   const newSeen = new Set(poems.map(p => String(p.id)));
+
+  poemsList.innerHTML = '';
 
   poems.forEach((poem, index) => {
     const id = String(poem.id);
@@ -77,18 +83,20 @@ function renderPoems(poems) {
       </p>
 
       <div class="ai-meta">
-        <span class="score">Affinità ${Number(poem.affinity_score).toFixed(2)}</span>
+        <span class="score">
+          Affinità ${Number(poem.affinity_score).toFixed(2)}
+        </span>
 
         ${isNew ? `<span class="badge-new">✨ Nuova per te</span>` : ''}
-
-        ${
-          AB_VARIANT === 'A'
-            ? `<p class="ai-reason">
-                 Suggerita perché simile alle poesie che leggi spesso
-               </p>`
-            : ''
-        }
       </div>
+
+      ${
+        AB_VARIANT === 'A' && poem.affinity_score >= 0.6
+          ? `<p class="ai-reason">
+               Suggerita perché simile alle poesie che leggi più spesso
+             </p>`
+          : ''
+      }
     `;
 
     poemsList.appendChild(li);
@@ -109,18 +117,19 @@ async function loadIntelligentRanking() {
 
     clearStatus();
 
-    if (!data?.length) {
+    if (!data || data.length === 0) {
       emptyState?.classList.remove('hidden');
       return;
     }
 
     emptyState?.classList.add('hidden');
-    animateReorder(data);
+
+    animateReorder();
     renderPoems(data);
 
-  } catch (e) {
-    console.error(e);
-    setStatus('Errore nel caricamento.');
+  } catch (err) {
+    console.error('[AI CLASSIFICA ERROR]', err);
+    setStatus('❌ Errore nel caricamento della classifica intelligente.');
   }
 }
 
@@ -128,16 +137,16 @@ async function loadIntelligentRanking() {
 
 function animateReorder() {
   poemsList.classList.remove('animate');
-  void poemsList.offsetWidth; // reflow
+  void poemsList.offsetWidth; // force reflow
   poemsList.classList.add('animate');
 }
 
 /* ================= AUTO REFRESH ================= */
 
-let t;
+let refreshTimeout;
 window.addEventListener('interaction-updated', () => {
-  clearTimeout(t);
-  t = setTimeout(loadIntelligentRanking, 400);
+  clearTimeout(refreshTimeout);
+  refreshTimeout = setTimeout(loadIntelligentRanking, 400);
 });
 
 /* ================= INIT ================= */
