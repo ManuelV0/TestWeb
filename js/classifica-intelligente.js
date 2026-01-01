@@ -1,17 +1,17 @@
 /* =========================================================
-   CLASSIFICA INTELLIGENTE – CORE LOGIC (DEBUG MODE)
+   CLASSIFICA INTELLIGENTE – CORE LOGIC (FIXED)
    TheItalianPoetry
 ========================================================= */
 
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+/* ================= SUPABASE ================= */
 
-/* ================= CONFIG ================= */
+// 🔥 USA L’ISTANZA GLOBALE (OBBLIGATORIO)
+const supabase = window.supabaseClient;
 
-const SUPABASE_URL = 'https://djikypgmchywybjxbwar.supabase.co';
-const SUPABASE_ANON_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q';
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+if (!supabase) {
+  console.error('[AI CLASSIFICA] supabaseClient non inizializzato');
+  throw new Error('Supabase client mancante');
+}
 
 /* ================= DOM ================= */
 
@@ -31,7 +31,7 @@ function clearStatus() {
   statusBox.classList.add('hidden');
 }
 
-/* ================= DEBUG VISIVO ================= */
+/* ================= DEBUG ================= */
 
 function debug(message, data = null) {
   statusBox.classList.remove('hidden');
@@ -59,7 +59,7 @@ function debug(message, data = null) {
 async function requireAuth() {
   const { data, error } = await supabase.auth.getSession();
 
-  debug('AUTH CHECK', { data, error });
+  debug('AUTH CHECK', { session: data?.session });
 
   if (error) throw error;
 
@@ -83,16 +83,18 @@ function renderPoems(poems) {
 
     li.innerHTML = `
       <h3>${poem.title}</h3>
-      <p class="author">di ${poem.author_name}</p>
+      <p class="author">di ${poem.author_name || 'Anonimo'}</p>
       <p class="preview">${(poem.content || '').slice(0, 160)}…</p>
-      <span class="score">Affinità: ${Number(poem.affinity_score).toFixed(2)}</span>
+      <span class="score">
+        Affinità: ${Number(poem.affinity_score).toFixed(2)}
+      </span>
     `;
 
     poemsList.appendChild(li);
   });
 }
 
-/* ================= CORE LOAD ================= */
+/* ================= CORE ================= */
 
 async function loadIntelligentRanking() {
   try {
@@ -102,7 +104,9 @@ async function loadIntelligentRanking() {
     const userId = await requireAuth();
     debug('USER AUTHENTICATED', { userId });
 
+    // ⚠️ RPC USA LA SESSIONE CORRENTE
     const { data, error } = await supabase.rpc('get_intelligent_poems');
+
     debug('RPC RESPONSE', { data, error });
 
     if (error) throw error;
@@ -112,13 +116,10 @@ async function loadIntelligentRanking() {
     if (!data || data.length === 0) {
       debug('EMPTY RESULT');
       emptyState.classList.remove('hidden');
-      emptyState.setAttribute('aria-hidden', 'false');
       return;
     }
 
     emptyState.classList.add('hidden');
-    emptyState.setAttribute('aria-hidden', 'true');
-
     renderPoems(data);
 
   } catch (err) {
