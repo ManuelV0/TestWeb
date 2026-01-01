@@ -104,6 +104,11 @@
   <script>
   
     document.getElementById('year').textContent = new Date().getFullYear();
+    
+    window.addEventListener('interaction-updated', () => {
+  console.log('[AI RANKING] refresh triggered');
+  loadIntelligentRanking();
+});
   </script>
 
 </body>
