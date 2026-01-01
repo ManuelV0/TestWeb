@@ -108,6 +108,12 @@ async function loadIntelligentRanking() {
   }
 }
 
+let refreshTimeout;
+window.addEventListener('interaction-updated', () => {
+  clearTimeout(refreshTimeout);
+  refreshTimeout = setTimeout(loadIntelligentRanking, 400);
+});
+
 /* ================= INIT ================= */
 
 document.addEventListener('DOMContentLoaded', loadIntelligentRanking);
