@@ -1,498 +1,779 @@
+/* =========================================================
+   CLASSIFICA INTELLIGENTE – GREEN PREMIUM UX (REVISIONE 2.0)
+   Compatibilità cross-platform, theming dinamico, accessibilità,
+   container queries, dark mode, motion-safe, safe-area aware.
+========================================================= */
 
-@layer tokens {
+/* ---------- RESET & BASE TYPOGRAPHY ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--ai-font-body, "Open Sans", "Helvetica Neue", Arial, sans-serif);
+  font-feature-settings: "liga" 1, "kern" 1;
+  background: var(--ai-page-bg);
+  color: var(--ai-neutral-700);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  transition:
+    background 0.4s ease,
+    color 0.3s ease;
+}
+
+main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 4vw, 48px);
+}
+
+img, svg {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- TOKEN DESIGN & THEME ---------- */
+:root {
+  color-scheme: light;
+  --ai-hue: 142;
+  --ai-green-50: #f1fdf6;
+  --ai-green-100: #d8f8e6;
+  --ai-green-200: #b7f0d2;
+  --ai-green-300: #86e1b3;
+  --ai-green-500: #4fbe7f;
+  --ai-green-600: #3aa06b;
+  --ai-green-700: #2f7d5c;
+  --ai-green-900: #143624;
+
+  --ai-neutral-0: #ffffff;
+  --ai-neutral-20: #f7fcf8;
+  --ai-neutral-200: #c5d8cc;
+  --ai-neutral-500: #4d6254;
+  --ai-neutral-700: #1f2f24;
+
+  --ai-page-bg: radial-gradient(120% 120% at 15% 20%, #ffffff 0%, #eafff2 45%, #daf5e6 100%);
+  --ai-surface: linear-gradient(135deg, #ffffff 0%, #f4fff8 55%, #e8fbf1 100%);
+  --ai-surface-muted: linear-gradient(135deg, #ffffff 0%, #ebfff4 60%, #dff7ec 100%);
+  --ai-surface-strong: linear-gradient(140deg, #ffffff 0%, #e0ffef 50%, #d2f9e4 100%);
+
+  --ai-border-subtle: rgba(79, 190, 127, 0.18);
+  --ai-border-strong: rgba(58, 160, 107, 0.46);
+
+  --ai-shadow-card: 0 16px 50px -24px rgba(24, 71, 48, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  --ai-shadow-card-hover: 0 24px 70px -26px rgba(27, 92, 58, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+
+  --ai-radius-md: 14px;
+  --ai-radius-lg: 20px;
+  --ai-radius-xl: 24px;
+  --ai-radius-pill: 999px;
+
+  --ai-font-title: "Montserrat", "Poppins", system-ui, -apple-system, sans-serif;
+  --ai-font-body: "Open Sans", "Inter", system-ui, -apple-system, sans-serif;
+
+  --ai-transition-card: 0.45s cubic-bezier(.22, .61, .36, 1);
+  --ai-transition-soft: 0.32s ease;
+  --ai-transition-fast: 0.22s ease;
+}
+
+:root[data-theme="dark"],
+.ai-theme-dark {
+  color-scheme: dark;
+  --ai-page-bg: radial-gradient(120% 120% at 15% 20%, #121b14 0%, #08130d 60%, #050d08 100%);
+  --ai-surface: linear-gradient(150deg, #102317 0%, #08150f 55%, #07110c 100%);
+  --ai-surface-muted: linear-gradient(150deg, #132b1c 0%, #0b2015 55%, #081910 100%);
+  --ai-surface-strong: linear-gradient(150deg, #183724 0%, #0d2318 65%, #08180f 100%);
+
+  --ai-neutral-0: rgba(20, 35, 27, 0.82);
+  --ai-neutral-20: #0c1911;
+  --ai-neutral-200: #6ea189;
+  --ai-neutral-500: #c5e5d3;
+  --ai-neutral-700: #f6fff9;
+
+  --ai-border-subtle: rgba(111, 237, 175, 0.28);
+  --ai-border-strong: rgba(132, 255, 191, 0.55);
+
+  --ai-shadow-card: 0 26px 65px -28px rgba(3, 29, 18, 0.9),
+    inset 0 0 0 1px rgba(143, 243, 194, 0.16);
+  --ai-shadow-card-hover: 0 32px 80px -28px rgba(21, 93, 56, 0.75),
+    inset 0 0 0 1px rgba(143, 243, 194, 0.32);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ai-page-bg: radial-gradient(120% 120% at 15% 20%, #121b14 0%, #08130d 60%, #050d08 100%);
+    --ai-surface: linear-gradient(150deg, #102317 0%, #08150f 55%, #07110c 100%);
+    --ai-surface-muted: linear-gradient(150deg, #132b1c 0%, #0b2015 55%, #081910 100%);
+  }
+}
+
+/* ---------- LAYOUT WRAPPERS ---------- */
+.page-container {
+  width: min(1120px, 92vw);
+  margin: clamp(24px, 6vw, 60px) auto clamp(32px, 8vw, 80px);
+  display: grid;
+  gap: clamp(24px, 4.5vw, 56px);
+}
+
+section {
+  background: transparent;
+}
+
+/* ---------- HEADER ---------- */
+.main-header {
+  background: var(--ai-surface-muted);
+  border-bottom: 1px solid var(--ai-border-subtle);
+  backdrop-filter: blur(18px);
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+}
+
+.header-inner {
+  width: min(1120px, 92vw);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: clamp(14px, 2.5vw, 20px);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ai-font-title);
+  font-weight: 700;
+  font-size: clamp(1.02rem, 2.4vw, 1.28rem);
+  text-decoration: none;
+  color: var(--ai-neutral-700);
+  letter-spacing: 0.38px;
+  transition: color var(--ai-transition-fast);
+}
+
+.logo i {
+  font-size: 1.25em;
+  color: var(--ai-green-600);
+  transition: transform var(--ai-transition-fast);
+}
+
+.logo:focus-visible {
+  outline: 3px solid rgba(79, 190, 127, 0.65);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .logo:hover {
+    color: var(--ai-green-700);
+  }
+  .logo:hover i {
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- INTRO SECTION ---------- */
+.intro-section {
+  display: grid;
+  gap: clamp(12px, 2vw, 18px);
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--ai-radius-xl);
+  background: var(--ai-surface);
+  box-shadow: var(--ai-shadow-card);
+  border: 1px solid var(--ai-border-subtle);
+  isolation: isolate;
+}
+
+.intro-section h1 {
+  margin: 0;
+  font-family: var(--ai-font-title);
+  font-size: clamp(2.14rem, 5vw, 2.84rem);
+  color: var(--ai-green-700);
+  letter-spacing: 0.45px;
+  text-wrap: balance;
+}
+
+.intro-section p {
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.18rem);
+  color: var(--ai-neutral-500);
+  max-width: 60ch;
+}
+
+/* ---------- STATUS SECTION ---------- */
+.status-section {
+  padding: clamp(16px, 3vw, 20px);
+  border-radius: var(--ai-radius-lg);
+  background: var(--ai-surface-muted);
+  border: 1px dashed rgba(79, 190, 127, 0.28);
+  color: var(--ai-green-700);
+  font-weight: 600;
+  letter-spacing: 0.24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 3vw, 24px);
+}
+
+.loading-text {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+}
+
+.loading-text::before {
+  content: "";
+  inline-size: 22px;
+  block-size: 22px;
+  border-radius: 50%;
+  border: 3px solid rgba(79, 190, 127, 0.25);
+  border-top-color: var(--ai-green-500);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- FEED SECTION ---------- */
+.ai-feed-section {
+  display: block;
+  position: relative;
+}
+
+.ai-poems-list {
+  display: grid;
+  gap: clamp(20px, 2.4vw, 36px);
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  padding: clamp(8px, 1.4vw, 18px);
+  margin: 0;
+  list-style: none;
+  container-type: inline-size;
+  container-name: ai-poems-list;
+}
+
+.ai-poems-list:is(ol, ul) {
+  padding-inline-start: 0;
+}
+
+/* ---------- CARD COMPONENT ---------- */
+.ai-poem-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.4vw, 20px);
+  padding: clamp(22px, 3vw, 34px);
+  border-radius: var(--ai-radius-xl);
+  background: var(--ai-surface);
+  border: 1px solid var(--ai-border-subtle);
+  box-shadow: var(--ai-shadow-card);
+  color: var(--ai-neutral-700);
+  transition:
+    transform var(--ai-transition-card),
+    box-shadow var(--ai-transition-soft),
+    background var(--ai-transition-soft),
+    border-color var(--ai-transition-soft),
+    color var(--ai-transition-soft);
+  transform-style: preserve-3d;
+  overflow: clip;
+  isolation: isolate;
+}
+
+/* Glow dinamico */
+.ai-poem-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 120% at 90% 0%, rgba(79, 190, 127, 0.22), transparent 55%),
+    linear-gradient(135deg, rgba(79, 190, 127, 0.18), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity var(--ai-transition-soft), transform var(--ai-transition-soft);
+  pointer-events: none;
+}
+
+/* Bordo attivo */
+.ai-poem-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(79, 190, 127, 0.45), rgba(79, 190, 127, 0.08)) border-box;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity var(--ai-transition-soft);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .ai-poem-card:hover {
+    transform: translate3d(0, -10px, 0) scale(1.012);
+    box-shadow: var(--ai-shadow-card-hover);
+    border-color: var(--ai-border-strong);
+  }
+  .ai-poem-card:hover::after {
+    opacity: 1;
+    transform: translate3d(6px, -6px, 0);
+  }
+  .ai-poem-card:hover::before {
+    opacity: 0.85;
+  }
+}
+
+.ai-poem-card:focus-within {
+  border-color: var(--ai-border-strong);
+  box-shadow: var(--ai-shadow-card-hover);
+}
+
+.ai-poem-card:focus-visible {
+  outline: 3px solid rgba(79, 190, 127, 0.65);
+  outline-offset: 4px;
+}
+
+/* ---------- CARD CONTENT ---------- */
+.ai-poem-card h3 {
+  font-family: var(--ai-font-title);
+  font-size: clamp(1.28rem, 2.5vw, 1.62rem);
+  line-height: 1.25;
+  margin: 0;
+  color: var(--ai-green-700);
+  letter-spacing: 0.24px;
+  text-wrap: balance;
+}
+
+.ai-poem-card .author {
+  font-size: clamp(0.92rem, 1.6vw, 1.04rem);
+  font-weight: 600;
+  color: var(--ai-neutral-500);
+  letter-spacing: 0.15px;
+  margin-block-end: 6px;
+}
+
+.ai-poem-card .preview {
+  font-size: clamp(0.98rem, 1.85vw, 1.08rem);
+  line-height: 1.68;
+  color: var(--ai-neutral-700);
+  opacity: 0.95;
+  text-wrap: pretty;
+}
+
+/* ---------- META ---------- */
+.ai-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: auto;
+}
+
+@container ai-poems-list (max-width: 360px) {
+  .ai-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* ---------- SCORE ---------- */
+.score {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.75rem;
+  border-radius: var(--ai-radius-pill);
+  background: rgba(79, 190, 127, 0.12);
+  color: var(--ai-green-700);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.38px;
+  text-transform: uppercase;
+  box-shadow:
+    inset 0 0 0 1px rgba(79, 190, 127, 0.18),
+    0 6px 16px -10px rgba(58, 160, 107, 0.45);
+  transition: background var(--ai-transition-soft), color var(--ai-transition-soft);
+  --score-value: 0.82;
+}
+
+.score::before {
+  content: "";
+  inline-size: 44px;
+  block-size: 6px;
+  border-radius: var(--ai-radius-pill);
+  background:
+    linear-gradient(90deg, rgba(58, 160, 107, 0.85), rgba(79, 190, 127, 0.55)) no-repeat;
+  background-size: calc(var(--score-value) * 100%) 100%;
+  background-color: rgba(79, 190, 127, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(79, 190, 127, 0.16);
+}
+
+.score::after {
+  content: attr(data-score);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.42px;
+}
+
+/* ---------- NEW CARD EMPHASIS ---------- */
+.ai-poem-card.is-new {
+  background: var(--ai-surface-strong);
+  border-color: rgba(79, 190, 127, 0.45);
+  --ai-badge-shadow: 0 6px 18px rgba(79, 190, 127, 0.35);
+}
+
+.ai-poem-card.is-new::after {
+  opacity: 1;
+}
+
+.ai-poem-card.is-new::before {
+  opacity: 0.9;
+}
+
+.ai-poem-card.is-new .badge-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #12442d;
+  background: linear-gradient(135deg, #bbf3d5 0%, #77e5b3 55%, #55d89b 100%);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--ai-radius-pill);
+  white-space: nowrap;
+  box-shadow: var(--ai-badge-shadow, 0 6px 16px rgba(79, 190, 127, 0.35));
+  text-transform: uppercase;
+  letter-spacing: 0.45px;
+  isolation: isolate;
+}
+
+.ai-poem-card.is-new .badge-new::before {
+  content: "🧠";
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ai-poem-card.is-new .badge-new {
+    animation: badgePulse 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-2px) scale(1.04);
+  }
+}
+
+/* ---------- AI INSIGHT ---------- */
+.ai-reason {
+  margin-top: 12px;
+  font-size: clamp(0.78rem, 1.4vw, 0.9rem);
+  line-height: 1.55;
+  color: var(--ai-neutral-500);
+  background: rgba(156, 229, 193, 0.42);
+  border-left: 3px solid var(--ai-green-500);
+  padding: 10px 12px 10px 16px;
+  border-radius: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.ai-reason::before {
+  content: "Insight IA";
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.38px;
+  text-transform: uppercase;
+  color: var(--ai-green-600);
+}
+
+/* ---------- ANIMATED REORDER ---------- */
+.ai-poems-list.animate .ai-poem-card {
+  animation: reorderFade 0.52s var(--ai-transition-card) both;
+  animation-delay: calc(var(--ai-card-index, 0) * 35ms);
+}
+
+@keyframes reorderFade {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+  45% {
+    opacity: 1;
+    transform: translate3d(0, -4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ---------- EMPTY STATE ---------- */
+.empty-state {
+  padding: clamp(24px, 4.2vw, 36px);
+  border-radius: var(--ai-radius-xl);
+  background: var(--ai-surface-muted);
+  border: 1px dashed rgba(79, 190, 127, 0.32);
+  color: var(--ai-neutral-500);
+  font-size: clamp(1rem, 2.1vw, 1.18rem);
+  text-align: center;
+  box-shadow: 0 18px 40px -24px rgba(24, 71, 48, 0.45);
+}
+
+.empty-state p {
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* ---------- FOOTER ---------- */
+.main-footer {
+  padding-block: clamp(24px, 4vw, 34px);
+  background: var(--ai-neutral-20);
+  border-top: 1px solid var(--ai-border-subtle);
+  display: flex;
+  justify-content: center;
+  font-size: clamp(0.86rem, 1.8vw, 0.95rem);
+  color: var(--ai-neutral-500);
+}
+
+/* ---------- RESPONSIVE & PLATFORM TWEAKS ---------- */
+@media (max-width: 960px) {
+  .header-inner {
+    padding-block: clamp(12px, 3vw, 18px);
+  }
+
+  .page-container {
+    width: min(940px, 94vw);
+    margin-inline: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    width: min(720px, 92vw);
+    gap: clamp(20px, 6vw, 32px);
+  }
+
+  .intro-section {
+    padding: clamp(22px, 6vw, 34px);
+  }
+
+  .status-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+@media screen and (max-width: 680px) {
   :root {
-    color-scheme: light;
-    --ai-hue: 142;
-    --ai-green-50: #f1fdf6;
-    --ai-green-100: #d8f8e6;
-    --ai-green-200: #b7f0d2;
-    --ai-green-300: #86e1b3;
-    --ai-green-500: #4fbe7f;
-    --ai-green-600: #3aa06b;
-    --ai-green-700: #2f7d5c;
-    --ai-green-900: #143624;
-
-    --ai-neutral-0: #ffffff;
-    --ai-neutral-30: #f5fbf7;
-    --ai-neutral-200: #c4d8cc;
-    --ai-neutral-500: #4d6254;
-    --ai-neutral-700: #1f2f24;
-
-    --ai-border-subtle: rgba(79, 190, 127, 0.22);
-    --ai-border-strong: rgba(58, 160, 107, 0.48);
-
-    --ai-surface: linear-gradient(135deg, #ffffff 0%, #f4fff8 55%, #e8fbf1 100%);
-    --ai-surface-muted: linear-gradient(135deg, #ffffff 0%, #ebfff4 60%, #dff7ec 100%);
-    --ai-surface-strong: linear-gradient(140deg, #ffffff 0%, #e0ffef 50%, #d2f9e4 100%);
-
-    --ai-shadow-card: 0 16px 50px -24px rgba(24, 71, 48, 0.65),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
-    --ai-shadow-card-hover: 0 24px 70px -26px rgba(27, 92, 58, 0.65),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.75);
-
-    --ai-radius-lg: 20px;
-    --ai-radius-xl: 24px;
-    --ai-radius-pill: 999px;
-
-    --ai-font-title: "Montserrat", "Poppins", system-ui, -apple-system, sans-serif;
-    --ai-font-body: "Inter", "Montserrat", system-ui, -apple-system, sans-serif;
-
-    --ai-transition-card: 0.45s cubic-bezier(.22, .61, .36, 1);
-    --ai-transition-soft: 0.32s ease;
-    --ai-focus-ring: 3px solid rgba(79, 190, 127, 0.65);
-
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --safe-left: env(safe-area-inset-left, 0px);
   }
 
-  :root[data-theme="dark"],
-  .ai-theme-dark {
-    color-scheme: dark;
-    --ai-surface: linear-gradient(150deg, #102317 0%, #08150f 55%, #07110c 100%);
-    --ai-surface-muted: linear-gradient(150deg, #132b1c 0%, #0b2015 55%, #081910 100%);
-    --ai-surface-strong: linear-gradient(150deg, #183724 0%, #0d2318 65%, #08180f 100%);
-
-    --ai-neutral-0: rgba(20, 35, 27, 0.75);
-    --ai-neutral-30: #0d1c13;
-    --ai-neutral-200: #6ea189;
-    --ai-neutral-500: #bdd9c7;
-    --ai-neutral-700: #f6fff9;
-
-    --ai-border-subtle: rgba(111, 237, 175, 0.28);
-    --ai-border-strong: rgba(132, 255, 191, 0.55);
-
-    --ai-shadow-card: 0 26px 65px -28px rgba(3, 29, 18, 0.9),
-      inset 0 0 0 1px rgba(143, 243, 194, 0.16);
-    --ai-shadow-card-hover: 0 32px 80px -28px rgba(21, 93, 56, 0.75),
-      inset 0 0 0 1px rgba(143, 243, 194, 0.32);
+  .main-header {
+    position: sticky;
+    top: 0;
+    padding-inline: clamp(16px, 6vw, 24px);
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      color-scheme: dark;
-      --ai-surface: linear-gradient(150deg, #102317 0%, #08150f 55%, #07110c 100%);
-      --ai-surface-muted: linear-gradient(150deg, #132b1c 0%, #0b2015 55%, #081910 100%);
-      --ai-surface-strong: linear-gradient(150deg, #183724 0%, #0d2318 65%, #08180f 100%);
-    }
+  .header-inner {
+    width: 100%;
   }
-}
 
-@layer components {
+  main {
+    padding-inline: clamp(18px, 6vw, 30px);
+  }
+
+  .page-container {
+    width: 100%;
+    margin: calc(var(--safe-top) + 20px) auto calc(var(--safe-bottom) + 32px);
+  }
+
   .ai-poems-list {
-    display: grid;
-    gap: clamp(20px, 2.4vw, 34px);
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-    padding: clamp(8px, 1.4vw, 18px);
-    margin: 0;
-    list-style: none;
-    container-type: inline-size;
-    container-name: ai-poems-list;
-  }
-
-  .ai-poems-list:is(ol, ul) {
-    padding-inline-start: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 5vw, 24px);
+    padding: 0;
   }
 
   .ai-poem-card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(12px, 1.4vw, 20px);
-    padding: clamp(22px, 3vw, 34px);
-    border-radius: var(--ai-radius-xl);
-    background: var(--ai-surface);
-    border: 1px solid var(--ai-border-subtle);
-    box-shadow: var(--ai-shadow-card);
-    font-family: var(--ai-font-body);
-    color: var(--ai-neutral-700);
-    isolation: isolate;
-    overflow: clip;
-    transform-style: preserve-3d;
-    transition:
-      transform var(--ai-transition-card),
-      box-shadow var(--ai-transition-soft),
-      background var(--ai-transition-soft),
-      border-color var(--ai-transition-soft),
-      color var(--ai-transition-soft);
+    border-radius: clamp(16px, 6vw, 24px);
+    padding: clamp(20px, 6vw, 30px);
+    box-shadow:
+      0 16px 34px rgba(58, 160, 107, 0.25),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    transform-origin: center;
   }
 
   .ai-poem-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(120% 120% at 90% 0%, rgba(79, 190, 127, 0.22), transparent 55%),
-      linear-gradient(135deg, rgba(79, 190, 127, 0.18), transparent 70%);
-    mix-blend-mode: screen;
-    opacity: 0;
-    transition: opacity var(--ai-transition-soft), transform var(--ai-transition-soft);
-    pointer-events: none;
-  }
-
-  .ai-poem-card::before {
-    content: "";
-    position: absolute;
-    inset: 1px;
-    border-radius: inherit;
-    border: 1px solid transparent;
-    background: linear-gradient(135deg, rgba(79, 190, 127, 0.45), rgba(79, 190, 127, 0.08)) border-box;
-    mask:
-      linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    -webkit-mask:
-      linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    opacity: 0;
-    transition: opacity var(--ai-transition-soft);
-    pointer-events: none;
-  }
-
-  @media (hover: hover) {
-    .ai-poem-card:hover {
-      transform: translate3d(0, -10px, 0) scale(1.012);
-      box-shadow: var(--ai-shadow-card-hover);
-      border-color: var(--ai-border-strong);
-    }
-
-    .ai-poem-card:hover::after {
-      opacity: 1;
-      transform: translate3d(6px, -6px, 0);
-    }
-
-    .ai-poem-card:hover::before {
-      opacity: 0.85;
-    }
-  }
-
-  .ai-poem-card:focus-within {
-    border-color: var(--ai-border-strong);
-    box-shadow: var(--ai-shadow-card-hover);
-  }
-
-  .ai-poem-card:focus-visible {
-    outline: var(--ai-focus-ring);
-    outline-offset: 4px;
+    background-size: 140% 140%;
+    opacity: 0.12;
   }
 
   .ai-poem-card h3 {
-    font-family: var(--ai-font-title);
-    font-size: clamp(1.28rem, 2.5vw, 1.62rem);
+    font-size: clamp(1.16rem, 4.8vw, 1.38rem);
     line-height: 1.25;
-    margin: 0;
-    color: var(--ai-green-700);
-    letter-spacing: 0.24px;
-    text-wrap: balance;
   }
 
   .ai-poem-card .author {
-    font-size: clamp(0.92rem, 1.6vw, 1.02rem);
-    font-weight: 600;
-    color: var(--ai-neutral-500);
-    letter-spacing: 0.15px;
+    font-size: clamp(0.9rem, 3.6vw, 1rem);
+    margin-bottom: 8px;
   }
 
   .ai-poem-card .preview {
-    font-size: clamp(0.98rem, 1.85vw, 1.08rem);
+    font-size: clamp(0.98rem, 4.1vw, 1.08rem);
     line-height: 1.68;
-    color: var(--ai-neutral-700);
-    opacity: 0.95;
-    text-wrap: pretty;
   }
 
   .ai-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    margin-top: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 20px;
   }
 
-  @container ai-poems-list (max-width: 360px) {
-    .ai-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
+  .ai-meta > * {
+    width: 100%;
   }
 
   .score {
-    position: relative;
-    display: inline-flex;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.35rem 0.85rem 0.35rem 0.75rem;
-    border-radius: var(--ai-radius-pill);
-    background: rgba(79, 190, 127, 0.12);
-    color: var(--ai-green-700);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.38px;
-    text-transform: uppercase;
-    box-shadow: inset 0 0 0 1px rgba(79, 190, 127, 0.18),
-      0 6px 16px -10px rgba(58, 160, 107, 0.45);
-    transition: background var(--ai-transition-soft), color var(--ai-transition-soft);
-    --score-value: 0.82;
+    font-size: clamp(0.86rem, 3.4vw, 0.98rem);
+    padding: 8px 0;
   }
 
-  .score::before {
-    content: "";
-    inline-size: 44px;
-    block-size: 6px;
-    border-radius: var(--ai-radius-pill);
-    background:
-      linear-gradient(90deg, rgba(58, 160, 107, 0.85), rgba(79, 190, 127, 0.55))
-      no-repeat;
-    background-size: calc(var(--score-value) * 100%) 100%;
-    background-color: rgba(79, 190, 127, 0.18);
-    box-shadow: inset 0 0 0 1px rgba(79, 190, 127, 0.16);
-  }
-
-  .score::after {
-    content: attr(data-score);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.42px;
-  }
-
-  .ai-poem-card.is-new {
-    background: var(--ai-surface-strong);
-    border-color: rgba(79, 190, 127, 0.45);
-    --ai-badge-shadow: 0 6px 18px rgba(79, 190, 127, 0.35);
-  }
-
-  .ai-poem-card.is-new::after {
-    opacity: 1;
-  }
-
-  .ai-poem-card.is-new::before {
-    opacity: 0.9;
-  }
-
-  .ai-poem-card.is-new .badge-new {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #12442d;
-    background: linear-gradient(135deg, #bbf3d5 0%, #77e5b3 55%, #55d89b 100%);
-    padding: 0.3rem 0.75rem;
-    border-radius: var(--ai-radius-pill);
-    white-space: nowrap;
-    box-shadow: var(--ai-badge-shadow, 0 6px 16px rgba(79, 190, 127, 0.35));
-    text-transform: uppercase;
-    letter-spacing: 0.45px;
-    position: relative;
-    isolation: isolate;
-  }
-
-  .ai-poem-card.is-new .badge-new::before {
-    content: "🧠";
-    font-size: 1rem;
-    opacity: 0.8;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .ai-poem-card.is-new .badge-new {
-      animation: badgePulse 2.4s ease-in-out infinite;
-    }
-  }
-
-  @keyframes badgePulse {
-    0%, 100% {
-      transform: translateY(0) scale(1);
-    }
-    40% {
-      transform: translateY(-2px) scale(1.04);
-    }
+  .badge-new {
+    align-self: flex-start;
+    font-size: clamp(0.78rem, 3.2vw, 0.9rem);
+    padding: 0.36rem 0.9rem;
+    box-shadow: 0 6px 16px rgba(79, 190, 127, 0.32);
   }
 
   .ai-reason {
-    margin-top: 12px;
-    font-size: clamp(0.78rem, 1.4vw, 0.9rem);
-    line-height: 1.55;
-    color: var(--ai-neutral-500);
-    background: rgba(156, 229, 193, 0.42);
-    border-left: 3px solid var(--ai-green-500);
-    padding: 10px 12px 10px 16px;
-    border-radius: 10px;
-    display: grid;
-    gap: 6px;
-  }
-
-  .ai-reason::before {
-    content: "Insight IA";
-    font-weight: 700;
-    font-size: 0.7rem;
-    letter-spacing: 0.38px;
-    text-transform: uppercase;
-    color: var(--ai-green-600);
-  }
-
-  .ai-poems-list.animate .ai-poem-card {
-    animation: reorderFade 0.52s var(--ai-transition-card) both;
-    animation-delay: calc(var(--ai-card-index, 0) * 35ms);
-  }
-
-  @keyframes reorderFade {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 16px, 0);
-    }
-    45% {
-      opacity: 1;
-      transform: translate3d(0, -4px, 0);
-    }
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @media (max-width: 640px) {
-    .ai-poem-card {
-      padding: clamp(20px, 6vw, 28px);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .ai-poem-card h3 {
-      font-size: clamp(1.2rem, 6.8vw, 1.45rem);
-    }
-  }
-
-  @media screen and (max-width: 680px) {
-    .ai-poems-list {
-      grid-template-columns: minmax(0, 1fr);
-      gap: clamp(18px, 5vw, 24px);
-      padding: calc(var(--safe-top) + 12px)
-               clamp(16px, 6vw, 28px)
-               calc(var(--safe-bottom) + 30px);
-    }
-
-    .ai-poem-card {
-      border-radius: clamp(16px, 6vw, 24px);
-      padding: clamp(20px, 6vw, 30px);
-      box-shadow:
-        0 16px 34px rgba(58, 160, 107, 0.25),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.55);
-      transform-origin: center;
-    }
-
-    .ai-poem-card::after {
-      background-size: 140% 140%;
-      opacity: 0.12;
-    }
-
-    .ai-poem-card h3 {
-      font-size: clamp(1.16rem, 4.8vw, 1.38rem);
-      line-height: 1.25;
-    }
-
-    .ai-poem-card .author {
-      font-size: clamp(0.9rem, 3.6vw, 1rem);
-      margin-bottom: 8px;
-    }
-
-    .ai-poem-card .preview {
-      font-size: clamp(0.98rem, 4.1vw, 1.08rem);
-      line-height: 1.68;
-    }
-
-    .ai-meta {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .ai-meta > * {
-      width: 100%;
-    }
-
-    .score {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: clamp(0.86rem, 3.4vw, 0.98rem);
-      padding: 8px 0;
-    }
-
-    .badge-new {
-      align-self: flex-start;
-      font-size: clamp(0.78rem, 3.2vw, 0.9rem);
-      padding: 0.36rem 0.9rem;
-      box-shadow: 0 6px 16px rgba(79, 190, 127, 0.32);
-    }
-
-    .ai-reason {
-      margin-top: 16px;
-      font-size: clamp(0.84rem, 3.5vw, 0.94rem);
-      line-height: 1.6;
-      padding: 12px 16px;
-    }
-  }
-
-  @media (hover: none) and (pointer: coarse) {
-    .ai-poem-card {
-      transition-duration: 0.22s;
-    }
-
-    .ai-poem-card:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 14px 28px rgba(58, 160, 107, 0.22),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.55);
-    }
-
-    .ai-poem-card:active {
-      transform: translateY(-8px) scale(0.992);
-      box-shadow:
-        0 18px 32px rgba(58, 160, 107, 0.28),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.65);
-    }
-
-    .ai-poem-card::after {
-      opacity: 0.18;
-    }
-  }
-
-  @media screen and (max-width: 360px) {
-    .ai-poem-card {
-      padding: clamp(18px, 7vw, 24px);
-    }
-
-    .ai-poem-card h3 {
-      font-size: 1.12rem;
-    }
-
-    .ai-meta {
-      gap: 8px;
-    }
+    margin-top: 16px;
+    font-size: clamp(0.84rem, 3.5vw, 0.94rem);
+    line-height: 1.6;
+    padding: 12px 16px;
   }
 }
 
-@layer utilities {
-  @media (prefers-reduced-motion: reduce) {
-    .ai-poem-card,
-    .ai-poem-card::after,
-    .ai-poems-list.animate .ai-poem-card,
-    .ai-poem-card.is-new .badge-new {
-      transition: none !important;
-      animation: none !important;
-    }
+@media (hover: none) and (pointer: coarse) {
+  .ai-poem-card {
+    transition-duration: 0.22s;
   }
 
-  @media (prefers-reduced-transparency: reduce) {
-    .ai-poem-card {
-      background: var(--ai-neutral-0);
-    }
+  .ai-poem-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 28px rgba(58, 160, 107, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  }
 
-    .ai-poem-card::after {
-      display: none;
-    }
+  .ai-poem-card:active {
+    transform: translateY(-8px) scale(0.992);
+    box-shadow:
+      0 18px 32px rgba(58, 160, 107, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  }
+
+  .ai-poem-card::after {
+    opacity: 0.18;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .ai-poem-card {
+    padding: clamp(18px, 7vw, 24px);
+  }
+
+  .ai-poem-card h3 {
+    font-size: 1.12rem;
+  }
+
+  .ai-meta {
+    gap: 8px;
+  }
+}
+
+/* ---------- ACCESSIBILITÀ & MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .ai-poem-card,
+  .ai-poem-card::after,
+  .ai-poems-list.animate .ai-poem-card,
+  .ai-poem-card.is-new .badge-new {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ai-poem-card {
+    background: var(--ai-neutral-0);
+  }
+  .ai-poem-card::after {
+    display: none;
+  }
+}
+
+/* ---------- PRINT STYLES ---------- */
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+
+  .main-header,
+  .main-footer {
+    display: none;
+  }
+
+  .ai-poem-card {
+    box-shadow: none;
+    border: 1px solid #cbd5d1;
+    background: #fff;
+  }
+
+  .ai-reason {
+    background: #f0f7f4;
   }
 }
