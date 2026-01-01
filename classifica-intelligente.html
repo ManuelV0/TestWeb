@@ -93,11 +93,16 @@
   </footer>
 
   <!-- ========= LOGICA (ES MODULE) ========= -->
-  <!-- ⚠️ IMPORTA SUPABASE SOLO DENTRO classifica-intelligente.js -->
-  <script type="module" src="js/classifica-intelligente.js"></script>
+  
 
-  <!-- utilità minime -->
+  <!-- utilità minime --><!-- ========= SUPABASE INIT ========= -->
+<script type="module" src="js/supabase-init.js"></script>
+
+<!-- ========= CLASSIFICA INTELLIGENTE ========= -->
+<script type="module" src="js/classifica-intelligente.js"></script>
+  
   <script>
+  
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
