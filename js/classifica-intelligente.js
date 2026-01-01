@@ -1,3 +1,4 @@
+
 /* =========================================================
    CLASSIFICA INTELLIGENTE – UX “IL SISTEMA IMPARA”
 ========================================================= */
@@ -16,9 +17,22 @@ const statusBox = document.getElementById('ai-status');
 const poemsList = document.getElementById('ai-poems-list');
 const emptyState = document.getElementById('ai-empty-state');
 
-/* ================= STATO ================= */
+/* ================= STATO PERSISTENTE ================= */
 
-let previousPoemIds = new Set();
+// 👉 memorizziamo cosa l’utente ha GIÀ visto
+const STORAGE_KEY = 'ai_seen_poems';
+
+function getSeenPoems() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveSeenPoems(set) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
+}
 
 /* ================= STATUS ================= */
 
@@ -38,10 +52,12 @@ function clearStatus() {
 
 async function requireAuth() {
   const { data } = await supabase.auth.getSession();
+
   if (!data?.session) {
     setStatus('❌ Devi essere loggato per vedere la classifica intelligente.');
     throw new Error('NOT_AUTHENTICATED');
   }
+
   return data.session.user.id;
 }
 
@@ -52,14 +68,20 @@ function renderPoems(poems) {
 
   poemsList.innerHTML = '';
 
+  const seenPoems = getSeenPoems();
   const currentIds = new Set(poems.map(p => String(p.id)));
 
   poems.forEach(poem => {
-    const isNew = !previousPoemIds.has(String(poem.id));
+    const poemId = String(poem.id);
+
+    // ✨ “Nuova per te” SOLO se:
+    // - NON è il primo caricamento
+    // - NON l’utente l’ha già vista
+    const isNew = seenPoems.size > 0 && !seenPoems.has(poemId);
 
     const li = document.createElement('li');
     li.className = 'ai-poem-card';
-    li.dataset.poemId = poem.id;
+    li.dataset.poemId = poemId;
 
     if (isNew) li.classList.add('is-new');
 
@@ -76,14 +98,21 @@ function renderPoems(poems) {
           Affinità: ${Number(poem.affinity_score).toFixed(2)}
         </span>
 
-        ${isNew ? `<span class="badge-new">✨ Nuova per te</span>` : ''}
+        ${
+          isNew
+            ? `<span class="badge-new" title="Il sistema ha imparato qualcosa di nuovo su di te">
+                 ✨ Nuova per te
+               </span>`
+            : ''
+        }
       </div>
     `;
 
     poemsList.appendChild(li);
   });
 
-  previousPoemIds = currentIds;
+  // 🔒 aggiorniamo ciò che l’utente ha ormai visto
+  saveSeenPoems(currentIds);
 }
 
 /* ================= CORE ================= */
