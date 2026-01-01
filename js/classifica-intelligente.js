@@ -1,15 +1,9 @@
-
 /* =========================================================
-   CLASSIFICA INTELLIGENTE – UX “IL SISTEMA IMPARA”
+   CLASSIFICA INTELLIGENTE – FULL UX VERSION
 ========================================================= */
 
-// 🔥 USA SOLO L’ISTANZA GLOBALE
 const supabase = window.supabaseClient;
-
-if (!supabase) {
-  console.error('❌ supabaseClient non inizializzato');
-  throw new Error('SUPABASE_NOT_READY');
-}
+if (!supabase) throw new Error('SUPABASE_NOT_READY');
 
 /* ================= DOM ================= */
 
@@ -17,22 +11,20 @@ const statusBox = document.getElementById('ai-status');
 const poemsList = document.getElementById('ai-poems-list');
 const emptyState = document.getElementById('ai-empty-state');
 
-/* ================= STATO PERSISTENTE ================= */
+/* ================= PERSISTENZA ================= */
 
-// 👉 memorizziamo cosa l’utente ha GIÀ visto
-const STORAGE_KEY = 'ai_seen_poems';
+const SEEN_KEY = 'ai_seen_poems';
+const AB_KEY = 'ai_ab_variant';
 
-function getSeenPoems() {
-  try {
-    return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
-  } catch {
-    return new Set();
-  }
-}
+const getSeen = () => new Set(JSON.parse(localStorage.getItem(SEEN_KEY) || '[]'));
+const saveSeen = set => localStorage.setItem(SEEN_KEY, JSON.stringify([...set]));
 
-function saveSeenPoems(set) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...set]));
-}
+// 🧪 A/B test (A = spiegazione, B = no)
+const AB_VARIANT =
+  localStorage.getItem(AB_KEY) ||
+  (Math.random() > 0.5 ? 'A' : 'B');
+
+localStorage.setItem(AB_KEY, AB_VARIANT);
 
 /* ================= STATUS ================= */
 
@@ -52,36 +44,27 @@ function clearStatus() {
 
 async function requireAuth() {
   const { data } = await supabase.auth.getSession();
-
   if (!data?.session) {
-    setStatus('❌ Devi essere loggato per vedere la classifica intelligente.');
-    throw new Error('NOT_AUTHENTICATED');
+    setStatus('❌ Devi essere loggato.');
+    throw new Error('NOT_AUTH');
   }
-
-  return data.session.user.id;
 }
 
 /* ================= RENDER ================= */
 
 function renderPoems(poems) {
-  if (!poemsList) return;
-
   poemsList.innerHTML = '';
 
-  const seenPoems = getSeenPoems();
-  const currentIds = new Set(poems.map(p => String(p.id)));
+  const seen = getSeen();
+  const newSeen = new Set(poems.map(p => String(p.id)));
 
-  poems.forEach(poem => {
-    const poemId = String(poem.id);
-
-    // ✨ “Nuova per te” SOLO se:
-    // - NON è il primo caricamento
-    // - NON l’utente l’ha già vista
-    const isNew = seenPoems.size > 0 && !seenPoems.has(poemId);
+  poems.forEach((poem, index) => {
+    const id = String(poem.id);
+    const isNew = seen.size > 0 && !seen.has(id);
 
     const li = document.createElement('li');
     li.className = 'ai-poem-card';
-    li.dataset.poemId = poemId;
+    li.style.setProperty('--order', index);
 
     if (isNew) li.classList.add('is-new');
 
@@ -94,15 +77,15 @@ function renderPoems(poems) {
       </p>
 
       <div class="ai-meta">
-        <span class="score">
-          Affinità: ${Number(poem.affinity_score).toFixed(2)}
-        </span>
+        <span class="score">Affinità ${Number(poem.affinity_score).toFixed(2)}</span>
+
+        ${isNew ? `<span class="badge-new">✨ Nuova per te</span>` : ''}
 
         ${
-          isNew
-            ? `<span class="badge-new" title="Il sistema ha imparato qualcosa di nuovo su di te">
-                 ✨ Nuova per te
-               </span>`
+          AB_VARIANT === 'A'
+            ? `<p class="ai-reason">
+                 Suggerita perché simile alle poesie che leggi spesso
+               </p>`
             : ''
         }
       </div>
@@ -111,16 +94,14 @@ function renderPoems(poems) {
     poemsList.appendChild(li);
   });
 
-  // 🔒 aggiorniamo ciò che l’utente ha ormai visto
-  saveSeenPoems(currentIds);
+  saveSeen(newSeen);
 }
 
 /* ================= CORE ================= */
 
 async function loadIntelligentRanking() {
   try {
-    setStatus('Analisi delle tue preferenze in corso…');
-
+    setStatus('Il sistema sta imparando da te…');
     await requireAuth();
 
     const { data, error } = await supabase.rpc('get_intelligent_poems');
@@ -128,26 +109,35 @@ async function loadIntelligentRanking() {
 
     clearStatus();
 
-    if (!data || data.length === 0) {
+    if (!data?.length) {
       emptyState?.classList.remove('hidden');
       return;
     }
 
     emptyState?.classList.add('hidden');
+    animateReorder(data);
     renderPoems(data);
 
-  } catch (err) {
-    console.error('[AI CLASSIFICA ERROR]', err);
-    setStatus('❌ Errore nel caricamento della classifica intelligente.');
+  } catch (e) {
+    console.error(e);
+    setStatus('Errore nel caricamento.');
   }
+}
+
+/* ================= ANIMAZIONE RIORDINO ================= */
+
+function animateReorder() {
+  poemsList.classList.remove('animate');
+  void poemsList.offsetWidth; // reflow
+  poemsList.classList.add('animate');
 }
 
 /* ================= AUTO REFRESH ================= */
 
-let refreshTimeout;
+let t;
 window.addEventListener('interaction-updated', () => {
-  clearTimeout(refreshTimeout);
-  refreshTimeout = setTimeout(loadIntelligentRanking, 400);
+  clearTimeout(t);
+  t = setTimeout(loadIntelligentRanking, 400);
 });
 
 /* ================= INIT ================= */
