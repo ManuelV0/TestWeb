@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -22,7 +21,7 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   >
 
-  <!-- CSS dedicato -->
+  <!-- CSS -->
   <link rel="stylesheet" href="css/classifica-intelligente.css">
 </head>
 
@@ -50,7 +49,7 @@
       </p>
     </section>
 
-    <!-- STATO (loading / error) -->
+    <!-- STATUS -->
     <section
       id="ai-status"
       class="status-section"
@@ -62,7 +61,7 @@
       </p>
     </section>
 
-    <!-- FEED POESIE -->
+    <!-- FEED -->
     <section class="ai-feed-section" aria-live="polite">
       <ul
         id="ai-poems-list"
@@ -73,7 +72,7 @@
       </ul>
     </section>
 
-    <!-- EMPTY STATE -->
+    <!-- EMPTY -->
     <section
       id="ai-empty-state"
       class="empty-state hidden"
@@ -92,26 +91,18 @@
     <p>© <span id="year"></span> TheItalianPoetry</p>
   </footer>
 
-  <!-- ========= LOGICA (ES MODULE) ========= -->
-  
+  <!-- ========= LOGICA ========= -->
 
-  <!-- utilità minime --><!-- ========= SUPABASE INIT ========= -->
-<script type="module" src="js/supabase-init.js"></script>
+  <!-- Supabase (istanza globale) -->
+  <script type="module" src="js/supabase-init.js"></script>
 
-<!-- ========= CLASSIFICA INTELLIGENTE ========= -->
-<script type="module" src="js/classifica-intelligente.js"></script>
-  
+  <!-- Classifica intelligente -->
+  <script type="module" src="js/classifica-intelligente.js"></script>
+
+  <!-- Utilità minime -->
   <script>
-  
     document.getElementById('year').textContent = new Date().getFullYear();
-    
-    window.addEventListener('interaction-updated', () => {
-  console.log('[AI RANKING] refresh triggered');
-  loadIntelligentRanking();
-});
   </script>
 
 </body>
 </html>
-
-
