@@ -1,6 +1,5 @@
-
 /* =========================================================
-   CLASSIFICA INTELLIGENTE – CORE LOGIC (FINAL FIX)
+   CLASSIFICA INTELLIGENTE – CORE LOGIC (FINAL ✅)
 ========================================================= */
 
 // 🔥 USA SOLO L’ISTANZA GLOBALE
@@ -20,11 +19,13 @@ const emptyState = document.getElementById('ai-empty-state');
 /* ================= STATUS ================= */
 
 function setStatus(text) {
+  if (!statusBox) return;
   statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
   statusBox.classList.remove('hidden');
 }
 
 function clearStatus() {
+  if (!statusBox) return;
   statusBox.innerHTML = '';
   statusBox.classList.add('hidden');
 }
@@ -32,6 +33,8 @@ function clearStatus() {
 /* ================= DEBUG ================= */
 
 function debug(message, data = null) {
+  if (!statusBox) return;
+
   const pre = document.createElement('pre');
   pre.style.whiteSpace = 'pre-wrap';
   pre.style.fontSize = '13px';
@@ -41,6 +44,7 @@ function debug(message, data = null) {
   pre.style.marginTop = '1rem';
   pre.textContent =
     '[DEBUG]\n' + message + (data ? '\n\n' + JSON.stringify(data, null, 2) : '');
+
   statusBox.appendChild(pre);
 }
 
@@ -71,7 +75,9 @@ function renderPoems(poems) {
       <h3>${poem.title}</h3>
       <p class="author">di ${poem.author_name}</p>
       <p class="preview">${(poem.content || '').slice(0, 160)}…</p>
-      <span class="score">Affinità: ${Number(poem.affinity_score).toFixed(2)}</span>
+      <span class="score">
+        Affinità: ${Number(poem.affinity_score).toFixed(2)}
+      </span>
     `;
 
     poemsList.appendChild(li);
@@ -88,11 +94,8 @@ async function loadIntelligentRanking() {
     const userId = await requireAuth();
     debug('USER AUTHENTICATED', { userId });
 
-    // ✅ PASSIAMO L’USER ID ALLA FUNZIONE SQL
-    const { data, error } = await supabase.rpc(
-      'get_intelligent_poems',
-      { p_user_id: userId }
-    );
+    // ✅ RPC SENZA PARAMETRI
+    const { data, error } = await supabase.rpc('get_intelligent_poems');
 
     debug('RPC RESPONSE', { data, error });
 
@@ -102,11 +105,11 @@ async function loadIntelligentRanking() {
 
     if (!data || data.length === 0) {
       debug('EMPTY RESULT');
-      emptyState.classList.remove('hidden');
+      emptyState?.classList.remove('hidden');
       return;
     }
 
-    emptyState.classList.add('hidden');
+    emptyState?.classList.add('hidden');
     renderPoems(data);
 
   } catch (err) {
