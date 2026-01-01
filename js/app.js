@@ -1,5 +1,25 @@
 import { trackInteraction } from './ai-interactions-core.js';
 
+
+import { trackInteraction } from './ai-interactions-core.js';
+
+/* =========================================
+   LISTENER INTERAZIONI DAL WIDGET (IFRAME)
+========================================= */
+window.addEventListener('message', async (event) => {
+  if (event.data?.type !== 'TRACK_INTERACTION') return;
+
+  const { action, poemId, weight } = event.data.payload;
+
+  console.log('[PARENT RECEIVED]', { action, poemId, weight });
+
+  await trackInteraction({ action, poemId, weight });
+
+  // 🔄 forza refresh classifica intelligente
+  window.dispatchEvent(new Event('interaction-updated'));
+});
+
+
 let supabaseClient = null;
 let allPoems = [];
 let currentRating = 0;
