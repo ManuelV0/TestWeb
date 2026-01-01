@@ -370,54 +370,150 @@ section {
   border-radius: 999px;
 }
 
-/* ====== CARD ====== */
+/* ================= AI POEM CARD ================= */
+
+.ai-poems-list {
+  display: grid;
+  gap: 26px;
+}
+
 .ai-poem-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
-  transition: transform .4s ease, box-shadow .4s ease;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #f3fff8 60%,
+    #e9fbf1 100%
+  );
+  border-radius: 18px;
+  padding: clamp(22px, 3vw, 30px);
+  border: 1px solid rgba(79, 190, 127, 0.25);
+  box-shadow:
+    0 10px 28px rgba(79, 190, 127, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+  overflow: hidden;
 }
 
+/* Hover elegante */
 .ai-poem-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 42px rgba(58, 160, 107, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
 }
 
-/* ====== NUOVA PER TE ====== */
+/* Luce morbida */
+.ai-poem-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top right,
+    rgba(79, 190, 127, 0.18),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.ai-poem-card:hover::after {
+  opacity: 1;
+}
+
+/* ================= CONTENUTO ================= */
+
+.ai-poem-card h3 {
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(1.25rem, 2.4vw, 1.5rem);
+  margin: 0 0 10px;
+  color: #2f7d5c;
+  letter-spacing: 0.2px;
+}
+
+.ai-poem-card .author {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4d6254;
+  margin-bottom: 14px;
+}
+
+.ai-poem-card .preview {
+  font-size: 0.98rem;
+  color: #1f2f24;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+/* ================= META ================= */
+
+.ai-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  gap: 12px;
+}
+
+.score {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3aa06b;
+  letter-spacing: 0.3px;
+}
+
+/* ================= NUOVA PER TE ================= */
+
 .ai-poem-card.is-new {
-  border: 2px solid #facc15;
-  animation: glow 1.4s ease;
+  border-left: 5px solid #4fbe7f;
+  background: linear-gradient(
+    135deg,
+    #ffffff 0%,
+    #eafff3 55%,
+    #dff7ec 100%
+  );
 }
 
-@keyframes glow {
-  0% { box-shadow: 0 0 0 rgba(250,204,21,.0); }
-  50% { box-shadow: 0 0 22px rgba(250,204,21,.5); }
-  100% { box-shadow: 0 0 0 rgba(250,204,21,.0); }
+/* accento cognitivo */
+.ai-poem-card.is-new::before {
+  content: "🧠";
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 1.4rem;
+  opacity: 0.15;
 }
 
+/* badge */
 .badge-new {
-  background: linear-gradient(135deg,#fde68a,#facc15);
-  color: #111;
-  padding: .25rem .6rem;
-  border-radius: 999px;
-  font-size: .75rem;
+  font-size: 0.7rem;
   font-weight: 700;
+  color: #1f5e45;
+  background: linear-gradient(
+    135deg,
+    #b7f0d2,
+    #6fe0ab
+  );
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 4px 10px rgba(79, 190, 127, 0.35);
 }
 
-/* ====== SPIEGAZIONE ====== */
-.ai-reason {
-  font-size: .75rem;
-  color: #6b7280;
-  margin-top: .25rem;
+/* movimento leggero */
+.ai-poem-card.is-new:hover {
+  transform: translateY(-6px) translateX(4px);
 }
 
-/* ====== ANIMAZIONE RIORDINO ====== */
-.ai-poems-list.animate .ai-poem-card {
-  animation: reorder .4s ease;
-}
+/* ================= ACCESSIBILITÀ ================= */
 
-@keyframes reorder {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .ai-poem-card,
+  .ai-poem-card::after {
+    transition: none;
+  }
 }
