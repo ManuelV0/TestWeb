@@ -24,8 +24,6 @@ let supabaseClient = null;
 let allPoems = [];
 let currentRating = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-
   // ✅ prende l’istanza globale
   supabaseClient = window.supabaseClient;
 
@@ -1034,5 +1032,5 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPoems();
         });
     }
-});
+
 });
