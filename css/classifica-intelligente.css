@@ -410,3 +410,134 @@
     display: none;
   }
 }
+
+/* =========================================================
+   MOBILE POWER-UP
+   Ottimizzazioni per device con pointer grossolano / display piccoli
+========================================================= */
+
+@media screen and (max-width: 680px) {
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+  }
+
+  .ai-poems-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 5vw, 24px);
+    padding: calc(var(--safe-top) + 12px)
+             clamp(16px, 6vw, 28px)
+             calc(var(--safe-bottom) + 30px);
+  }
+
+  .ai-poem-card {
+    border-radius: clamp(16px, 6vw, 24px);
+    padding: clamp(20px, 6vw, 30px);
+    box-shadow:
+      0 16px 34px rgba(58, 160, 107, 0.25),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    transform-origin: center;
+  }
+
+  .ai-poem-card::after {
+    background-size: 140% 140%;
+    opacity: 0.12;
+  }
+
+  .ai-poem-card h3 {
+    font-size: clamp(1.16rem, 4.8vw, 1.38rem);
+    line-height: 1.25;
+  }
+
+  .ai-poem-card .author {
+    font-size: clamp(0.9rem, 3.6vw, 1rem);
+    margin-bottom: 8px;
+  }
+
+  .ai-poem-card .preview {
+    font-size: clamp(0.98rem, 4.1vw, 1.08rem);
+    line-height: 1.68;
+  }
+
+  .ai-meta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .ai-meta > * {
+    width: 100%;
+  }
+
+  .score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: clamp(0.86rem, 3.4vw, 0.98rem);
+    padding: 8px 0;
+  }
+
+  .badge-new {
+    align-self: flex-start;
+    font-size: clamp(0.78rem, 3.2vw, 0.9rem);
+    padding: 0.36rem 0.9rem;
+    box-shadow: 0 6px 16px rgba(79, 190, 127, 0.32);
+  }
+
+  .ai-reason {
+    margin-top: 16px;
+    font-size: clamp(0.84rem, 3.5vw, 0.94rem);
+    line-height: 1.6;
+    padding: 12px 16px;
+  }
+}
+
+/* Feedback tattile (elimina hover invasivi sui device touch) */
+@media (hover: none) and (pointer: coarse) {
+  .ai-poem-card {
+    transition-duration: 0.22s;
+  }
+
+  .ai-poem-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 14px 28px rgba(58, 160, 107, 0.22),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  }
+
+  .ai-poem-card:active {
+    transform: translateY(-8px) scale(0.992);
+    box-shadow:
+      0 18px 32px rgba(58, 160, 107, 0.28),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.65);
+  }
+
+  .ai-poem-card::after {
+    opacity: 0.18;
+  }
+}
+
+/* Micro-tuning per display ultracompatti */
+@media screen and (max-width: 360px) {
+  .ai-poem-card {
+    padding: clamp(18px, 7vw, 24px);
+  }
+
+  .ai-poem-card h3 {
+    font-size: 1.12rem;
+  }
+
+  .ai-meta {
+    gap: 8px;
+  }
+}
+
+/* Accessibilità focus da tastiera (utile anche su mobile con tastiere fisiche) */
+.ai-poem-card:focus-within,
+.ai-poem-card:focus-visible {
+  outline: 3px solid rgba(79, 190, 127, 0.65);
+  outline-offset: 4px;
+}
