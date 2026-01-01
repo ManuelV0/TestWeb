@@ -16,3 +16,9 @@ for = "/*.css"
 for = "/*.js"
   [headers.values]
   Cache-Control = "max-age=60, must-revalidate"
+
+ [[redirects]]
+  from = "/ads.txt"
+  to = "https://srv.adstxtmanager.com/19390/theitalianpoetryproject.com"
+  status = 301
+  force = true
