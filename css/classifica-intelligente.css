@@ -325,3 +325,47 @@ section {
     font-size: 1.25rem;
   }
 }
+
+/* ================= AI LEARNING UX ================= */
+
+.ai-poem-card {
+  background: #111;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.ai-poem-card.is-new {
+  border-left: 4px solid #f4c430;
+  background: linear-gradient(
+    90deg,
+    rgba(244, 196, 48, 0.12),
+    rgba(0, 0, 0, 0)
+  );
+}
+
+.ai-poem-card.is-new:hover {
+  transform: translateX(4px);
+}
+
+.ai-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.score {
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+.badge-new {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #f4c430;
+  background: rgba(244, 196, 48, 0.15);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+}
