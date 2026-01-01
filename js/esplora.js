@@ -2,6 +2,8 @@
    ESPLORA / POESIE CONSIGLIATE – CORE
 ========================================================= */
 
+(async () => {
+
 /* ================= SAFE SUPABASE ================= */
 
 async function waitForSupabase(retries = 15) {
@@ -30,11 +32,13 @@ const emptyState = document.getElementById('explore-empty');
 /* ================= STATUS ================= */
 
 function setStatus(text) {
+  if (!statusBox) return;
   statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
   statusBox.classList.remove('hidden');
 }
 
 function clearStatus() {
+  if (!statusBox) return;
   statusBox.innerHTML = '';
   statusBox.classList.add('hidden');
 }
@@ -53,12 +57,12 @@ async function requireAuth() {
 /* ================= RENDER ================= */
 
 function renderPoems(poems) {
+  if (!poemsList) return;
   poemsList.innerHTML = '';
 
   poems.forEach(poem => {
     const li = document.createElement('li');
     li.className = 'ai-poem-card';
-
     if (poem.is_new) li.classList.add('is-new');
 
     li.innerHTML = `
@@ -73,7 +77,6 @@ function renderPoems(poems) {
         <span class="score">
           Affinità ${Number(poem.affinity_score || 0).toFixed(2)}
         </span>
-
         ${poem.is_new ? `<span class="badge-new">✨ Nuova per te</span>` : ''}
       </div>
 
@@ -81,7 +84,6 @@ function renderPoems(poems) {
         Suggerita perché simile alle poesie che hai apprezzato
       </p>
     `;
-
     poemsList.appendChild(li);
   });
 }
@@ -94,26 +96,17 @@ async function loadExplore() {
 
     await requireAuth();
 
-    /**
-     * Usa la STESSA funzione della classifica,
-     * ma qui la UX è DISCOVER, non ranking.
-     */
     const { data, error } = await supabase.rpc('get_intelligent_poems');
-
     if (error) throw error;
 
     clearStatus();
 
     if (!data || data.length === 0) {
-      emptyState.classList.remove('hidden');
+      emptyState?.classList.remove('hidden');
       return;
     }
 
-    emptyState.classList.add('hidden');
-
-    // 👉 qui puoi in futuro:
-    // - mischiare random + affinità
-    // - inserire GPT suggestions
+    emptyState?.classList.add('hidden');
     renderPoems(data.slice(0, 12));
 
   } catch (err) {
@@ -125,3 +118,5 @@ async function loadExplore() {
 /* ================= INIT ================= */
 
 document.addEventListener('DOMContentLoaded', loadExplore);
+
+})();
