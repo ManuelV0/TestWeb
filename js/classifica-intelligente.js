@@ -1,6 +1,6 @@
 
 /* =========================================================
-   CLASSIFICA INTELLIGENTE – CORE LOGIC (FINAL)
+   CLASSIFICA INTELLIGENTE – CORE LOGIC (FINAL FIX)
 ========================================================= */
 
 // 🔥 USA SOLO L’ISTANZA GLOBALE
@@ -88,7 +88,12 @@ async function loadIntelligentRanking() {
     const userId = await requireAuth();
     debug('USER AUTHENTICATED', { userId });
 
-    const { data, error } = await supabase.rpc('get_intelligent_poems');
+    // ✅ PASSIAMO L’USER ID ALLA FUNZIONE SQL
+    const { data, error } = await supabase.rpc(
+      'get_intelligent_poems',
+      { p_user_id: userId }
+    );
+
     debug('RPC RESPONSE', { data, error });
 
     if (error) throw error;
@@ -101,12 +106,16 @@ async function loadIntelligentRanking() {
       return;
     }
 
+    emptyState.classList.add('hidden');
     renderPoems(data);
+
   } catch (err) {
     console.error('[AI CLASSIFICA ERROR]', err);
     setStatus('❌ Errore nel caricamento della classifica intelligente.');
   }
 }
+
+/* ================= AUTO-REFRESH ================= */
 
 let refreshTimeout;
 window.addEventListener('interaction-updated', () => {
