@@ -12,7 +12,7 @@ const statusBox = document.getElementById('ai-status');
 const poemsList = document.getElementById('ai-poems-list');
 const emptyState = document.getElementById('ai-empty-state');
 
-/* ================= PERSISTENZA ================= */
+/* ================= PERSISTENZA (CLIENT) ================= */
 
 const SEEN_KEY = 'ai_seen_poems';
 const AB_KEY = 'ai_ab_variant';
@@ -23,7 +23,10 @@ const getSeen = () =>
 const saveSeen = set =>
   localStorage.setItem(SEEN_KEY, JSON.stringify([...set]));
 
-/* 🧪 A/B test (A = con spiegazione, B = senza) */
+/* 🧪 A/B test
+   A = mostra spiegazione
+   B = non mostra spiegazione
+*/
 const AB_VARIANT =
   localStorage.getItem(AB_KEY) ||
   (Math.random() > 0.5 ? 'A' : 'B');
@@ -136,6 +139,7 @@ async function loadIntelligentRanking() {
 /* ================= ANIMAZIONE RIORDINO ================= */
 
 function animateReorder() {
+  if (!poemsList) return;
   poemsList.classList.remove('animate');
   void poemsList.offsetWidth; // force reflow
   poemsList.classList.add('animate');
