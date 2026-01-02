@@ -1,5 +1,6 @@
 /* =========================================================
-   ESPLORA / POESIE CONSIGLIATE – CORE (FIXED)
+   DISCOVERY / POESIE CONSIGLIATE – CORE
+   Porta a analisi-focus.html
 ========================================================= */
 
 (async () => {
@@ -24,21 +25,18 @@
   let supabase;
   try {
     supabase = await waitForSupabase();
-  } catch (e) {
-    console.error('❌ Supabase non inizializzato');
+  } catch (err) {
+    console.error('[DISCOVERY] Supabase non pronto');
     return;
   }
 
   /* ================= DOM ================= */
 
-  const statusBox   = document.getElementById('explore-status');
-  const poemsList  = document.getElementById('explore-poems-list');
+  const statusBox = document.getElementById('explore-status');
+  const poemsList = document.getElementById('explore-poems-list');
   const emptyState = document.getElementById('explore-empty');
 
-  if (!poemsList) {
-    console.warn('[ESPLORA] explore-poems-list non trovato');
-    return;
-  }
+  if (!poemsList) return;
 
   /* ================= STATUS ================= */
 
@@ -57,9 +55,9 @@
   /* ================= AUTH ================= */
 
   async function requireAuth() {
-    const { data, error } = await supabase.auth.getSession();
-    if (error || !data?.session) {
-      setStatus('❌ Accedi per vedere le poesie consigliate.');
+    const { data } = await supabase.auth.getSession();
+    if (!data?.session) {
+      setStatus('❌ Accedi per scoprire poesie consigliate.');
       throw new Error('NOT_AUTHENTICATED');
     }
     return data.session.user.id;
@@ -73,7 +71,6 @@
     poems.forEach(poem => {
       const li = document.createElement('li');
       li.className = 'ai-poem-card';
-      li.tabIndex = 0;
 
       if (poem.is_new) li.classList.add('is-new');
 
@@ -93,20 +90,13 @@
         </div>
 
         <p class="ai-reason">
-          Suggerita perché simile alle poesie che hai apprezzato
+          Suggerita in base alle poesie che hai apprezzato
         </p>
       `;
 
-      /* 👉 CLICK → POESIA FOCUS */
+      /* 👉 CLICK → ANALISI FOCUS */
       li.addEventListener('click', () => {
-        window.location.href = `poesia-focus.html?id=${poem.poem_id}`;
-      });
-
-      /* accessibilità */
-      li.addEventListener('keydown', e => {
-        if (e.key === 'Enter') {
-          window.location.href = `poesia-focus.html?id=${poem.poem_id}`;
-        }
+        window.location.href = `analisi-focus.html?id=${poem.poem_id}`;
       });
 
       poemsList.appendChild(li);
@@ -115,9 +105,9 @@
 
   /* ================= CORE ================= */
 
-  async function loadExplore() {
+  async function loadDiscovery() {
     try {
-      setStatus('Stiamo esplorando per te…');
+      setStatus('Stiamo cercando poesie per te…');
 
       await requireAuth();
 
@@ -133,17 +123,18 @@
 
       emptyState?.classList.add('hidden');
 
-      /* 🔮 DISCOVERY LOGIC (per ora semplice) */
+      // UX DISCOVER → non classifica
+      // (affinità alta sopra, ma senza numeri aggressivi)
       renderPoems(data.slice(0, 12));
 
     } catch (err) {
-      console.error('[ESPLORA ERROR]', err);
+      console.error('[DISCOVERY ERROR]', err);
       setStatus('❌ Errore nel caricamento delle poesie consigliate.');
     }
   }
 
   /* ================= INIT ================= */
 
-  document.addEventListener('DOMContentLoaded', loadExplore);
+  document.addEventListener('DOMContentLoaded', loadDiscovery);
 
 })();
