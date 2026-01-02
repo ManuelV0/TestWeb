@@ -1,6 +1,6 @@
 /* =========================================================
    ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: STABILE / EDGE FUNCTION AUTH / VITE READY
+   Stato: STABILE / EDGE FUNCTION ATTIVA / STATIC READY
 ========================================================= */
 
 (async () => {
@@ -26,7 +26,15 @@
     return;
   }
 
+  /* ================= GLOBAL ENV ================= */
 
+  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+  const EDGE_URL = window.EDGE_FUNCTION_URL;
+
+  if (!SUPABASE_ANON_KEY || !EDGE_URL) {
+    console.error('[ANALISI-FOCUS] Variabili globali mancanti');
+    return;
+  }
 
   /* ================= DOM ================= */
 
@@ -61,7 +69,7 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 160) {
+  async function print(text, delay = 180) {
     terminal.textContent += text;
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
@@ -105,7 +113,7 @@
     }
   }
 
-  /* ================= ANALISI IA ================= */
+  /* ================= GPT LIVE ================= */
 
   async function runAnalysis() {
     terminal.textContent = '';
@@ -117,19 +125,12 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-      /* 🔐 JWT UTENTE */
-      const { data, error } = await supabase.auth.getSession();
-      if (error || !data?.session) {
-        throw new Error('SESSION_NOT_FOUND');
-      }
-
-      const jwt = data.session.access_token;
-
       const res = await fetch(EDGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${jwt}`,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apikey': SUPABASE_ANON_KEY
         },
         body: JSON.stringify({
           poem: { content: contentEl.textContent }
