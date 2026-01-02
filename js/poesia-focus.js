@@ -119,13 +119,15 @@
 
       const poemText = contentEl.textContent;
 
-      const { data: sessionData } = await supabase.auth.getSession();
-      const accessToken = sessionData?.session?.access_token;
+      /* 🔐 SESSIONE SICURA */
+      const sessionRes = await supabase.auth.getSession();
+      const accessToken = sessionRes?.data?.session?.access_token;
 
       if (!accessToken) {
         throw new Error('TOKEN_MANCANTE');
       }
 
+      /* 🚀 EDGE FUNCTION */
       const res = await fetch(
         'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler',
         {
@@ -143,7 +145,8 @@
       );
 
       if (!res.ok) {
-        throw new Error('EDGE_FUNCTION_ERROR');
+        const errText = await res.text();
+        throw new Error(errText || 'EDGE_FUNCTION_ERROR');
       }
 
       const result = await res.json();
