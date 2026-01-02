@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Poesie consigliate | TheItalianPoetry</title>
 
-  <!-- Fonts -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -19,7 +19,7 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   >
 
-  <!-- CSS (stesso stile Classifica Intelligente) -->
+  <!-- CSS (stesso stile della Classifica Intelligente) -->
   <link rel="stylesheet" href="css/classifica-intelligente.css">
 </head>
 
@@ -28,7 +28,7 @@
 <!-- ================= HEADER ================= -->
 <header class="main-header">
   <div class="header-inner">
-    <a href="index.html" class="logo">
+    <a href="index.html" class="logo" aria-label="Torna alla home">
       <i class="fa-solid fa-feather-pointed"></i>
       <span>TheItalianPoetry</span>
     </a>
@@ -36,14 +36,16 @@
 </header>
 
 <!-- ================= MAIN ================= -->
-<main class="page-container">
+<main class="page-container" role="main">
 
   <!-- INTRO -->
-  <section class="intro-section">
-    <h1>Poesie consigliate</h1>
+  <section class="intro-section" aria-labelledby="discover-title">
+    <h1 id="discover-title">Poesie consigliate</h1>
     <p>
-      Scopri testi suggeriti in base a ciò che leggi, voti e senti.
-      Questa sezione <strong>esplora</strong>, non classifica.
+      Qui trovi poesie <strong>suggerite in base a ciò che leggi e voti</strong>,
+      insieme a qualche scoperta inattesa.
+      <br>
+      Questa sezione <em>esplora</em>, non classifica.
     </p>
   </section>
 
@@ -52,14 +54,22 @@
     id="explore-status"
     class="status-section hidden"
     aria-live="polite"
+    aria-atomic="true"
   ></section>
 
   <!-- FEED -->
-  <section class="ai-feed-section">
+  <section
+    class="ai-feed-section"
+    aria-labelledby="discover-feed-title"
+  >
+    <h2 id="discover-feed-title" class="sr-only">
+      Elenco poesie consigliate
+    </h2>
+
     <ul
       id="explore-poems-list"
       class="ai-poems-list"
-      aria-label="Poesie consigliate"
+      aria-label="Poesie consigliate per te"
     ></ul>
   </section>
 
@@ -71,28 +81,29 @@
   >
     <p>
       Non abbiamo ancora abbastanza segnali per consigliarti poesie.
-      Continua a leggere e votare ✨
+      <br>
+      Continua a leggere, votare e tornare qui ✨
     </p>
   </section>
 
 </main>
 
 <!-- ================= FOOTER ================= -->
-<footer class="main-footer">
+<footer class="main-footer" role="contentinfo">
   <p>© <span id="year"></span> TheItalianPoetry</p>
 </footer>
 
-<!-- ================= CONFIG GLOBALE (OBBLIGATORIO) ================= -->
+<!-- ================= CONFIGURAZIONE GLOBALE ================= -->
 <script>
   /**
    * 🔐 Supabase public config
-   * SAFE: è una anon key, NON una service key
+   * (anon key – sicura lato client)
    */
   window.SUPABASE_ANON_KEY =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q";
 
   /**
-   * 🧠 Edge Function (GPT / Discover / Analisi)
+   * 🧠 Edge Function (Discover / GPT / Analisi)
    */
   window.EDGE_FUNCTION_URL =
     "https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler";
@@ -103,7 +114,7 @@
 <!-- Supabase init -->
 <script type="module" src="js/supabase-init.js"></script>
 
-<!-- Tracciamento interazioni utente -->
+<!-- Tracciamento interazioni (like, view, click) -->
 <script type="module" src="js/ai-interactions-core.js"></script>
 
 <!-- Logica Discover / Poesie consigliate -->
