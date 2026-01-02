@@ -1,5 +1,3 @@
-
-
 import { trackInteraction } from './ai-interactions-core.js';
 
 /* =========================================
@@ -204,23 +202,6 @@ let currentRating = 0;
             }
         });
     });
-
-const participateBtn = elements.openSubmissionModalBtn;
-
-if (participateBtn) {
-  participateBtn.addEventListener('click', async (e) => {
-    e.preventDefault();
-
-    const { data: { session } } = await supabaseClient.auth.getSession();
-
-    if (!session) {
-      alert('Accedi con Google per partecipare ✨');
-      return;
-    }
-
-    openModalElement(elements.submissionModal);
-  });
-}
 
     function initMobileNav() {
         const navToggle = elements.mobileNavToggle;
@@ -612,12 +593,6 @@ if (participateBtn) {
         }
         if (elements.userEmailSpan && !loggedIn) {
             elements.userEmailSpan.textContent = '';
-        }
-        if (elements.openSubmissionModalBtn) {
-          elements.openSubmissionModalBtn.classList.toggle(
-            'is-disabled',
-            !session
-          );
         }
     }
 
