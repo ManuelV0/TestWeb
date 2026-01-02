@@ -501,3 +501,180 @@ body {
     font-size: 0.88rem;
   }
 }
+
+/* =========================================================
+   POESIA FOCUS – EXTRA UI (Analisi & Discover)
+========================================================= */
+
+/* ===== CTA ANALISI ===== */
+
+.analysis-cta {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.analysis-cta .cta-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin-bottom: 0.75rem;
+}
+
+/* pulsante già esistente, lo rinforziamo */
+.terminal-btn.primary {
+  background: linear-gradient(135deg, #f97316, #facc15);
+  color: #111827;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.terminal-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 25px rgba(249, 115, 22, 0.35);
+}
+
+/* ===== SEZIONE ANALISI ===== */
+
+.ai-terminal-section {
+  margin-top: 3rem;
+  background: #0f172a;
+  color: #e5e7eb;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
+}
+
+/* header terminale */
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.04);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+}
+
+.terminal-status {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* ===== TERMINALE ===== */
+
+.terminal {
+  background: transparent;
+  padding: 1.25rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* ===== BOX SINTESI ===== */
+
+.analysis-summary {
+  background: rgba(255,255,255,0.06);
+  margin: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+}
+
+.analysis-summary h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: #facc15;
+}
+
+#analysis-summary-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+/* ===== TAG TONO / EMOZIONE ===== */
+
+.analysis-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.analysis-tags span {
+  background: rgba(255,255,255,0.12);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===== TEMI ===== */
+
+.analysis-themes {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.analysis-themes span {
+  background: rgba(249, 115, 22, 0.25);
+  color: #fde68a;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+}
+
+/* ===== DISCOVER CTA ===== */
+
+.discover-cta {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  text-align: center;
+}
+
+.discover-cta p {
+  font-size: 0.85rem;
+  color: #d1d5db;
+  margin-bottom: 0.25rem;
+}
+
+.discover-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  color: #facc15;
+  text-decoration: none;
+}
+
+.discover-link:hover {
+  text-decoration: underline;
+}
+
+/* ===== VISIBILITY ===== */
+
+.hidden {
+  display: none !important;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 640px) {
+  .terminal {
+    font-size: 0.8rem;
+  }
+
+  .analysis-summary {
+    margin: 0.75rem;
+  }
+}
