@@ -5,6 +5,10 @@
 
 (async () => {
 
+  /* ================= FEATURE FLAGS ================= */
+
+  const DISCOVERY_UNLOCK_REQUIRED = false; // 🔒 FUTURO (ora OFF)
+
   /* ================= SAFE SUPABASE ================= */
 
   async function waitForSupabase(retries = 15) {
@@ -25,7 +29,7 @@
   let supabase;
   try {
     supabase = await waitForSupabase();
-  } catch (err) {
+  } catch {
     console.error('[DISCOVERY] Supabase non pronto');
     return;
   }
@@ -123,8 +127,7 @@
 
       emptyState?.classList.add('hidden');
 
-      // UX DISCOVER → non classifica
-      // (affinità alta sopra, ma senza numeri aggressivi)
+      // UX DISCOVER → suggerimenti, NON classifica
       renderPoems(data.slice(0, 12));
 
     } catch (err) {
