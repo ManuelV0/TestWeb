@@ -1,25 +1,3 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Poesia | TheItalianPoetry</title>
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-
-  <!-- CSS base -->
-  <link rel="stylesheet" href="css/poesia-focus.css">
-</head>
-
-<body>
-
-<header class="focus-header">
-  <a href="esplora.html" class="back-link">← Torna a Discovery</a>
-</header>
-
 <main class="focus-container">
 
   <!-- STATO -->
@@ -34,30 +12,20 @@
     <pre id="poem-content" class="content"></pre>
   </article>
 
-  <!-- GPT / IA -->
-  <section id="ai-section" class="ai-section hidden">
-    <h2>🧠 Dialoga con questa poesia</h2>
+  <!-- ANALISI IA – TERMINALE -->
+  <section class="ai-terminal-section">
+    <header class="terminal-header">
+      <span>Analisi Intelligente</span>
+      <span class="terminal-status" id="terminal-status">Pronta</span>
+    </header>
 
-    <div class="ai-box">
-      <textarea
-        id="ai-input"
-        placeholder="Chiedi qualcosa a questa poesia…"
-        rows="3"
-      ></textarea>
+    <pre class="terminal" id="gpt-terminal">
+$ tip analyze poem --profile
+    </pre>
 
-      <button id="ai-send-btn">Invia</button>
-    </div>
-
-    <div id="ai-response" class="ai-response"></div>
+    <button id="run-analysis" class="terminal-btn">
+      ▶ Avvia Analisi
+    </button>
   </section>
 
 </main>
-
-<!-- SUPABASE -->
-<script type="module" src="js/supabase-init.js"></script>
-
-<!-- LOGICA -->
-<script type="module" src="js/poesia-focus.js"></script>
-
-</body>
-</html>
