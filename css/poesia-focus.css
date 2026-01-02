@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  font-family: "Open Sans", sans-serif;
+  background: #f6fff9;
+  color: #1f2f24;
+}
+
+.focus-header {
+  padding: 1rem;
+}
+
+.back-link {
+  text-decoration: none;
+  color: #3aa06b;
+  font-weight: 600;
+}
+
+.focus-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.poem h1 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.author {
+  color: #4d6254;
+  margin-bottom: 1.5rem;
+}
+
+.content {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.ai-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(79,190,127,0.25);
+}
+
+.ai-box {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ai-box textarea {
+  flex: 1;
+  padding: 0.75rem;
+  font-family: inherit;
+}
+
+.ai-box button {
+  background: #4fbe7f;
+  color: white;
+  border: none;
+  padding: 0 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ai-response {
+  margin-top: 1rem;
+  color: #3aa06b;
+  font-style: italic;
+}
