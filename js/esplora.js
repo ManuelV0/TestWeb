@@ -1,5 +1,5 @@
 /* =========================================================
-   ESPLORA / POESIE CONSIGLIATE – VERSIONE DEFINITIVA
+   ESPLORA / POESIE CONSIGLIATE – VERSIONE FINALE
    Modalità: DISCOVER (non classifica)
    Stato: PRODUZIONE
 ========================================================= */
@@ -67,22 +67,27 @@
     poemsList.innerHTML = '';
 
     poems.forEach(poem => {
-      const poemId = poem.id || poem.poem_id;
+      const poemId = poem.id ?? poem.poem_id;
       if (!poemId) return;
 
       const li = document.createElement('li');
       li.className = 'ai-poem-card';
       li.style.cursor = 'pointer';
 
-      const reasonLabel =
-        poem.reason === 'affinity'
-          ? `<span class="discover-reason affinity">🧠 In sintonia con ciò che leggi</span>`
-          : `<span class="discover-reason explore">✨ Scoperta esplorativa</span>`;
+      /* 🔍 Reason (backend-first, fallback safe) */
+      let reasonHtml = '';
+      if (poem.reason) {
+        reasonHtml = poem.reason.includes('Suggerita')
+          ? `<span class="discover-reason affinity">🧠 ${poem.reason}</span>`
+          : `<span class="discover-reason explore">✨ ${poem.reason}</span>`;
+      } else {
+        reasonHtml = `<span class="discover-reason explore">✨ Scoperta esplorativa</span>`;
+      }
 
       li.innerHTML = `
         <h3>${poem.title}</h3>
         <p class="author">di ${poem.author_name}</p>
-        ${reasonLabel}
+        ${reasonHtml}
       `;
 
       /* 👉 CLICK → ANALISI POESIA */
@@ -104,8 +109,9 @@
 
       /**
        * 🔮 DISCOVER
-       * In futuro: user_top_themes dinamici
-       * Ora: già compatibile con la funzione SQL
+       * p_user_top_themes:
+       * - ora fallback []
+       * - pronto per get_user_top_themes()
        */
       const { data, error } = await supabase.rpc('get_discover_poems', {
         p_user_id: userId,
