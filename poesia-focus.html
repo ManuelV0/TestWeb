@@ -24,7 +24,7 @@
   <script>
     /**
      * 🔐 Supabase Public Anon Key
-     * (sicura da esporre lato client)
+     * SAFE: anon key, NON service key
      */
     window.SUPABASE_ANON_KEY =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q";
@@ -45,32 +45,86 @@
   <main class="focus-container">
 
     <!-- STATO -->
-    <section id="focus-status" class="status hidden" aria-live="polite">
+    <section
+      id="focus-status"
+      class="status hidden"
+      aria-live="polite"
+    >
       <p class="loading-text">Caricamento poesia…</p>
     </section>
 
-    <!-- POESIA -->
+    <!-- ================= POESIA ================= -->
     <article id="poem-container" class="poem hidden">
+
       <h1 id="poem-title"></h1>
       <p id="poem-author" class="author"></p>
+
       <pre id="poem-content" class="content"></pre>
+
+      <!-- CTA ANALISI -->
+      <div class="analysis-cta">
+        <p class="cta-text">
+          Vuoi approfondire questa poesia?
+        </p>
+        <button
+          id="run-analysis"
+          class="terminal-btn primary"
+        >
+          ▶ Avvia Analisi Intelligente
+        </button>
+      </div>
+
     </article>
 
-    <!-- ANALISI IA – TERMINALE -->
-    <section class="ai-terminal-section">
+    <!-- ================= ANALISI IA ================= -->
+    <section class="ai-terminal-section hidden" id="analysis-section">
 
       <header class="terminal-header">
         <span>Analisi Intelligente</span>
-        <span class="terminal-status" id="terminal-status">Pronta</span>
+        <span
+          class="terminal-status"
+          id="terminal-status"
+        >
+          Pronta
+        </span>
       </header>
 
       <pre class="terminal" id="gpt-terminal">
 $ tip analyze poem --profile
       </pre>
 
-      <button id="run-analysis" class="terminal-btn">
-        ▶ Avvia Analisi
-      </button>
+      <!-- SINTESI RAPIDA (POPOLATA DA JS) -->
+      <div
+        id="analysis-summary-box"
+        class="analysis-summary hidden"
+      >
+        <h3>🧠 In breve</h3>
+
+        <p id="analysis-summary-text"></p>
+
+        <div class="analysis-tags">
+          <span id="analysis-tone"></span>
+          <span id="analysis-emotion"></span>
+        </div>
+
+        <div
+          id="analysis-themes"
+          class="analysis-themes"
+        ></div>
+      </div>
+
+      <!-- CTA DISCOVER -->
+      <div class="discover-cta">
+        <p>
+          Vuoi continuare l’esplorazione?
+        </p>
+        <a
+          href="esplora.html"
+          class="discover-link"
+        >
+          Scopri poesie simili →
+        </a>
+      </div>
 
     </section>
 
