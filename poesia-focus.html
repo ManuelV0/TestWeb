@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poesia | TheItalianPoetry</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- CSS base -->
+  <link rel="stylesheet" href="css/poesia-focus.css">
+</head>
+
+<body>
+
+<header class="focus-header">
+  <a href="esplora.html" class="back-link">← Torna a Discovery</a>
+</header>
+
+<main class="focus-container">
+
+  <!-- STATO -->
+  <section id="focus-status" class="status hidden">
+    <p class="loading-text">Caricamento poesia…</p>
+  </section>
+
+  <!-- POESIA -->
+  <article id="poem-container" class="poem hidden">
+    <h1 id="poem-title"></h1>
+    <p id="poem-author" class="author"></p>
+    <pre id="poem-content" class="content"></pre>
+  </article>
+
+  <!-- GPT / IA -->
+  <section id="ai-section" class="ai-section hidden">
+    <h2>🧠 Dialoga con questa poesia</h2>
+
+    <div class="ai-box">
+      <textarea
+        id="ai-input"
+        placeholder="Chiedi qualcosa a questa poesia…"
+        rows="3"
+      ></textarea>
+
+      <button id="ai-send-btn">Invia</button>
+    </div>
+
+    <div id="ai-response" class="ai-response"></div>
+  </section>
+
+</main>
+
+<!-- SUPABASE -->
+<script type="module" src="js/supabase-init.js"></script>
+
+<!-- LOGICA -->
+<script type="module" src="js/poesia-focus.js"></script>
+
+</body>
+</html>
