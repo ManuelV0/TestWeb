@@ -291,6 +291,73 @@
       </div>
     </section>
 
+
+<div
+  id="submission-modal"
+  class="info-modal hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="submission-modal-title"
+  aria-hidden="true"
+>
+  <div class="modal-content">
+    <button
+      type="button"
+      class="modal-close-btn"
+      data-close-modal
+      aria-label="Chiudi"
+    >
+      &times;
+    </button>
+
+    <h2 id="submission-modal-title">Invia la tua poesia</h2>
+
+    <form id="submission-form">
+      <label>
+        Titolo
+        <input type="text" id="poem-title" required />
+      </label>
+
+      <label>
+        Testo della poesia
+        <textarea
+          id="poem-content"
+          rows="6"
+          required
+        ></textarea>
+      </label>
+
+      <label>
+        <input type="checkbox" id="anonymous-checkbox" />
+        Pubblica come anonimo
+      </label>
+
+      <label>
+        Nome
+        <input type="text" id="author-firstname" />
+      </label>
+
+      <label>
+        Cognome
+        <input type="text" id="author-lastname" />
+      </label>
+
+      <label>
+        Instagram (opzionale)
+        <input type="text" id="author-instagram" />
+      </label>
+
+      <p id="form-message" aria-live="polite"></p>
+
+      <button type="submit" class="button-primary">
+        Invia poesia
+      </button>
+    </form>
+  </div>
+</div>
+
+
+    
     <div id="how-to-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="how-to-modal-title" aria-hidden="true">
       <div class="modal-content">
         <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
