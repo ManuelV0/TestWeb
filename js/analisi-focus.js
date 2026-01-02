@@ -1,5 +1,5 @@
 /* =========================================================
-   POESIA FOCUS + ANALISI IA (OPERATIVO)
+   POESIA FOCUS + ANALISI IA (OPERATIVO) eliminare
 ========================================================= */
 
 (async () => {
