@@ -10,9 +10,13 @@
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
-        else setTimeout(() => check(--retries), 100);
+        if (window.supabaseClient) {
+          resolve(window.supabaseClient);
+        } else if (retries <= 0) {
+          reject(new Error('SUPABASE_NOT_READY'));
+        } else {
+          setTimeout(() => check(--retries), 100);
+        }
       };
       check();
     });
@@ -30,6 +34,7 @@
 
   const statusBox   = document.getElementById('focus-status');
   const poemBox     = document.getElementById('poem-container');
+
   const titleEl     = document.getElementById('poem-title');
   const authorEl    = document.getElementById('poem-author');
   const contentEl   = document.getElementById('poem-content');
@@ -68,6 +73,7 @@
 
   async function loadPoem() {
     const poemId = getPoemIdFromUrl();
+
     if (!poemId) {
       setStatus('❌ Poesia non trovata.');
       return;
@@ -92,19 +98,18 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI-FOCUS] Errore poesia', err);
+      console.error('[ANALISI-FOCUS] Errore caricamento poesia', err);
       setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
 
-  /* ================= ANALISI IA (SIMULATA MA STRUTTURATA) ================= */
+  /* ================= ANALISI IA (SIMULATA, STRUTTURATA) ================= */
 
   async function runAnalysis() {
-    if (!terminal) return;
+    if (!terminal || !runBtn || !statusLabel) return;
 
     terminal.textContent = '';
     statusLabel.textContent = '🧠 Analisi in corso';
-
     runBtn.disabled = true;
 
     await print('$ tip analyze poem --profile\n');
