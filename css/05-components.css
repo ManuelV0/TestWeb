@@ -360,3 +360,12 @@ body.widget-open {
     font-size: 1.4rem;
   }
 }
+
+.info-modal {
+  z-index: 1000;
+}
+
+.mobile-nav-toggle,
+.nav-wrapper {
+  z-index: 900;
+}
