@@ -1,6 +1,6 @@
 /* =========================================================
    ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: STABILE / SENZA SBLOCCO / EDGE FUNCTION ATTIVA
+   Stato: STABILE / EDGE FUNCTION ATTIVA / VITE READY
 ========================================================= */
 
 (async () => {
@@ -26,6 +26,17 @@
     return;
   }
 
+  /* ================= ENV (VITE) ================= */
+
+  const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+  const EDGE_URL = import.meta.env.VITE_SUPABASE_EDGE_URL
+    || 'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler';
+
+  if (!SUPABASE_ANON_KEY) {
+    console.error('[ANALISI-FOCUS] VITE_SUPABASE_ANON_KEY mancante');
+    return;
+  }
+
   /* ================= DOM ================= */
 
   const statusBox   = document.getElementById('focus-status');
@@ -38,6 +49,11 @@
   const terminal    = document.getElementById('gpt-terminal');
   const runBtn      = document.getElementById('run-analysis');
   const statusLabel = document.getElementById('terminal-status');
+
+  if (!terminal || !runBtn || !statusLabel) {
+    console.warn('[ANALISI-FOCUS] DOM incompleto, abort');
+    return;
+  }
 
   /* ================= HELPERS ================= */
 
@@ -68,7 +84,8 @@
 
   async function loadPoem() {
     const poemId = getPoemIdFromUrl();
-    if (!poemId) {
+
+    if (!poemId || !/^\d+$/.test(poemId)) {
       setStatus('❌ Poesia non trovata.');
       return;
     }
@@ -92,7 +109,7 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI-FOCUS]', err);
+      console.error('[ANALISI-FOCUS] Errore poesia', err);
       setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
@@ -100,8 +117,6 @@
   /* ================= ANALISI IA – GPT LIVE ================= */
 
   async function runAnalysis() {
-    if (!terminal || !runBtn || !statusLabel) return;
-
     terminal.textContent = '';
     statusLabel.textContent = '🧠 Analisi in corso';
     runBtn.disabled = true;
@@ -111,20 +126,17 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-      const res = await fetch(
-        'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // ✅ USA ANON KEY (EDGE READY)
-            'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`
-          },
-          body: JSON.stringify({
-            poem: { content: contentEl.textContent }
-          })
-        }
-      );
+      const res = await fetch(EDGE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'apikey': SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          poem: { content: contentEl.textContent }
+        })
+      });
 
       if (!res.ok) {
         const errText = await res.text();
@@ -149,7 +161,12 @@
 
   /* ================= INIT ================= */
 
-  document.addEventListener('DOMContentLoaded', loadPoem);
-  runBtn?.addEventListener('click', runAnalysis);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPoem);
+  } else {
+    loadPoem();
+  }
+
+  runBtn.addEventListener('click', runAnalysis);
 
 })();
