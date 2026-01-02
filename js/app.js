@@ -1,5 +1,5 @@
 
-import { trackInteraction } from '.js/ai-interactions-core.js';
+import { trackInteraction } from './ai-interactions-core.js';
 
 /* =========================================
    LISTENER INTERAZIONI DAL WIDGET (IFRAME)
