@@ -699,8 +699,8 @@ if (elements.primaryNavigation?.getAttribute('data-visible') === 'true') {
       }
 
       const user = session.user;
-      const title = document.getElementById('poem-title')?.value || '';
-      const content = document.getElementById('poem-content')?.value || '';
+      const title = document.getElementById('submission-poem-title')?.value.trim() || '';
+const content = document.getElementById('submission-poem-content')?.value.trim() || '';
       const isAnonymous = elements.anonymousCheckbox?.checked || false;
       const firstName = elements.firstNameInput?.value?.trim() || '';
       const lastName = elements.lastNameInput?.value?.trim() || '';
