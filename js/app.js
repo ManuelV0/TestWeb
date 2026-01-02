@@ -182,6 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
+
+   
   const participateBtn = elements.openSubmissionModalBtn;
 
   if (participateBtn) {
@@ -199,7 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         return;
       }
+       
+// ✅ chiude menu mobile se aperto
+if (elements.primaryNavigation?.getAttribute('data-visible') === 'true') {
+  elements.primaryNavigation.setAttribute('data-visible', 'false');
+  elements.mobileNavToggle?.setAttribute('aria-expanded', 'false');
+  elements.mobileNavToggle?.classList.remove('is-active');
 
+  const icon = elements.mobileNavToggle?.querySelector('i');
+  if (icon) {
+    icon.classList.add('fa-bars');
+    icon.classList.remove('fa-times');
+  }
+}
       openModalElement(elements.submissionModal);
     });
   }
