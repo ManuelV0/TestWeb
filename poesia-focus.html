@@ -19,16 +19,33 @@
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ================= CONFIG GLOBALE ================= -->
+  <!-- ⚠️ DEVE stare PRIMA di poesia-focus.js -->
+  <script>
+    /**
+     * 🔐 Supabase Public Anon Key
+     * (sicura da esporre lato client)
+     */
+    window.SUPABASE_ANON_KEY =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q";
+
+    /**
+     * 🧠 Edge Function – Analisi GPT
+     */
+    window.EDGE_FUNCTION_URL =
+      "https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler";
+  </script>
+
+  <!-- ================= HEADER ================= -->
   <header class="focus-header">
     <a href="esplora.html" class="back-link">← Torna a Discovery</a>
   </header>
 
-  <!-- CONTENUTO -->
+  <!-- ================= CONTENUTO ================= -->
   <main class="focus-container">
 
     <!-- STATO -->
-    <section id="focus-status" class="status hidden">
+    <section id="focus-status" class="status hidden" aria-live="polite">
       <p class="loading-text">Caricamento poesia…</p>
     </section>
 
@@ -59,10 +76,12 @@ $ tip analyze poem --profile
 
   </main>
 
-  <!-- SUPABASE -->
+  <!-- ================= SCRIPT ================= -->
+
+  <!-- Supabase init -->
   <script type="module" src="js/supabase-init.js"></script>
 
-  <!-- LOGICA ANALISI -->
+  <!-- Logica Analisi -->
   <script type="module" src="js/poesia-focus.js"></script>
 
 </body>
