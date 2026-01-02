@@ -1,5 +1,6 @@
 /* =========================================================
-   ESPLORA / POESIE CONSIGLIATE – VERSIONE FINALE
+   ESPLORA / POESIE CONSIGLIATE – VERSIONE DEFINITIVA
+   Modalità: DISCOVER (non classifica)
    Stato: PRODUZIONE
 ========================================================= */
 
@@ -10,13 +11,9 @@
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) {
-          resolve(window.supabaseClient);
-        } else if (retries <= 0) {
-          reject(new Error('SUPABASE_NOT_READY'));
-        } else {
-          setTimeout(() => check(--retries), 100);
-        }
+        if (window.supabaseClient) resolve(window.supabaseClient);
+        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
+        else setTimeout(() => check(--retries), 100);
       };
       check();
     });
@@ -58,7 +55,7 @@
   async function requireAuth() {
     const { data } = await supabase.auth.getSession();
     if (!data?.session) {
-      setStatus('❌ Accedi per vedere le poesie consigliate.');
+      setStatus('Accedi per scoprire poesie consigliate ✨');
       throw new Error('NOT_AUTHENTICATED');
     }
     return data.session.user.id;
@@ -70,38 +67,25 @@
     poemsList.innerHTML = '';
 
     poems.forEach(poem => {
-      const poemId = poem.poem_id ?? poem.id;
-
+      const poemId = poem.id || poem.poem_id;
       if (!poemId) return;
 
       const li = document.createElement('li');
       li.className = 'ai-poem-card';
       li.style.cursor = 'pointer';
 
-      if (poem.is_new) li.classList.add('is-new');
+      const reasonLabel =
+        poem.reason === 'affinity'
+          ? `<span class="discover-reason affinity">🧠 In sintonia con ciò che leggi</span>`
+          : `<span class="discover-reason explore">✨ Scoperta esplorativa</span>`;
 
       li.innerHTML = `
         <h3>${poem.title}</h3>
         <p class="author">di ${poem.author_name}</p>
-
-        <p class="preview">
-          ${(poem.content || '').slice(0, 160)}…
-        </p>
-
-        <div class="ai-meta">
-          <span class="score">
-            Affinità ${Number(poem.affinity_score || 0).toFixed(2)}
-          </span>
-
-          ${poem.is_new ? `<span class="badge-new">✨ Nuova per te</span>` : ''}
-        </div>
-
-        <p class="ai-reason">
-          Suggerita perché simile alle poesie che hai apprezzato
-        </p>
+        ${reasonLabel}
       `;
 
-      /* 👉 COLLEGAMENTO ALLA PAGINA ANALISI */
+      /* 👉 CLICK → ANALISI POESIA */
       li.addEventListener('click', () => {
         window.location.href = `poesia-focus.html?id=${poemId}`;
       });
@@ -116,27 +100,39 @@
     try {
       setStatus('Stiamo esplorando per te…');
 
-      await requireAuth();
+      const userId = await requireAuth();
 
-      const { data, error } = await supabase.rpc('get_intelligent_poems');
-
-      if (error) throw error;
+      /**
+       * 🔮 DISCOVER
+       * In futuro: user_top_themes dinamici
+       * Ora: già compatibile con la funzione SQL
+       */
+      const { data, error } = await supabase.rpc('get_discover_poems', {
+        p_user_id: userId,
+        p_user_top_themes: [] // fallback sicuro
+      });
 
       clearStatus();
 
+      if (error) throw error;
+
       if (!data || data.length === 0) {
         emptyBox.classList.remove('hidden');
+        emptyBox.innerHTML = `
+          <p>
+            Stiamo imparando i tuoi gusti.<br>
+            Continua a leggere e votare ✨
+          </p>
+        `;
         return;
       }
 
       emptyBox.classList.add('hidden');
-
-      /* Mostriamo solo le prime N (UX discovery) */
-      renderPoems(data.slice(0, 12));
+      renderPoems(data);
 
     } catch (err) {
       console.error('[ESPLORA ERROR]', err);
-      setStatus('❌ Errore nel caricamento delle poesie consigliate.');
+      setStatus('Errore nel caricamento delle poesie consigliate.');
     }
   }
 
