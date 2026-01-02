@@ -8,12 +8,18 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
 
   <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  >
 
-  <!-- CSS (stesso stile della classifica intelligente) -->
+  <!-- CSS (stesso stile Classifica Intelligente) -->
   <link rel="stylesheet" href="css/classifica-intelligente.css">
 </head>
 
@@ -37,7 +43,7 @@
     <h1>Poesie consigliate</h1>
     <p>
       Scopri testi suggeriti in base a ciò che leggi, voti e senti.
-      Qui il sistema esplora per te, non classifica.
+      Questa sezione <strong>esplora</strong>, non classifica.
     </p>
   </section>
 
@@ -76,19 +82,36 @@
   <p>© <span id="year"></span> TheItalianPoetry</p>
 </footer>
 
-<!-- ================= SCRIPTS ================= -->
+<!-- ================= CONFIG GLOBALE (OBBLIGATORIO) ================= -->
+<script>
+  /**
+   * 🔐 Supabase public config
+   * SAFE: è una anon key, NON una service key
+   */
+  window.SUPABASE_ANON_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqaWt5cGdtY2h5d3lianhid2FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyMTMyOTIsImV4cCI6MjA2ODc4OTI5Mn0.dXqWkg47xTg2YtfLhBLrFd5AIB838KdsmR9qsMPkk8Q";
 
-<!-- Supabase -->
+  /**
+   * 🧠 Edge Function (GPT / Discover / Analisi)
+   */
+  window.EDGE_FUNCTION_URL =
+    "https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler";
+</script>
+
+<!-- ================= SCRIPT CORE ================= -->
+
+<!-- Supabase init -->
 <script type="module" src="js/supabase-init.js"></script>
 
-<!-- Tracciamento interazioni -->
+<!-- Tracciamento interazioni utente -->
 <script type="module" src="js/ai-interactions-core.js"></script>
 
-<!-- Logica ESPLORA -->
+<!-- Logica Discover / Poesie consigliate -->
 <script type="module" src="js/esplora.js"></script>
 
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('year').textContent =
+    new Date().getFullYear();
 </script>
 
 </body>
