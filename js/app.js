@@ -630,7 +630,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ========= 7. GESTIONE MODALI =========
-  setupModal(elements.submissionModal, [], [elements.closeSubmissionModalBtn]);
+  setupModal(elements.submissionModal, [], []);
   setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], { onClose: resetVotingModalState });
   setupModal(elements.howToModal, [elements.howToLink, elements.sidebarParticipateBtn], [elements.closeHowToModalBtn]);
   setupModal(elements.aboutUsModal, [elements.aboutUsLink], [elements.closeAboutUsModalBtn]);
