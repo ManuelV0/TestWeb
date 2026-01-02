@@ -1,29 +1,22 @@
 /* =========================================================
-   ESPLORA / POESIE CONSIGLIATE – FINAL
+   ESPLORA / POESIE CONSIGLIATE – VERSIONE FINALE
    Stato: PRODUZIONE
 ========================================================= */
 
 (async () => {
-
-  /* ================= PAGE GUARD ================= */
-
-  const poemsList = document.getElementById('explore-poems-list');
-  if (!poemsList) {
-    // Script caricato su una pagina che non è "Esplora"
-    return;
-  }
-
-  const statusBox  = document.getElementById('explore-status');
-  const emptyState = document.getElementById('explore-empty');
 
   /* ================= SAFE SUPABASE ================= */
 
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
-        else setTimeout(() => check(--retries), 100);
+        if (window.supabaseClient) {
+          resolve(window.supabaseClient);
+        } else if (retries <= 0) {
+          reject(new Error('SUPABASE_NOT_READY'));
+        } else {
+          setTimeout(() => check(--retries), 100);
+        }
       };
       check();
     });
@@ -37,25 +30,34 @@
     return;
   }
 
+  /* ================= DOM ================= */
+
+  const statusBox  = document.getElementById('explore-status');
+  const poemsList = document.getElementById('explore-poems-list');
+  const emptyBox  = document.getElementById('explore-empty');
+
+  if (!statusBox || !poemsList || !emptyBox) {
+    console.warn('[ESPLORA] DOM incompleto, abort');
+    return;
+  }
+
   /* ================= STATUS ================= */
 
   function setStatus(text) {
-    if (!statusBox) return;
     statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
     statusBox.classList.remove('hidden');
   }
 
   function clearStatus() {
-    if (!statusBox) return;
-    statusBox.innerHTML = '';
     statusBox.classList.add('hidden');
+    statusBox.innerHTML = '';
   }
 
   /* ================= AUTH ================= */
 
   async function requireAuth() {
-    const { data, error } = await supabase.auth.getSession();
-    if (error || !data?.session) {
+    const { data } = await supabase.auth.getSession();
+    if (!data?.session) {
       setStatus('❌ Accedi per vedere le poesie consigliate.');
       throw new Error('NOT_AUTHENTICATED');
     }
@@ -68,8 +70,13 @@
     poemsList.innerHTML = '';
 
     poems.forEach(poem => {
+      const poemId = poem.poem_id ?? poem.id;
+
+      if (!poemId) return;
+
       const li = document.createElement('li');
       li.className = 'ai-poem-card';
+      li.style.cursor = 'pointer';
 
       if (poem.is_new) li.classList.add('is-new');
 
@@ -90,9 +97,14 @@
         </div>
 
         <p class="ai-reason">
-          Suggerita perché simile alle poesie che hai letto o apprezzato
+          Suggerita perché simile alle poesie che hai apprezzato
         </p>
       `;
+
+      /* 👉 COLLEGAMENTO ALLA PAGINA ANALISI */
+      li.addEventListener('click', () => {
+        window.location.href = `poesia-focus.html?id=${poemId}`;
+      });
 
       poemsList.appendChild(li);
     });
@@ -106,7 +118,6 @@
 
       await requireAuth();
 
-      // Usa la stessa funzione della classifica intelligente
       const { data, error } = await supabase.rpc('get_intelligent_poems');
 
       if (error) throw error;
@@ -114,13 +125,13 @@
       clearStatus();
 
       if (!data || data.length === 0) {
-        emptyState?.classList.remove('hidden');
+        emptyBox.classList.remove('hidden');
         return;
       }
 
-      emptyState?.classList.add('hidden');
+      emptyBox.classList.add('hidden');
 
-      // DISCOVER = pochi contenuti, curati
+      /* Mostriamo solo le prime N (UX discovery) */
       renderPoems(data.slice(0, 12));
 
     } catch (err) {
