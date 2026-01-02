@@ -1,3 +1,5 @@
+
+
 import { trackInteraction } from './ai-interactions-core.js';
 
 /* =========================================
@@ -202,6 +204,23 @@ let currentRating = 0;
             }
         });
     });
+
+const participateBtn = elements.openSubmissionModalBtn;
+
+if (participateBtn) {
+  participateBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+      alert('Accedi con Google per partecipare ✨');
+      return;
+    }
+
+    openModalElement(elements.submissionModal);
+  });
+}
 
     function initMobileNav() {
         const navToggle = elements.mobileNavToggle;
@@ -595,7 +614,10 @@ let currentRating = 0;
             elements.userEmailSpan.textContent = '';
         }
         if (elements.openSubmissionModalBtn) {
-            elements.openSubmissionModalBtn.disabled = !loggedIn;
+          elements.openSubmissionModalBtn.classList.toggle(
+            'is-disabled',
+            !session
+          );
         }
     }
 
@@ -614,7 +636,7 @@ let currentRating = 0;
     });
 
     // ========= 7. GESTIONE MODALI =========
-    setupModal(elements.submissionModal, [elements.openSubmissionModalBtn], [elements.closeSubmissionModalBtn]);
+    setupModal(elements.submissionModal, [], [elements.closeSubmissionModalBtn]);
     setupModal(elements.votingModal, [], [elements.closeVotingModalBtn], { onClose: resetVotingModalState });
     setupModal(elements.howToModal, [elements.howToLink, elements.sidebarParticipateBtn], [elements.closeHowToModalBtn]);
     setupModal(elements.aboutUsModal, [elements.aboutUsLink], [elements.closeAboutUsModalBtn]);
