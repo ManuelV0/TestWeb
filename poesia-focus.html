@@ -1,31 +1,69 @@
-<main class="focus-container">
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analisi Poesia | TheItalianPoetry</title>
 
-  <!-- STATO -->
-  <section id="focus-status" class="status hidden">
-    <p class="loading-text">Caricamento poesia…</p>
-  </section>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap"
+    rel="stylesheet"
+  >
 
-  <!-- POESIA -->
-  <article id="poem-container" class="poem hidden">
-    <h1 id="poem-title"></h1>
-    <p id="poem-author" class="author"></p>
-    <pre id="poem-content" class="content"></pre>
-  </article>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/poesia-focus.css">
+</head>
 
-  <!-- ANALISI IA – TERMINALE -->
-  <section class="ai-terminal-section">
-    <header class="terminal-header">
-      <span>Analisi Intelligente</span>
-      <span class="terminal-status" id="terminal-status">Pronta</span>
-    </header>
+<body>
 
-    <pre class="terminal" id="gpt-terminal">
+  <!-- HEADER -->
+  <header class="focus-header">
+    <a href="esplora.html" class="back-link">← Torna a Discovery</a>
+  </header>
+
+  <!-- CONTENUTO -->
+  <main class="focus-container">
+
+    <!-- STATO -->
+    <section id="focus-status" class="status hidden">
+      <p class="loading-text">Caricamento poesia…</p>
+    </section>
+
+    <!-- POESIA -->
+    <article id="poem-container" class="poem hidden">
+      <h1 id="poem-title"></h1>
+      <p id="poem-author" class="author"></p>
+      <pre id="poem-content" class="content"></pre>
+    </article>
+
+    <!-- ANALISI IA – TERMINALE -->
+    <section class="ai-terminal-section">
+
+      <header class="terminal-header">
+        <span>Analisi Intelligente</span>
+        <span class="terminal-status" id="terminal-status">Pronta</span>
+      </header>
+
+      <pre class="terminal" id="gpt-terminal">
 $ tip analyze poem --profile
-    </pre>
+      </pre>
 
-    <button id="run-analysis" class="terminal-btn">
-      ▶ Avvia Analisi
-    </button>
-  </section>
+      <button id="run-analysis" class="terminal-btn">
+        ▶ Avvia Analisi
+      </button>
 
-</main>
+    </section>
+
+  </main>
+
+  <!-- SUPABASE -->
+  <script type="module" src="js/supabase-init.js"></script>
+
+  <!-- LOGICA ANALISI -->
+  <script type="module" src="js/poesia-focus.js"></script>
+
+</body>
+</html>
