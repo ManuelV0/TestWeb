@@ -41,19 +41,16 @@
 
   if (!terminal || !runBtn || !statusLabel) return;
 
-  /* ================= STATO SBLOCCO ================= */
+  /* ================= STATO ================= */
 
-  const UNLOCK_KEY = 'analysis_unlocked';
-
-  const isUnlocked = () => localStorage.getItem(UNLOCK_KEY) === 'true';
-  const unlock     = () => localStorage.setItem(UNLOCK_KEY, 'true');
+  let isRunning = false;
 
   /* ================= UTILS ================= */
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   async function print(text, delay = 200) {
-    terminal.textContent += text;
+    terminal.appendChild(document.createTextNode(text));
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
   }
@@ -73,12 +70,28 @@
     return new URLSearchParams(window.location.search).get('id');
   }
 
+  function getUnlockKey() {
+    const id = getPoemId();
+    return id ? `analysis_unlocked_${id}` : null;
+  }
+
+  const isUnlocked = () => {
+    const key = getUnlockKey();
+    return key && localStorage.getItem(key) === 'true';
+  };
+
+  const unlock = () => {
+    const key = getUnlockKey();
+    if (key) localStorage.setItem(key, 'true');
+  };
+
   /* ================= LOAD POESIA ================= */
 
   async function loadPoem() {
     const poemId = getPoemId();
-    if (!poemId) {
-      setStatus('❌ Poesia non trovata.');
+
+    if (!poemId || !/^\d+$/.test(poemId)) {
+      setStatus('❌ ID poesia non valido.');
       return;
     }
 
@@ -109,6 +122,11 @@
   /* ================= UNLOCK PROMPT ================= */
 
   async function showUnlockPrompt() {
+    if (document.querySelector('.unlock-actions')) return;
+
+    isRunning = true;
+    runBtn.disabled = true;
+
     terminal.textContent = '';
     statusLabel.textContent = '🔒 Inattiva';
 
@@ -129,14 +147,18 @@
 
     yes.onclick = async () => {
       unlock();
-      statusLabel.textContent = '🧠 Analisi in corso';
       actions.remove();
       await runGptAnalysis();
     };
 
     later.onclick = () => {
-      terminal.textContent += '\n→ Analisi rimandata\n';
+      terminal.appendChild(
+        document.createTextNode('\n→ Analisi rimandata\n')
+      );
+      statusLabel.textContent = '⏸ Sospesa';
       actions.remove();
+      isRunning = false;
+      runBtn.disabled = false;
     };
 
     actions.append(yes, later);
@@ -146,9 +168,13 @@
   /* ================= GPT LIVE ================= */
 
   async function runGptAnalysis() {
+    if (isRunning) return;
+
+    isRunning = true;
+    runBtn.disabled = true;
+
     terminal.textContent = '';
     statusLabel.textContent = '🧠 Analisi in corso';
-    runBtn.disabled = true;
 
     try {
       await print('$ tip analyze poem --profile\n');
@@ -159,7 +185,12 @@
 
       const { data: session } = await supabase.auth.getSession();
       const token = session?.session?.access_token;
-      if (!token) throw new Error('TOKEN_MANCANTE');
+
+      if (!token) {
+        await print('[ ERRORE ] Sessione scaduta. Ricarica la pagina.\n');
+        statusLabel.textContent = '❌ Sessione';
+        return;
+      }
 
       const res = await fetch(
         'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler',
@@ -180,7 +211,7 @@
       const result = await res.json();
 
       await print('[ OK ] Analisi completata\n\n', 400);
-      await print(result.output + '\n', 120);
+      await print(result.output + '\n', 80);
 
       statusLabel.textContent = '🔓 Attiva';
 
@@ -189,6 +220,7 @@
       await print('\n[ ERRORE ] Analisi fallita\n');
       statusLabel.textContent = '❌ Errore';
     } finally {
+      isRunning = false;
       runBtn.disabled = false;
     }
   }
@@ -196,6 +228,8 @@
   /* ================= ENTRY POINT ================= */
 
   async function handleRun() {
+    if (isRunning) return;
+
     if (!isUnlocked()) {
       await showUnlockPrompt();
     } else {
@@ -205,7 +239,12 @@
 
   /* ================= INIT ================= */
 
-  document.addEventListener('DOMContentLoaded', loadPoem);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPoem);
+  } else {
+    loadPoem();
+  }
+
   runBtn.addEventListener('click', handleRun);
 
 })();
