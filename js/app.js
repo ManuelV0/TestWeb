@@ -684,8 +684,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const user = session.user;
-      const title = document.getElementById('poem-title')?.value || '';
-      const content = document.getElementById('poem-content')?.value || '';
+      const title = document.getElementById('submission-poem-title')?.value || '';
+      const content = document.getElementById('submission-poem-content')?.value || '';
       const isAnonymous = elements.anonymousCheckbox?.checked || false;
       const firstName = elements.firstNameInput?.value?.trim() || '';
       const lastName = elements.lastNameInput?.value?.trim() || '';
