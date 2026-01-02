@@ -10,13 +10,9 @@
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) {
-          resolve(window.supabaseClient);
-        } else if (retries <= 0) {
-          reject(new Error('SUPABASE_NOT_READY'));
-        } else {
-          setTimeout(() => check(--retries), 100);
-        }
+        if (window.supabaseClient) resolve(window.supabaseClient);
+        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
+        else setTimeout(() => check(--retries), 100);
       };
       check();
     });
@@ -25,7 +21,7 @@
   let supabase;
   try {
     supabase = await waitForSupabase();
-  } catch (err) {
+  } catch {
     console.error('[ANALISI-FOCUS] Supabase non pronto');
     return;
   }
@@ -58,22 +54,20 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 200) {
+  async function print(text, delay = 180) {
     terminal.textContent += text;
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
   }
 
   function getPoemIdFromUrl() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('id');
+    return new URLSearchParams(window.location.search).get('id');
   }
 
   /* ================= LOAD POESIA ================= */
 
   async function loadPoem() {
     const poemId = getPoemIdFromUrl();
-
     if (!poemId) {
       setStatus('❌ Poesia non trovata.');
       return;
@@ -84,7 +78,7 @@
 
       const { data, error } = await supabase
         .from('poesie')
-        .select('id, title, author_name, content')
+        .select('title, author_name, content')
         .eq('id', poemId)
         .single();
 
@@ -98,7 +92,7 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI-FOCUS] Errore caricamento poesia', err);
+      console.error('[ANALISI-FOCUS]', err);
       setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
@@ -117,36 +111,24 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-      const poemText = contentEl.textContent;
-
-      /* 🔐 SESSIONE SICURA */
-      const sessionRes = await supabase.auth.getSession();
-      const accessToken = sessionRes?.data?.session?.access_token;
-
-      if (!accessToken) {
-        throw new Error('TOKEN_MANCANTE');
-      }
-
-      /* 🚀 EDGE FUNCTION */
       const res = await fetch(
         'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler',
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
+            // ✅ USA ANON KEY (EDGE READY)
+            'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`
           },
           body: JSON.stringify({
-            poem: {
-              content: poemText
-            }
+            poem: { content: contentEl.textContent }
           })
         }
       );
 
       if (!res.ok) {
         const errText = await res.text();
-        throw new Error(errText || 'EDGE_FUNCTION_ERROR');
+        throw new Error(errText);
       }
 
       const result = await res.json();
@@ -168,9 +150,6 @@
   /* ================= INIT ================= */
 
   document.addEventListener('DOMContentLoaded', loadPoem);
-
-  if (runBtn) {
-    runBtn.addEventListener('click', runAnalysis);
-  }
+  runBtn?.addEventListener('click', runAnalysis);
 
 })();
