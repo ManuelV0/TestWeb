@@ -3,16 +3,20 @@
    Stato: PRODUZIONE / TEST UTENTE
 ========================================================= */
 
-(async () => {
+(async function ANALISI_FOCUS_BOOTSTRAP() {
 
   /* ================= SAFE SUPABASE ================= */
 
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
-        else setTimeout(() => check(--retries), 100);
+        if (window.supabaseClient) {
+          resolve(window.supabaseClient);
+        } else if (retries <= 0) {
+          reject(new Error('SUPABASE_NOT_READY'));
+        } else {
+          setTimeout(() => check(--retries), 100);
+        }
       };
       check();
     });
@@ -21,7 +25,7 @@
   let supabase;
   try {
     supabase = await waitForSupabase();
-  } catch {
+  } catch (err) {
     console.error('[ANALISI] Supabase non pronto');
     return;
   }
@@ -39,7 +43,10 @@
   const runBtn      = document.getElementById('run-analysis');
   const statusLabel = document.getElementById('terminal-status');
 
-  if (!terminal || !runBtn || !statusLabel) return;
+  if (!terminal || !runBtn || !statusLabel) {
+    console.warn('[ANALISI] DOM incompleto, abort');
+    return;
+  }
 
   /* ================= STATO ================= */
 
@@ -49,7 +56,7 @@
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-  async function print(text, delay = 200) {
+  async function print(text, delay = 120) {
     terminal.appendChild(document.createTextNode(text));
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
@@ -70,20 +77,22 @@
     return new URLSearchParams(window.location.search).get('id');
   }
 
+  /* ================= UNLOCK ================= */
+
   function getUnlockKey() {
     const id = getPoemId();
     return id ? `analysis_unlocked_${id}` : null;
   }
 
-  const isUnlocked = () => {
+  function isUnlocked() {
     const key = getUnlockKey();
-    return key && localStorage.getItem(key) === 'true';
-  };
+    return Boolean(key && localStorage.getItem(key) === 'true');
+  }
 
-  const unlock = () => {
+  function unlock() {
     const key = getUnlockKey();
     if (key) localStorage.setItem(key, 'true');
-  };
+  }
 
   /* ================= LOAD POESIA ================= */
 
@@ -104,7 +113,7 @@
         .eq('id', poemId)
         .single();
 
-      if (error) throw error;
+      if (error || !data) throw error;
 
       titleEl.textContent   = data.title;
       authorEl.textContent  = `di ${data.author_name}`;
@@ -114,7 +123,7 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI] Errore poesia', err);
+      console.error('[ANALISI] Errore caricamento poesia', err);
       setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
@@ -128,11 +137,11 @@
     runBtn.disabled = true;
 
     terminal.textContent = '';
-    statusLabel.textContent = '🔒 Inattiva';
+    statusLabel.textContent = '🔒 Bloccata';
 
     await print('$ tip analyze poem --profile\n');
-    await print('→ Questa analisi richiede attenzione\n');
-    await print('→ Vuoi davvero approfondire questa poesia?\n\n');
+    await print('→ Analisi profonda disponibile\n');
+    await print('→ Vuoi approfondire questa poesia?\n\n');
 
     const actions = document.createElement('div');
     actions.className = 'unlock-actions';
@@ -165,7 +174,7 @@
     terminal.parentNode.appendChild(actions);
   }
 
-  /* ================= GPT LIVE ================= */
+  /* ================= GPT ANALYSIS ================= */
 
   async function runGptAnalysis() {
     if (isRunning) return;
@@ -181,13 +190,14 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-      const poemText = contentEl.textContent;
+      const poemText = contentEl.textContent.trim();
+      if (!poemText) throw new Error('EMPTY_POEM');
 
-      const { data: session } = await supabase.auth.getSession();
-      const token = session?.session?.access_token;
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
 
       if (!token) {
-        await print('[ ERRORE ] Sessione scaduta. Ricarica la pagina.\n');
+        await print('[ ERRORE ] Sessione scaduta\n');
         statusLabel.textContent = '❌ Sessione';
         return;
       }
@@ -198,7 +208,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify({
             poem: { content: poemText }
@@ -211,7 +221,7 @@
       const result = await res.json();
 
       await print('[ OK ] Analisi completata\n\n', 400);
-      await print(result.output + '\n', 80);
+      await print(result.output + '\n', 70);
 
       statusLabel.textContent = '🔓 Attiva';
 
@@ -225,7 +235,7 @@
     }
   }
 
-  /* ================= ENTRY POINT ================= */
+  /* ================= ENTRY ================= */
 
   async function handleRun() {
     if (isRunning) return;
