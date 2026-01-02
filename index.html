@@ -2,50 +2,29 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  
- <meta name="ezoic-site-verification" content="XnXxiVOYLPqHv5G8NaoOJ28KOejmUV" />
-  
-  
+  <meta name="ezoic-site-verification" content="XnXxiVOYLPqHv5G8NaoOJ28KOejmUV" />
   <script data-cfasync="false" src="https://cmp.gatekeeperconsent.com/min.js"></script>
-<script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
-  
+  <script data-cfasync="false" src="https://the.gatekeeperconsent.com/cmp.min.js"></script>
   <script async src="//www.ezojs.com/ezoic/sa.min.js"></script>
-<script>
+  <script>
     window.ezstandalone = window.ezstandalone || {};
     ezstandalone.cmd = ezstandalone.cmd || [];
-</script>
-  
-  
-  
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TheItalianPoetry - La Tua Dashboard Artistica</title>
-  
-  
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:wght@400;600&family=Poppins:wght@600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
-  <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-  
-  <!-- Styles (lasciati con i path originali) -->
   <link rel="stylesheet" href="css/01-base.css">
   <link rel="stylesheet" href="css/02-header-nav.css">
   <link rel="stylesheet" href="css/03-hero.css">
   <link rel="stylesheet" href="css/04-layout-buttons.css">
   <link rel="stylesheet" href="css/05-components.css">
   <link rel="stylesheet" href="css/06-responsive-print.css">
-
-  
-
-  <!-- React (per widget) -->
   <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-
-  <!-- Inizio modifica: Stili aggiuntivi -->
   <style>
     .hidden { display: none !important; }
     .hidden-content { display: none; }
@@ -72,30 +51,24 @@
   </style>
 </head>
 <body>
-
   <header class="main-header">
-    <!-- Logo centrale -->
     <div class="logo">
       <i class="fa-solid fa-feather-pointed"></i>
       <span>TheItalianPoetry</span>
     </div>
-
-    <!-- Hamburger per mobile -->
     <button class="mobile-nav-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="Menu">
       <i class="fas fa-bars" aria-hidden="true"></i>
       <span class="sr-only">Menu</span>
     </button>
-
-    <!-- Navigazione e azioni -->
     <div class="nav-wrapper" id="primary-navigation" data-visible="false">
       <nav class="main-nav">
-  <a href="classifica-intelligente.html">Classifica Intelligente</a>
-  <a href="#" id="how-to-link">Come Partecipare</a>
-  <a href="#" id="about-us-link">Chi Siamo</a>
-  <a href="esplora.html">Esplora</a>
-  <a href="italian_poetry_portfolio/pages/poet_portfolio_landing.html">Diario</a>
-  <a href="author-page.html">Autore</a>
-</nav>
+        <a href="classifica-intelligente.html">Classifica Intelligente</a>
+        <a href="come-partecipare.html">Come Partecipare</a>
+        <a href="chi-siamo.html" id="about-us-link">Chi Siamo</a>
+        <a href="esplora.html">Esplora</a>
+        <a href="italian_poetry_portfolio/pages/poet_portfolio_landing.html">Diario</a>
+        <a href="author-page.html" target="_blank" rel="noreferrer noopener">Autore</a>
+      </nav>
       <div class="header-actions">
         <div id="auth-buttons">
           <button id="login-google-btn" class="button-social google">
@@ -106,13 +79,12 @@
           <span id="user-email"></span>
           <button id="logout-btn" class="button-secondary">Logout</button>
         </div>
-        <button id="open-submission-modal-btn" class="button-primary" >Partecipa</button>
+        <a href="partecipa.html" class="button-primary" id="header-participate-btn">Partecipa</a>
       </div>
     </div>
   </header>
 
   <main>
-    <!-- Hero attaccata all’header -->
     <section class="hero-section">
       <div class="hero-content">
         <h1>Le Voci Più Amate del Mese!</h1>
@@ -120,7 +92,6 @@
       </div>
     </section>
 
-   <!-- ▼▼▼ COUNTDOWN ▼▼▼ -->
     <section class="countdown-section">
       <div class="countdown-container">
         <h2 class="countdown-title">⏰ Tempo rimanente questo mese</h2>
@@ -145,8 +116,7 @@
         <p class="countdown-subtitle">Partecipa prima che finisca il mese!</p>
       </div>
     </section>
-    <!-- ▲▲▲ COUNTDOWN ▲▲▲ -->
-    
+
     <div class="container">
       <div class="content-area">
         <section id="mission-principale" class="card-section">
@@ -184,159 +154,138 @@
         </section>
 
         <h2 class="section-title" id="leaderboard">Classifica Principale</h2>
-        <div class="poems-list"><!-- Popolato dinamicamente --></div>
+        <div class="poems-list"></div>
       </div>
 
-<div class="sidebar-box">
-  <h3>Sponsorizzato da</h3>
-
-  <div id="ezoic-pub-ad-placeholder-101">
-    <small style="opacity:.6">Supporta il progetto ❤️</small>
-  </div>
-</div>
-
-        <div class="sidebar-box">
-          <h3>Poesie del Mese</h3>
-          <div class="search-box">
-            <input type="text" id="search-poems" placeholder="Cerca titolo o autore..." aria-label="Cerca poesie">
-            <i class="fas fa-search search-icon"></i>
-          </div>
-          <div class="filter-options">
-            <label for="sort-by">Ordina per:</label>
-            <select id="sort-by">
-              <option value="recent">Più Recenti</option>
-              <option value="popular">Più Votate</option>
-              <option value="title-asc">Titolo (A-Z)</option>
-              <option value="title-desc">Titolo (Z-A)</option>
-            </select>
-          </div>
-          <div id="monthly-poems-list" class="mini-poems-list"></div>
-          <a href="#leaderboard" class="button-secondary full-width-btn">Vedi Classifica Principale</a>
+      <div class="sidebar-box">
+        <h3>Sponsorizzato da</h3>
+        <div id="ezoic-pub-ad-placeholder-101">
+          <small style="opacity:.6">Supporta il progetto ❤️</small>
         </div>
+      </div>
 
-     <div class="sidebar-box">
-  <h3>Sponsorizzato da</h3>
-
-  <div id="ezoic-pub-ad-placeholder-101">
-    <small style="opacity:.6">Supporta il progetto ❤️</small>
-  </div>
-</div>
-
-        <div class="sidebar-box">
-          <h3><i class="fas fa-pen-fancy"></i> Vuoi Partecipare?</h3>
-          <p>Condividi la tua arte con la community e fatti votare!</p>
-          <div class="participate-buttons">
-            <button id="sidebar-participate-btn" class="participation-btn"><i class="fas fa-info-circle"></i> Scopri Come</button>
-            <button id="share-cta-btn" class="participation-btn"><i class="fab fa-instagram"></i> Condividi</button>
-          </div>
-          <div id="share-fallback" class="hidden">
-            <div class="share-link-box">
-              <input type="text" id="poem-share-link" readonly value="https://theitalianpoetry.it/partecipa">
-              <button id="copy-link-btn" class="button-copy"><i class="fas fa-copy"></i> Copia</button>
-            </div>
-            <p class="share-hint">Condividi questo link sui social!</p>
-            <!-- Inizio modifica: Feedback copia link -->
-            <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
-          </div>
+      <div class="sidebar-box">
+        <h3>Poesie del Mese</h3>
+        <div class="search-box">
+          <input type="text" id="search-poems" placeholder="Cerca titolo o autore..." aria-label="Cerca poesie">
+          <i class="fas fa-search search-icon"></i>
         </div>
-      </aside>
+        <div class="filter-options">
+          <label for="sort-by">Ordina per:</label>
+          <select id="sort-by">
+            <option value="recent">Più Recenti</option>
+            <option value="popular">Più Votate</option>
+            <option value="title-asc">Titolo (A-Z)</option>
+            <option value="title-desc">Titolo (Z-A)</option>
+          </select>
+        </div>
+        <div id="monthly-poems-list" class="mini-poems-list"></div>
+        <a href="#leaderboard" class="button-secondary full-width-btn">Vedi Classifica Principale</a>
+      </div>
+
+      <div class="sidebar-box">
+        <h3>Sponsorizzato da</h3>
+        <div id="ezoic-pub-ad-placeholder-101">
+          <small style="opacity:.6">Supporta il progetto ❤️</small>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h3><i class="fas fa-pen-fancy"></i> Vuoi Partecipare?</h3>
+        <p>Condividi la tua arte con la community e fatti votare!</p>
+        <div class="participate-buttons">
+          <button id="sidebar-participate-btn" class="participation-btn"><i class="fas fa-info-circle"></i> Scopri Come</button>
+          <button id="share-cta-btn" class="participation-btn"><i class="fab fa-instagram"></i> Condividi</button>
+        </div>
+        <div id="share-fallback" class="hidden">
+          <div class="share-link-box">
+            <input type="text" id="poem-share-link" readonly value="https://theitalianpoetry.it/partecipa">
+            <button id="copy-link-btn" class="button-copy"><i class="fas fa-copy"></i> Copia</button>
+          </div>
+          <p class="share-hint">Condividi questo link sui social!</p>
+          <span id="copy-feedback" class="copy-feedback" aria-live="polite"></span>
+        </div>
+      </div>
     </div>
-
-
-
-
 
     <section class="poetry-widget-section">
       <h2 class="widget-title">Analisi IA</h2>
       <div id="poetry-widget-container"></div>
     </section>
 
-    
-<!-- 🧠 ANALISI IA – SPIEGAZIONE -->
-<section id="analisi-ia-spiegazione" class="card-section">
-  <div class="card-content">
-
-    <h2>
-      <span class="red-text">Analisi</span>
-      <span class="gold-text">Intelligente</span>,
-      <span class="green-text">Non Giudicante</span>
-    </h2>
-
-    <p>
-      L’Analisi IA di <strong>TheItalianPoetry</strong> è pensata come
-      uno <em>strumento di accompagnamento alla lettura</em>.
-      Non sostituisce il giudizio umano, non assegna valori assoluti
-      e non decide cosa sia “giusto” o “sbagliato”.
-      Serve a <strong>guardare una poesia da più angolazioni</strong>.
-    </p>
-
-    <div class="mission-paragraphs">
-
-      <!-- COSA FA -->
-      <div class="mission-block">
-        <h3 class="red-title">Cosa fa l’Intelligenza Artificiale</h3>
+    <section id="analisi-ia-spiegazione" class="card-section">
+      <div class="card-content">
+        <h2>
+          <span class="red-text">Analisi</span>
+          <span class="gold-text">Intelligente</span>,
+          <span class="green-text">Non Giudicante</span>
+        </h2>
         <p>
-          L’IA analizza il testo dal punto di vista
-          <strong>linguistico, stilistico ed emotivo</strong>.
-          Individua temi ricorrenti, immagini simboliche,
-          tono e ritmo, restituendo una lettura ragionata
-          che può aiutare a comprendere meglio il testo.
+          L’Analisi IA di <strong>TheItalianPoetry</strong> è pensata come
+          uno <em>strumento di accompagnamento alla lettura</em>.
+          Non sostituisce il giudizio umano, non assegna valori assoluti
+          e non decide cosa sia “giusto” o “sbagliato”.
+          Serve a <strong>guardare una poesia da più angolazioni</strong>.
         </p>
+
+        <div class="mission-paragraphs">
+          <div class="mission-block">
+            <h3 class="red-title">Cosa fa l’Intelligenza Artificiale</h3>
+            <p>
+              L’IA analizza il testo dal punto di vista
+              <strong>linguistico, stilistico ed emotivo</strong>.
+              Individua temi ricorrenti, immagini simboliche,
+              tono e ritmo, restituendo una lettura ragionata
+              che può aiutare a comprendere meglio il testo.
+            </p>
+          </div>
+
+          <div class="mission-block">
+            <h3 class="yellow-title">A cosa serve davvero</h3>
+            <p>
+              Serve come <strong>spunto di riflessione</strong>.
+              Può aiutare un autore a rileggere la propria poesia
+              con uno sguardo esterno, oppure un lettore
+              a cogliere livelli di significato che magari
+              erano rimasti in secondo piano.
+            </p>
+          </div>
+
+          <div class="mission-block">
+            <h3 class="green-title">Cosa NON fa</h3>
+            <p>
+              L’IA <strong>non assegna voti</strong>,
+              non stabilisce se una poesia è “bella” o “brutta”
+              e non sostituisce il giudizio artistico o quello
+              della community.
+              La poesia resta umana, sempre.
+            </p>
+          </div>
+
+          <div class="mission-block">
+            <h3 class="red-title">🤖 Il robottino: come funziona</h3>
+            <p>
+              Il robottino attiva l’Analisi Intelligente
+              della poesia che stai leggendo.
+              Cliccandolo puoi avviare un’analisi testuale
+              che si adatta al contenuto della poesia
+              e al tuo modo di esplorare il sito.
+            </p>
+          </div>
+
+          <div class="mission-block">
+            <h3 class="yellow-title">☰ Il menu (hamburger)</h3>
+            <p>
+              L’icona in alto a sinistra apre il menu di navigazione.
+              Da lì puoi accedere alle sezioni principali:
+              classifica, poesie consigliate, discovery
+              e alle funzioni intelligenti del sito.
+            </p>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <!-- A COSA SERVE -->
-      <div class="mission-block">
-        <h3 class="yellow-title">A cosa serve davvero</h3>
-        <p>
-          Serve come <strong>spunto di riflessione</strong>.
-          Può aiutare un autore a rileggere la propria poesia
-          con uno sguardo esterno, oppure un lettore
-          a cogliere livelli di significato che magari
-          erano rimasti in secondo piano.
-        </p>
-      </div>
-
-      <!-- COSA NON FA -->
-      <div class="mission-block">
-        <h3 class="green-title">Cosa NON fa</h3>
-        <p>
-          L’IA <strong>non assegna voti</strong>,
-          non stabilisce se una poesia è “bella” o “brutta”
-          e non sostituisce il giudizio artistico o quello
-          della community.
-          La poesia resta umana, sempre.
-        </p>
-      </div>
-
-      <!-- ROBOTTINO -->
-      <div class="mission-block">
-        <h3 class="red-title">🤖 Il robottino: come funziona</h3>
-        <p>
-          Il robottino attiva l’Analisi Intelligente
-          della poesia che stai leggendo.
-          Cliccandolo puoi avviare un’analisi testuale
-          che si adatta al contenuto della poesia
-          e al tuo modo di esplorare il sito.
-        </p>
-      </div>
-
-      <!-- MENU -->
-      <div class="mission-block">
-        <h3 class="yellow-title">☰ Il menu (hamburger)</h3>
-        <p>
-          L’icona in alto a sinistra apre il menu di navigazione.
-          Da lì puoi accedere alle sezioni principali:
-          classifica, poesie consigliate, discovery
-          e alle funzioni intelligenti del sito.
-        </p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-    <!-- Inizio modifica: Modali informative -->
     <div id="how-to-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="how-to-modal-title" aria-hidden="true">
       <div class="modal-content">
         <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
@@ -370,43 +319,37 @@
       <div class="modal-content">
         <button type="button" class="modal-close-btn" data-close-modal aria-label="Chiudi">&times;</button>
         <h2 id="author-title">Autore</h2>
-      <p>Seguici su Instagram per le pubblicazioni mensili.</p>
-      <a href="author-page.html"="_blank" class="button-secondary" style="display:inline-block;margin-top:.5rem;">Vai al profilo</a>      </div>
+        <p>Seguici su Instagram per le pubblicazioni mensili.</p>
+        <a href="author-page.html" target="_blank" rel="noreferrer noopener" class="button-secondary" style="display:inline-block;margin-top:.5rem;">Vai al profilo</a>
+      </div>
     </div>
   </main>
 
+  <div id="poetry-widget-toggle" aria-label="Apri Analisi IA">
+    🤖
+  </div>
 
-<!-- 🤖 TOGGLE WIDGET -->
-<div id="poetry-widget-toggle" aria-label="Apri Analisi IA">
-  🤖
-</div>
+  <div id="poetry-widget-overlay" class="poetry-widget-fixed hidden">
+    <button
+      id="poetry-widget-close"
+      aria-label="Chiudi Analisi IA"
+      title="Chiudi"
+    >
+      ✕
+    </button>
 
-<!-- 🧠 OVERLAY WIDGET -->
-<div id="poetry-widget-overlay" class="poetry-widget-fixed hidden">
-
-  <!-- ❌ CHIUDI -->
-  <button
-    id="poetry-widget-close"
-    aria-label="Chiudi Analisi IA"
-    title="Chiudi"
-  >
-    ✕
-  </button>
-
-  <iframe
-    src="https://widget.theitalianpoetryproject.com/"
-    allow="autoplay"
-    loading="lazy"
-  ></iframe>
-
-</div>
-
+    <iframe
+      src="https://widget.theitalianpoetryproject.com/"
+      allow="autoplay"
+      loading="lazy"
+    ></iframe>
+  </div>
 
   <footer class="main-footer">
     <div class="footer-content">
       <p>© 2025 TheItalianPoetry. Tutti i diritti riservati.</p>
       <div class="footer-links">
-      <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
         <a href="#">Termini di Servizio</a>
         <a href="#">Disclaimer</a>
       </div>
@@ -418,78 +361,56 @@
     </div>
   </footer>
 
-  <!-- Inizio modifica: Pulsante torna su -->
   <button id="scroll-top-btn" class="scroll-top-btn" type="button" aria-label="Torna all'inizio">
     <i class="fas fa-arrow-up" aria-hidden="true"></i>
   </button>
 
-  <!-- ========== MODALE VOTAZIONE A STELLE (coerente con app.js) ========== -->
   <div id="voting-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="vote-modal-title">
     <div class="modal-content">
       <button id="close-voting-modal-btn" class="modal-close-btn" aria-label="Chiudi">&times;</button>
-
       <h2 id="vote-modal-title" style="margin-bottom:.5rem;">Vota la poesia</h2>
       <p id="vote-poem-title" style="font-weight:700;"></p>
       <p id="vote-poem-author" style="color:#6B7280; margin-bottom:1rem;"></p>
-
-<div id="vote-poem-content" class="poem-text"></div>
-
+      <div id="vote-poem-content" class="poem-text"></div>
       <div class="star-rating" role="radiogroup" aria-label="Valuta con le stelle">
         <input type="radio" id="star1" name="rating" value="1" class="sr-only">
         <label for="star1" class="star" aria-label="1 stella"><i class="fa-regular fa-star"></i></label>
-
         <input type="radio" id="star2" name="rating" value="2" class="sr-only">
         <label for="star2" class="star" aria-label="2 stelle"><i class="fa-regular fa-star"></i></label>
-
         <input type="radio" id="star3" name="rating" value="3" class="sr-only">
         <label for="star3" class="star" aria-label="3 stelle"><i class="fa-regular fa-star"></i></label>
-
         <input type="radio" id="star4" name="rating" value="4" class="sr-only">
         <label for="star4" class="star" aria-label="4 stelle"><i class="fa-regular fa-star"></i></label>
-
         <input type="radio" id="star5" name="rating" value="5" class="sr-only">
         <label for="star5" class="star" aria-label="5 stelle"><i class="fa-regular fa-star"></i></label>
       </div>
-
       <input type="hidden" id="vote-poem-id" />
       <button id="submit-vote-btn" class="button-primary" style="margin-top:.5rem;">Invia Voto</button>
       <p id="vote-form-message" role="status" aria-live="polite" style="margin-top:.75rem;"></p>
     </div>
   </div>
-  <!-- =============================================================== -->
 
-<!-- ================= SUPABASE CORE ================= -->
+  <script type="module" src="js/supabase-init.js"></script>
+  <script type="module" src="js/ai-interactions-core.js"></script>
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/esplora.js"></script>
 
-  
-<script type="module" src="js/supabase-init.js"></script>
-<script type="module" src="js/ai-interactions-core.js"></script>
-<script type="module" src="js/app.js"></script>
-<script type="module" src="js/esplora.js"></script>
-
-  
-<script>
-(function () {
-  window.addEventListener('message', async (event) => {
-    // 🔐 (opzionale ma consigliato)
-    // if (event.origin !== 'https://widget.theitalianpoetryproject.com') return;
-
-    if (event.data?.type === 'COPY_POEM_TEXT') {
-      const text = event.data.payload;
-
-      if (!text) return;
-
-      try {
-        await navigator.clipboard.writeText(text);
-        console.log('[PARENT] Testo copiato correttamente');
-      } catch (err) {
-        console.error('[PARENT COPY ERROR]', err);
-        alert('Impossibile copiare automaticamente il testo.');
-      }
-    }
-  });
-})();
-</script>
-
-
+  <script>
+    (function () {
+      window.addEventListener('message', async (event) => {
+        if (event.data?.type === 'COPY_POEM_TEXT') {
+          const text = event.data.payload;
+          if (!text) return;
+          try {
+            await navigator.clipboard.writeText(text);
+            console.log('[PARENT] Testo copiato correttamente');
+          } catch (err) {
+            console.error('[PARENT COPY ERROR]', err);
+            alert('Impossibile copiare automaticamente il testo.');
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
