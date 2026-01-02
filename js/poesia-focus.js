@@ -1,6 +1,6 @@
 /* =========================================================
    ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: PRODUZIONE STABILE – NO BUILD, NO VITE
+   Stato: PRODUZIONE STABILE – NO BUILD
 ========================================================= */
 
 (async () => {
@@ -30,10 +30,10 @@
     return;
   }
 
-  /* ================= CONFIG GLOBAL ================= */
+  /* ================= CONFIG ================= */
 
   if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
-    console.error('[ANALISI-FOCUS] Variabili globali mancanti');
+    console.error('[ANALISI-FOCUS] Config globale mancante');
     return;
   }
 
@@ -50,14 +50,20 @@
   const runBtn      = document.getElementById('run-analysis');
   const statusLabel = document.getElementById('terminal-status');
 
-  if (!terminal || !runBtn || !statusLabel) {
-    console.warn('[ANALISI-FOCUS] DOM incompleto, abort');
+  if (!terminal || !runBtn || !statusLabel || !contentEl) {
+    console.warn('[ANALISI-FOCUS] DOM incompleto');
     return;
   }
 
   /* ================= UTILS ================= */
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+  async function print(text, delay = 140) {
+    terminal.textContent += text;
+    terminal.scrollTop = terminal.scrollHeight;
+    await sleep(delay);
+  }
 
   function setStatus(text) {
     if (!statusBox) return;
@@ -70,20 +76,14 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 160) {
-    terminal.textContent += text;
-    terminal.scrollTop = terminal.scrollHeight;
-    await sleep(delay);
-  }
-
-  function getPoemIdFromUrl() {
+  function getPoemId() {
     return new URLSearchParams(window.location.search).get('id');
   }
 
   /* ================= LOAD POESIA ================= */
 
   async function loadPoem() {
-    const poemId = getPoemIdFromUrl();
+    const poemId = getPoemId();
 
     if (!poemId || !/^\d+$/.test(poemId)) {
       setStatus('❌ Poesia non trovata.');
@@ -109,14 +109,21 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI-FOCUS] Errore caricamento poesia', err);
-      setStatus('❌ Errore nel caricamento della poesia.');
+      console.error('[ANALISI-FOCUS] Errore poesia', err);
+      setStatus('❌ Errore nel caricamento.');
     }
   }
 
   /* ================= GPT ANALYSIS ================= */
 
   async function runAnalysis() {
+    if (!contentEl.textContent.trim()) {
+      alert('La poesia non è ancora pronta.');
+      return;
+    }
+
+    console.log('[ANALISI] Avvio analisi');
+
     terminal.textContent = '';
     statusLabel.textContent = '🧠 Analisi in corso';
     runBtn.disabled = true;
@@ -138,20 +145,17 @@
         })
       });
 
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(errText);
-      }
+      if (!res.ok) throw new Error(await res.text());
 
       const result = await res.json();
 
-      await print('[ OK ] Analisi completata\n\n', 400);
-      await print(result.output + '\n', 120);
+      await print('[ OK ] Analisi completata\n\n', 300);
+      await print(result.output + '\n', 80);
 
       statusLabel.textContent = '✅ Analisi completata';
 
     } catch (err) {
-      console.error('[GPT ANALYSIS ERROR]', err);
+      console.error('[GPT ERROR]', err);
       await print('\n[ ERRORE ] Analisi fallita\n');
       statusLabel.textContent = '❌ Errore';
     } finally {
@@ -161,12 +165,7 @@
 
   /* ================= INIT ================= */
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPoem);
-  } else {
-    loadPoem();
-  }
-
+  document.addEventListener('DOMContentLoaded', loadPoem);
   runBtn.addEventListener('click', runAnalysis);
 
 })();
