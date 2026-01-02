@@ -1,6 +1,6 @@
 /* =========================================================
    ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: STABILE / EDGE FUNCTION ATTIVA / VITE READY
+   Stato: STABILE / EDGE FUNCTION AUTH / VITE READY
 ========================================================= */
 
 (async () => {
@@ -26,16 +26,11 @@
     return;
   }
 
-  /* ================= ENV (VITE) ================= */
+  /* ================= EDGE ================= */
 
-  const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
-  const EDGE_URL = import.meta.env.VITE_SUPABASE_EDGE_URL
+  const EDGE_URL =
+    import.meta.env.VITE_SUPABASE_EDGE_URL
     || 'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler';
-
-  if (!SUPABASE_ANON_KEY) {
-    console.error('[ANALISI-FOCUS] VITE_SUPABASE_ANON_KEY mancante');
-    return;
-  }
 
   /* ================= DOM ================= */
 
@@ -70,7 +65,7 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 180) {
+  async function print(text, delay = 160) {
     terminal.textContent += text;
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
@@ -114,7 +109,7 @@
     }
   }
 
-  /* ================= ANALISI IA – GPT LIVE ================= */
+  /* ================= ANALISI IA ================= */
 
   async function runAnalysis() {
     terminal.textContent = '';
@@ -126,12 +121,19 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
+      /* 🔐 JWT UTENTE */
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data?.session) {
+        throw new Error('SESSION_NOT_FOUND');
+      }
+
+      const jwt = data.session.access_token;
+
       const res = await fetch(EDGE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'apikey': SUPABASE_ANON_KEY
+          'Authorization': `Bearer ${jwt}`,
         },
         body: JSON.stringify({
           poem: { content: contentEl.textContent }
