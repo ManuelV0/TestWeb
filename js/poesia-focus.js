@@ -1,6 +1,6 @@
 /* =========================================================
    ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: STABILE / EDGE FUNCTION ATTIVA / STATIC READY
+   Stato: PRODUZIONE STABILE – NO BUILD, NO VITE
 ========================================================= */
 
 (async () => {
@@ -10,9 +10,13 @@
   async function waitForSupabase(retries = 20) {
     return new Promise((resolve, reject) => {
       const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
-        else setTimeout(() => check(--retries), 100);
+        if (window.supabaseClient) {
+          resolve(window.supabaseClient);
+        } else if (retries <= 0) {
+          reject(new Error('SUPABASE_NOT_READY'));
+        } else {
+          setTimeout(() => check(--retries), 100);
+        }
       };
       check();
     });
@@ -21,17 +25,14 @@
   let supabase;
   try {
     supabase = await waitForSupabase();
-  } catch {
-    console.error('[ANALISI-FOCUS] Supabase non pronto');
+  } catch (err) {
+    console.error('[ANALISI-FOCUS] Supabase non pronto', err);
     return;
   }
 
-  /* ================= GLOBAL ENV ================= */
+  /* ================= CONFIG GLOBAL ================= */
 
-  const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
-  const EDGE_URL = window.EDGE_FUNCTION_URL;
-
-  if (!SUPABASE_ANON_KEY || !EDGE_URL) {
+  if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
     console.error('[ANALISI-FOCUS] Variabili globali mancanti');
     return;
   }
@@ -54,7 +55,7 @@
     return;
   }
 
-  /* ================= HELPERS ================= */
+  /* ================= UTILS ================= */
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -69,7 +70,7 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 180) {
+  async function print(text, delay = 160) {
     terminal.textContent += text;
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
@@ -108,12 +109,12 @@
       clearStatus();
 
     } catch (err) {
-      console.error('[ANALISI-FOCUS] Errore poesia', err);
+      console.error('[ANALISI-FOCUS] Errore caricamento poesia', err);
       setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
 
-  /* ================= GPT LIVE ================= */
+  /* ================= GPT ANALYSIS ================= */
 
   async function runAnalysis() {
     terminal.textContent = '';
@@ -125,12 +126,12 @@
       await print('[ OK ] Profilo lettore caricato\n');
       await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-      const res = await fetch(EDGE_URL, {
+      const res = await fetch(window.EDGE_FUNCTION_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'apikey': SUPABASE_ANON_KEY
+          'Authorization': `Bearer ${window.SUPABASE_ANON_KEY}`,
+          'apikey': window.SUPABASE_ANON_KEY
         },
         body: JSON.stringify({
           poem: { content: contentEl.textContent }
