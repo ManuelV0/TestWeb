@@ -247,3 +247,116 @@ display:flex; justify-content:center; align-items:center;
 body.widget-open {
   overflow: hidden;
 }
+
+
+
+/* ===============================
+   MODALE INVIO POESIA – CARD
+================================ */
+
+#submission-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Titolo */
+#submission-modal h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: .5rem;
+}
+
+/* Form */
+#submission-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Label + input wrapper */
+#submission-form label {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: .35rem;
+  color: #1f2937;
+}
+
+/* Input & textarea */
+#submission-form input[type="text"],
+#submission-form textarea {
+  padding: .6rem .75rem;
+  font-size: 0.95rem;
+  border-radius: .5rem;
+  border: 1px solid #d1d5db;
+  font-family: 'Open Sans', sans-serif;
+  resize: vertical;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+#submission-form textarea {
+  min-height: 120px;
+}
+
+/* Focus */
+#submission-form input:focus,
+#submission-form textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+/* Checkbox anonimo */
+#submission-form label:has(#anonymous-checkbox) {
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 500;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+/* Messaggi */
+#form-message {
+  min-height: 1.2em;
+  font-size: .9rem;
+  text-align: center;
+}
+
+/* Bottone submit */
+#submission-form button[type="submit"] {
+  margin-top: .5rem;
+  padding: .7rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: .6rem;
+}
+
+/* Chiudi modale */
+#submission-modal .modal-close-btn {
+  font-size: 1.8rem;
+  line-height: 1;
+  opacity: .75;
+}
+
+#submission-modal .modal-close-btn:hover {
+  opacity: 1;
+}
+
+/* ===============================
+   MOBILE TUNING
+================================ */
+@media (max-width: 640px) {
+  #submission-modal .modal-content {
+    padding: 1.25rem;
+  }
+
+  #submission-modal h2 {
+    font-size: 1.4rem;
+  }
+}
