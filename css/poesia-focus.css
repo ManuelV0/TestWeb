@@ -1,125 +1,121 @@
-/* =========================================================
-   ANALISI FOCUS – PAGINA COMPLETA
-   Poesia + Analisi IA stile Bash
-   Stato: STABILE / PRODUZIONE
-========================================================= */
 
-/* ---------- RESET ---------- */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background: linear-gradient(180deg, #f6fff9 0%, #ecf9f1 100%);
-  color: #1f2f24;
-  line-height: 1.65;
-}
-
-/* ---------- HEADER ---------- */
-.focus-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  padding: 1rem 1.25rem;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(79, 190, 127, 0.25);
-}
-
-.back-link {
-  text-decoration: none;
-  color: #2f7d5c;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.2px;
-}
-
-.back-link:hover {
-  text-decoration: underline;
-}
-
-/* ---------- LAYOUT ---------- */
-.focus-container {
-  max-width: 820px;
-  margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-}
-
-/* ---------- UTIL ---------- */
-.hidden {
-  display: none !important;
-}
-
-/* ---------- STATUS ---------- */
-.status {
-  margin-bottom: 2rem;
-  padding: 1rem 1.25rem;
-  border-radius: 14px;
-  background: rgba(79, 190, 127, 0.1);
-  border: 1px dashed rgba(79, 190, 127, 0.35);
-}
-
-.loading-text {
-  font-weight: 700;
-  color: #2f7d5c;
-}
 
 /* =========================================================
-   POESIA
+   POESIA – LETTURA EDITORIALE AVANZATA
 ========================================================= */
 
 .poem {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: clamp(1.75rem, 4vw, 2.5rem);
+  position: relative;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f9fffc 100%);
+  border-radius: 24px;
+  padding: clamp(2rem, 5vw, 3rem);
   box-shadow:
-    0 22px 50px rgba(58, 160, 107, 0.18),
-    inset 0 0 0 1px rgba(79, 190, 127, 0.25);
+    0 28px 60px rgba(47, 125, 92, 0.18),
+    inset 0 0 0 1px rgba(79, 190, 127, 0.22);
+  isolation: isolate;
+}
+
+/* alone accent (linea poetica) */
+.poem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2.5rem;
+  bottom: 2.5rem;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    rgba(79, 190, 127, 0.85),
+    rgba(79, 190, 127, 0.15)
+  );
 }
 
 /* Titolo poesia */
 .poem h1 {
   font-family: "Montserrat", system-ui, sans-serif;
-  font-size: clamp(1.7rem, 4.8vw, 2.2rem);
-  margin: 0 0 0.35rem;
+  font-size: clamp(1.8rem, 5vw, 2.35rem);
+  margin: 0 0 0.4rem;
   color: #2f7d5c;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.45px;
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 /* Autore */
 .author {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #4d6254;
-  margin-bottom: 2rem;
+  color: #5b7667;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.15px;
 }
 
 /* Testo poesia */
 .content {
   white-space: pre-wrap;
-  font-size: 1.05rem;
-  line-height: 1.75;
+  font-size: clamp(1.05rem, 2.6vw, 1.12rem);
+  line-height: 1.8;
   color: #1f2f24;
+  max-width: 68ch;
+  margin-inline: auto;
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-wrap: pretty;
 }
 
-/* Separatore semantico */
+/* Drop-cap discreta sul primo verso */
+.content::first-letter {
+  float: left;
+  font-family: "Montserrat", serif;
+  font-size: 3.2rem;
+  line-height: 1;
+  font-weight: 700;
+  margin-right: 0.45rem;
+  margin-top: 0.15rem;
+  color: #3aa06b;
+}
+
+/* Separatore semantico verso IA */
 .poem::after {
-  content: "";
+  content: "Analisi Intelligente ↓";
   display: block;
-  margin-top: 2.5rem;
-  border-bottom: 1px solid rgba(79, 190, 127, 0.2);
+  margin: 3rem auto 0;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.45px;
+  text-transform: uppercase;
+  color: rgba(47, 125, 92, 0.55);
+  padding-top: 1.75rem;
+  border-top: 1px solid rgba(79, 190, 127, 0.25);
 }
 
-/* =========================================================
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 640px) {
+  .poem {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .poem::before {
+    top: 2rem;
+    bottom: 2rem;
+  }
+
+  .content {
+    font-size: 1.02rem;
+    line-height: 1.75;
+  }
+}
+
+/* ---------- ACCESSIBILITÀ ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .poem {
+    box-shadow: none;
+  }
+}
+
+
+ =========================================================
    TERMINALE IA – STILE BASH
 ========================================================= */
 
