@@ -1,11 +1,43 @@
 /* =========================================================
-   ANALISI-FOCUS – VERSIONE DEFINITIVA E STABILE
-   NO BUILD – NO VITE – EVENTI SEMPRE ATTIVI
+   ANALISI FOCUS – POESIA + ANALISI IA (TERMINALE)
+   Stato: PRODUZIONE STABILE
 ========================================================= */
 
-console.log('[ANALISI-FOCUS] script caricato');
+(async () => {
 
-document.addEventListener('DOMContentLoaded', async () => {
+  console.log('[ANALISI-FOCUS] Init');
+
+  /* ================= SAFE SUPABASE ================= */
+
+  async function waitForSupabase(retries = 20) {
+    return new Promise((resolve, reject) => {
+      const check = () => {
+        if (window.supabaseClient) {
+          resolve(window.supabaseClient);
+        } else if (retries <= 0) {
+          reject(new Error('SUPABASE_NOT_READY'));
+        } else {
+          setTimeout(() => check(--retries), 100);
+        }
+      };
+      check();
+    });
+  }
+
+  let supabase;
+  try {
+    supabase = await waitForSupabase();
+  } catch (err) {
+    console.error('[ANALISI-FOCUS] Supabase non pronto', err);
+    return;
+  }
+
+  /* ================= CONFIG GLOBAL ================= */
+
+  if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
+    console.error('[ANALISI-FOCUS] Variabili globali mancanti');
+    return;
+  }
 
   /* ================= DOM ================= */
 
@@ -20,47 +52,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const runBtn      = document.getElementById('run-analysis');
   const statusLabel = document.getElementById('terminal-status');
 
-  /* ================= VALIDAZIONE DOM ================= */
-
-  if (!runBtn || !terminal) {
-    console.error('[ANALISI-FOCUS] Bottone o terminale non trovati');
+  if (!terminal || !runBtn || !statusLabel) {
+    console.warn('[ANALISI-FOCUS] DOM incompleto, abort');
     return;
-  }
-
-  console.log('[ANALISI-FOCUS] DOM OK');
-
-  /* ================= EVENT LISTENER (SUBITO) ================= */
-
-  runBtn.addEventListener('click', () => {
-    console.log('[ANALISI-FOCUS] CLICK intercettato');
-    runAnalysis();
-  });
-
-  /* ================= CONFIG ================= */
-
-  if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
-    console.error('[ANALISI-FOCUS] Config globale mancante');
-  }
-
-  /* ================= SUPABASE ================= */
-
-  async function waitForSupabase(retries = 20) {
-    return new Promise((resolve, reject) => {
-      const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject();
-        else setTimeout(() => check(--retries), 100);
-      };
-      check();
-    });
-  }
-
-  let supabase;
-  try {
-    supabase = await waitForSupabase();
-    console.log('[ANALISI-FOCUS] Supabase pronto');
-  } catch {
-    console.warn('[ANALISI-FOCUS] Supabase non pronto');
   }
 
   /* ================= UTILS ================= */
@@ -84,22 +78,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     await sleep(delay);
   }
 
-  function getPoemId() {
+  function getPoemIdFromUrl() {
     return new URLSearchParams(window.location.search).get('id');
   }
 
   /* ================= LOAD POESIA ================= */
 
   async function loadPoem() {
-    const poemId = getPoemId();
+    const poemId = getPoemIdFromUrl();
 
-    if (!poemId) {
-      setStatus('❌ Poesia non trovata');
-      return;
-    }
-
-    if (!supabase) {
-      setStatus('❌ Sistema non pronto');
+    if (!poemId || !/^\d+$/.test(poemId)) {
+      setStatus('❌ Poesia non trovata.');
       return;
     }
 
@@ -121,32 +110,30 @@ document.addEventListener('DOMContentLoaded', async () => {
       poemBox.classList.remove('hidden');
       clearStatus();
 
-      console.log('[ANALISI-FOCUS] Poesia caricata');
-
     } catch (err) {
-      console.error('[ANALISI-FOCUS] Errore poesia', err);
-      setStatus('❌ Errore nel caricamento');
+      console.error('[ANALISI-FOCUS] Errore caricamento poesia', err);
+      setStatus('❌ Errore nel caricamento della poesia.');
     }
   }
 
-  /* ================= ANALISI GPT ================= */
+  /* ================= ANALISI IA ================= */
 
   async function runAnalysis() {
     console.log('[ANALISI-FOCUS] Avvio analisi');
 
-    if (!contentEl?.textContent) {
-      alert('Testo poesia non disponibile');
-      return;
-    }
-
     terminal.textContent = '';
+    terminal.scrollTop = 0;
+    terminal.style.opacity = '1';
+    terminal.style.visibility = 'visible';
+
     statusLabel.textContent = '🧠 Analisi in corso';
     runBtn.disabled = true;
 
     try {
-      await print('$ tip analyze poem --profile\n');
-      await print('[ OK ] Profilo lettore caricato\n');
-      await print('[ OK ] Invio poesia al motore semantico\n\n');
+      await print('\n🟢 Avvio analisi intelligente...\n\n', 80);
+      await print('$ tip analyze poem --profile\n', 120);
+      await print('[ OK ] Profilo lettore caricato\n', 120);
+      await print('[ OK ] Invio poesia al motore semantico\n\n', 160);
 
       const res = await fetch(window.EDGE_FUNCTION_URL, {
         method: 'POST',
@@ -161,19 +148,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       if (!res.ok) {
-        const t = await res.text();
-        throw new Error(t);
+        const errText = await res.text();
+        throw new Error(errText);
       }
 
       const result = await res.json();
 
-      await print('[ OK ] Analisi completata\n\n', 300);
-      await print(result.output + '\n', 80);
+      await print('[ OK ] Analisi completata\n\n', 200);
+      await print(result.output + '\n', 40);
 
       statusLabel.textContent = '✅ Analisi completata';
 
     } catch (err) {
-      console.error('[GPT ERROR]', err);
+      console.error('[GPT ANALYSIS ERROR]', err);
       await print('\n[ ERRORE ] Analisi fallita\n');
       statusLabel.textContent = '❌ Errore';
     } finally {
@@ -181,8 +168,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
+  /* ================= EVENTI ================= */
+
+  runBtn.addEventListener('click', () => {
+    console.log('[ANALISI-FOCUS] CLICK intercettato');
+    runAnalysis();
+  });
+
   /* ================= INIT ================= */
 
-  loadPoem();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadPoem);
+  } else {
+    loadPoem();
+  }
 
-});
+})();
