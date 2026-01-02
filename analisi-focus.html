@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Poesia – Analisi</title>
 
-  <link rel="stylesheet" href="css/ai-terminal.css" />
   <link rel="stylesheet" href="css/poesia-focus.css" />
+  <link rel="stylesheet" href="css/ai-terminal.css" />
 
   <script type="module" src="js/supabase-init.js"></script>
   <script type="module" src="js/poesia-focus.js"></script>
@@ -14,23 +14,27 @@
 
 <body>
 
+<header class="focus-header">
+  <a href="esplora.html" class="back-link">← Torna a Discovery</a>
+</header>
+
 <main class="page-container">
 
   <!-- 📜 POESIA -->
   <section class="poesia-focus">
     <h1 id="poem-title"></h1>
-    <p class="poem-author" id="poem-author"></p>
-    <article class="poem-content" id="poem-content"></article>
+    <p id="poem-author" class="poem-author"></p>
+    <pre id="poem-content" class="poem-content"></pre>
   </section>
 
   <!-- 🧠 ANALISI IA -->
   <section class="ai-terminal-section">
     <header class="terminal-header">
       <span>Analisi Intelligente</span>
-      <span class="terminal-status" id="terminal-status">🔒 Bloccata</span>
+      <span id="terminal-status" class="terminal-status">🔒 Inattiva</span>
     </header>
 
-    <pre class="terminal" id="gpt-terminal"></pre>
+    <pre id="gpt-terminal" class="terminal"></pre>
 
     <button id="run-analysis" class="terminal-btn">
       ▶ Avvia Analisi
