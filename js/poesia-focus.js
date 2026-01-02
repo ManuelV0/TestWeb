@@ -1,41 +1,11 @@
 /* =========================================================
-   ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
-   Stato: PRODUZIONE STABILE – NO BUILD
+   ANALISI-FOCUS – VERSIONE DEFINITIVA E STABILE
+   NO BUILD – NO VITE – EVENTI SEMPRE ATTIVI
 ========================================================= */
 
-(async () => {
+console.log('[ANALISI-FOCUS] script caricato');
 
-  /* ================= SAFE SUPABASE ================= */
-
-  async function waitForSupabase(retries = 20) {
-    return new Promise((resolve, reject) => {
-      const check = () => {
-        if (window.supabaseClient) {
-          resolve(window.supabaseClient);
-        } else if (retries <= 0) {
-          reject(new Error('SUPABASE_NOT_READY'));
-        } else {
-          setTimeout(() => check(--retries), 100);
-        }
-      };
-      check();
-    });
-  }
-
-  let supabase;
-  try {
-    supabase = await waitForSupabase();
-  } catch (err) {
-    console.error('[ANALISI-FOCUS] Supabase non pronto', err);
-    return;
-  }
-
-  /* ================= CONFIG ================= */
-
-  if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
-    console.error('[ANALISI-FOCUS] Config globale mancante');
-    return;
-  }
+document.addEventListener('DOMContentLoaded', async () => {
 
   /* ================= DOM ================= */
 
@@ -50,20 +20,52 @@
   const runBtn      = document.getElementById('run-analysis');
   const statusLabel = document.getElementById('terminal-status');
 
-  if (!terminal || !runBtn || !statusLabel || !contentEl) {
-    console.warn('[ANALISI-FOCUS] DOM incompleto');
+  /* ================= VALIDAZIONE DOM ================= */
+
+  if (!runBtn || !terminal) {
+    console.error('[ANALISI-FOCUS] Bottone o terminale non trovati');
     return;
+  }
+
+  console.log('[ANALISI-FOCUS] DOM OK');
+
+  /* ================= EVENT LISTENER (SUBITO) ================= */
+
+  runBtn.addEventListener('click', () => {
+    console.log('[ANALISI-FOCUS] CLICK intercettato');
+    runAnalysis();
+  });
+
+  /* ================= CONFIG ================= */
+
+  if (!window.SUPABASE_ANON_KEY || !window.EDGE_FUNCTION_URL) {
+    console.error('[ANALISI-FOCUS] Config globale mancante');
+  }
+
+  /* ================= SUPABASE ================= */
+
+  async function waitForSupabase(retries = 20) {
+    return new Promise((resolve, reject) => {
+      const check = () => {
+        if (window.supabaseClient) resolve(window.supabaseClient);
+        else if (retries <= 0) reject();
+        else setTimeout(() => check(--retries), 100);
+      };
+      check();
+    });
+  }
+
+  let supabase;
+  try {
+    supabase = await waitForSupabase();
+    console.log('[ANALISI-FOCUS] Supabase pronto');
+  } catch {
+    console.warn('[ANALISI-FOCUS] Supabase non pronto');
   }
 
   /* ================= UTILS ================= */
 
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-  async function print(text, delay = 140) {
-    terminal.textContent += text;
-    terminal.scrollTop = terminal.scrollHeight;
-    await sleep(delay);
-  }
 
   function setStatus(text) {
     if (!statusBox) return;
@@ -76,6 +78,12 @@
     statusBox.classList.add('hidden');
   }
 
+  async function print(text, delay = 120) {
+    terminal.textContent += text;
+    terminal.scrollTop = terminal.scrollHeight;
+    await sleep(delay);
+  }
+
   function getPoemId() {
     return new URLSearchParams(window.location.search).get('id');
   }
@@ -85,8 +93,13 @@
   async function loadPoem() {
     const poemId = getPoemId();
 
-    if (!poemId || !/^\d+$/.test(poemId)) {
-      setStatus('❌ Poesia non trovata.');
+    if (!poemId) {
+      setStatus('❌ Poesia non trovata');
+      return;
+    }
+
+    if (!supabase) {
+      setStatus('❌ Sistema non pronto');
       return;
     }
 
@@ -108,21 +121,23 @@
       poemBox.classList.remove('hidden');
       clearStatus();
 
+      console.log('[ANALISI-FOCUS] Poesia caricata');
+
     } catch (err) {
       console.error('[ANALISI-FOCUS] Errore poesia', err);
-      setStatus('❌ Errore nel caricamento.');
+      setStatus('❌ Errore nel caricamento');
     }
   }
 
-  /* ================= GPT ANALYSIS ================= */
+  /* ================= ANALISI GPT ================= */
 
   async function runAnalysis() {
-    if (!contentEl.textContent.trim()) {
-      alert('La poesia non è ancora pronta.');
+    console.log('[ANALISI-FOCUS] Avvio analisi');
+
+    if (!contentEl?.textContent) {
+      alert('Testo poesia non disponibile');
       return;
     }
-
-    console.log('[ANALISI] Avvio analisi');
 
     terminal.textContent = '';
     statusLabel.textContent = '🧠 Analisi in corso';
@@ -145,7 +160,10 @@
         })
       });
 
-      if (!res.ok) throw new Error(await res.text());
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error(t);
+      }
 
       const result = await res.json();
 
@@ -165,7 +183,6 @@
 
   /* ================= INIT ================= */
 
-  document.addEventListener('DOMContentLoaded', loadPoem);
-  runBtn.addEventListener('click', runAnalysis);
+  loadPoem();
 
-})();
+});
