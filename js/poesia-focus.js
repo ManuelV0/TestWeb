@@ -26,11 +26,7 @@
     return;
   }
 
-  /* ================= EDGE ================= */
 
-  const EDGE_URL =
-    import.meta.env.VITE_SUPABASE_EDGE_URL
-    || 'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler';
 
   /* ================= DOM ================= */
 
