@@ -1,6 +1,6 @@
 /* =========================================================
-   ANALISI-FOCUS – CORE DEFINITIVO
-   Stato: STABILE / SENZA SBLOCCO / SENZA GPT LIVE
+   ANALISI-FOCUS – CORE DEFINITIVO (GPT LIVE)
+   Stato: STABILE / SENZA SBLOCCO / EDGE FUNCTION ATTIVA
 ========================================================= */
 
 (async () => {
@@ -58,7 +58,7 @@
     statusBox.classList.add('hidden');
   }
 
-  async function print(text, delay = 250) {
+  async function print(text, delay = 200) {
     terminal.textContent += text;
     terminal.scrollTop = terminal.scrollHeight;
     await sleep(delay);
@@ -103,7 +103,7 @@
     }
   }
 
-  /* ================= ANALISI IA (SIMULATA, STRUTTURATA) ================= */
+  /* ================= ANALISI IA – GPT LIVE ================= */
 
   async function runAnalysis() {
     if (!terminal || !runBtn || !statusLabel) return;
@@ -112,28 +112,54 @@
     statusLabel.textContent = '🧠 Analisi in corso';
     runBtn.disabled = true;
 
-    await print('$ tip analyze poem --profile\n');
-    await print('[ OK ] Profilo lettore caricato\n');
-    await print('[ OK ] Storico interazioni analizzato\n');
-    await print('[ OK ] Parsing semantico poesia\n\n');
+    try {
+      await print('$ tip analyze poem --profile\n');
+      await print('[ OK ] Profilo lettore caricato\n');
+      await print('[ OK ] Invio poesia al motore semantico\n\n');
 
-    await print('→ Temi dominanti:\n');
-    await print('  • Identità (alto)\n');
-    await print('  • Memoria (alto)\n');
-    await print('  • Dissoluzione (medio)\n\n');
+      const poemText = contentEl.textContent;
 
-    await print('→ Affinità con il tuo profilo:\n');
-    await print('  • Pattern emotivi ricorrenti\n');
-    await print('  • Linguaggio affine ai testi apprezzati\n\n');
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData?.session?.access_token;
 
-    await print('→ Lettura guidata:\n');
-    await print('  Questa poesia funziona per sottrazione,\n');
-    await print('  lasciando spazio alla tua interpretazione.\n\n');
+      if (!accessToken) {
+        throw new Error('TOKEN_MANCANTE');
+      }
 
-    await print('[ COMPLETATO ]\n');
+      const res = await fetch(
+        'https://djikypgmchywybjxbwar.supabase.co/functions/v1/smart-handler',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          body: JSON.stringify({
+            poem: {
+              content: poemText
+            }
+          })
+        }
+      );
 
-    statusLabel.textContent = '✅ Analisi completata';
-    runBtn.disabled = false;
+      if (!res.ok) {
+        throw new Error('EDGE_FUNCTION_ERROR');
+      }
+
+      const result = await res.json();
+
+      await print('[ OK ] Analisi completata\n\n', 400);
+      await print(result.output + '\n', 120);
+
+      statusLabel.textContent = '✅ Analisi completata';
+
+    } catch (err) {
+      console.error('[GPT ANALYSIS ERROR]', err);
+      await print('\n[ ERRORE ] Analisi fallita\n');
+      statusLabel.textContent = '❌ Errore';
+    } finally {
+      runBtn.disabled = false;
+    }
   }
 
   /* ================= INIT ================= */
