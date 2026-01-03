@@ -614,21 +614,31 @@ if (elements.primaryNavigation?.getAttribute('data-visible') === 'true') {
   }
 
   function updateAuthUI(session) {
-    const loggedIn = !!session;
+  const loggedIn = !!session;
 
-    if (elements.authButtons) {
-      elements.authButtons.classList.toggle('hidden', loggedIn);
-    }
-    if (elements.userInfo) {
-      elements.userInfo.classList.toggle('hidden', !loggedIn);
-    }
-    if (loggedIn && elements.userEmailSpan) {
-      elements.userEmailSpan.textContent = session.user.email;
-    }
-    if (elements.userEmailSpan && !loggedIn) {
-      elements.userEmailSpan.textContent = '';
-    }
+  if (elements.authButtons) {
+    elements.authButtons.classList.toggle('hidden', loggedIn);
   }
+  if (elements.userInfo) {
+    elements.userInfo.classList.toggle('hidden', !loggedIn);
+  }
+  if (loggedIn && elements.userEmailSpan) {
+    elements.userEmailSpan.textContent = session.user.email;
+  }
+  if (elements.userEmailSpan && !loggedIn) {
+    elements.userEmailSpan.textContent = '';
+  }
+
+  // 🔒 BLOCCO / SBLOCCO PULSANTE PARTECIPA
+  if (elements.openSubmissionModalBtn) {
+    elements.openSubmissionModalBtn.disabled = !loggedIn;
+    elements.openSubmissionModalBtn.classList.toggle('is-disabled', !loggedIn);
+    elements.openSubmissionModalBtn.setAttribute(
+      'aria-disabled',
+      String(!loggedIn)
+    );
+  }
+}
 
   // Event listeners per autenticazione
   if (elements.googleLoginBtn) {
