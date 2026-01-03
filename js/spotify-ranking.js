@@ -209,7 +209,7 @@ async function getMockSpotifyRanking() {
       posizione: 1,
       titolo: 'BENVENUTO',
       autore: 'Anonimo',
-      audio_url: 'https://example.com/audio.mp3',
+      audio_url: "https://djikypgmchywybjxbwar.supabase.co/storage/v1/object/public/poetry-audio/poesia-44-1767398131548.mp3"
       spotify_episode_url: null,
       spotify_published: false
     }
