@@ -1,45 +1,35 @@
 
+/* ==========================================================
+   SPOTIFY CLASSIFICA – PODCAST TOP 10 (vers. 2.0)
+   Mantiene lo stile generale, migliora leggibilità & accessibilità
+========================================================== */
 
 :root {
+  --spotify-primary: #22c55e;
+  --spotify-primary-dark: #16a34a;
+  --spotify-accent: #dc2626;
   --spotify-text: #111827;
-  --spotify-text-muted: #6b7280;
-  --spotify-subtitle: #4b5563;
-  --spotify-accent-red: #dc2626;
-  --spotify-accent-green: #16a34a;
-  --spotify-accent-green-light: #22c55e;
+  --spotify-muted: #6b7280;
   --spotify-surface: #f9fafb;
   --spotify-surface-hover: #f3f4f6;
-  --spotify-radius: 0.75rem;
-  --spotify-radius-lg: 1.25rem;
-  --spotify-transition: 0.2s ease;
-  --spotify-transition-fast: 0.15s ease;
   --spotify-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
   --spotify-shadow-hover: 0 25px 55px rgba(0, 0, 0, 0.3);
+  --spotify-font-display: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --spotify-transition: 0.2s ease;
 }
 
-/* Miglior gestione transizioni per chi preferisce meno movimento */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition-duration: 0.01ms !important;
-    transition-delay: 0ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-  }
-}
-
-/* ============================================
-   SEZIONE GENERALE
-============================================ */
+/* Sezione generale */
 #spotify-classifica {
-  margin-top: clamp(2.5rem, 4vw, 3.5rem);
+  margin-top: 3rem;
   color: var(--spotify-text);
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--spotify-font-display);
 }
 
+/* Sottotitolo */
 #spotify-classifica .section-subtitle {
   margin-top: 0.75rem;
   font-size: 0.95rem;
-  color: var(--spotify-subtitle);
+  color: #4b5563;
   text-align: center;
 }
 
@@ -47,84 +37,66 @@
 .spotify-period {
   display: flex;
   justify-content: center;
-  gap: 0.65rem;
-  margin: 1.25rem 0 clamp(1.75rem, 4vw, 2.25rem);
+  gap: 0.5rem;
+  margin: 1.25rem 0 2rem;
   font-weight: 700;
-  letter-spacing: 0.015em;
+  color: var(--spotify-text);
 }
 
 .spotify-month {
-  color: var(--spotify-accent-red);
+  color: var(--spotify-accent);
 }
 
 .spotify-year {
-  color: var(--spotify-accent-green);
+  color: var(--spotify-primary-dark);
 }
 
-/* ============================================
+/* ============================
    LISTA EPISODI
-============================================ */
+============================ */
+
 .spotify-episodes {
-  display: grid;
-  gap: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* Singolo episodio */
 .spotify-episode {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.85rem 1.1rem;
-  background: var(--spotify-surface);
-  border-radius: var(--spotify-radius);
-  transition: background var(--spotify-transition), transform var(--spotify-transition-fast), box-shadow var(--spotify-transition);
-  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.05);
-  position: relative;
-  isolation: isolate;
+  padding: 0.75rem 1rem;
+  background-color: var(--spotify-surface);
+  border-radius: 0.75rem;
+  transition: background-color var(--spotify-transition), transform var(--spotify-transition), box-shadow var(--spotify-transition);
+  box-shadow: none;
 }
 
-.spotify-episode::after {
-  content: "";
-  position: absolute;
-  inset: 1px;
-  border-radius: inherit;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--spotify-transition);
-  border: 1px solid transparent;
-}
-
-.spotify-episode:hover {
-  background: var(--spotify-surface-hover);
+.spotify-episode:hover,
+.spotify-episode:focus-within {
+  background-color: var(--spotify-surface-hover);
   transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
 }
 
-.spotify-episode:hover::after {
-  border-color: rgba(22, 163, 74, 0.2);
-  opacity: 1;
-}
-
-.spotify-episode:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
-  transform: translateY(-1px);
-}
-
-/* Rank */
 .spotify-rank {
   font-size: 1.25rem;
   min-width: 2rem;
   text-align: center;
+  font-weight: 600;
+  color: var(--spotify-primary-dark);
 }
 
-/* Info episodio */
 .spotify-episode-info {
   flex: 1;
   min-width: 0;
 }
 
 .spotify-episode-title {
-  font-size: 0.97rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--spotify-text);
   white-space: nowrap;
@@ -133,79 +105,88 @@
 }
 
 .spotify-episode-author {
-  margin-top: 0.2rem;
-  font-size: 0.82rem;
-  color: var(--spotify-text-muted);
+  font-size: 0.8rem;
+  color: var(--spotify-muted);
+  margin-top: 0.15rem;
 }
 
 /* Pulsante play */
 .spotify-play-btn {
   margin-left: auto;
-  font-size: 0.82rem;
-  padding: 0.4rem 0.75rem;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
   border-radius: 0.5rem;
-  background: linear-gradient(135deg, var(--spotify-accent-green-light), var(--spotify-accent-green));
+  background: linear-gradient(135deg, var(--spotify-primary), var(--spotify-primary-dark));
   color: #ffffff;
   text-decoration: none;
   font-weight: 600;
   white-space: nowrap;
-  transition: transform var(--spotify-transition-fast), opacity var(--spotify-transition);
+  transition: opacity var(--spotify-transition), transform var(--spotify-transition), box-shadow var(--spotify-transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .spotify-play-btn:hover {
   opacity: 0.92;
   transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25);
 }
 
 .spotify-play-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.4);
+  outline: 3px solid rgba(34, 197, 94, 0.45);
+  outline-offset: 2px;
 }
 
-/* ============================================
+/* ============================
    CTA FINALE
-============================================ */
+============================ */
+
 .spotify-cta {
   display: flex;
   justify-content: center;
-  margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  margin-top: 2rem;
 }
 
-/* ============================================
+/* ============================
    PODCAST COVER
-============================================ */
+============================ */
+
 .spotify-cover-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: clamp(1.35rem, 3vw, 1.75rem);
+  margin-bottom: 1.75rem;
 }
 
 .spotify-cover {
-  width: clamp(180px, 28vw, 220px);
-  aspect-ratio: 1;
+  width: clamp(180px, 25vw, 220px);
+  aspect-ratio: 1 / 1;
   object-fit: cover;
-  border-radius: var(--spotify-radius-lg);
+  border-radius: 1.25rem;
   box-shadow: var(--spotify-shadow);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
 }
 
-.spotify-cover:hover {
+.spotify-cover:hover,
+.spotify-cover:focus-visible {
   transform: translateY(-4px) scale(1.02);
   box-shadow: var(--spotify-shadow-hover);
 }
 
 .spotify-cover:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.35), var(--spotify-shadow);
+  outline: 3px solid rgba(22, 163, 74, 0.5);
+  outline-offset: 4px;
 }
 
-/* ============================================
-   RESPONSIVE
-============================================ */
+/* ============================
+   MOBILE & SMALL SCREENS
+============================ */
+
 @media (max-width: 640px) {
   .spotify-episode {
-    padding: 0.7rem 0.85rem;
-    gap: 0.65rem;
+    padding: 0.65rem 0.75rem;
+    gap: 0.625rem;
   }
 
   .spotify-episode-title {
@@ -217,42 +198,17 @@
   }
 }
 
-@media (min-width: 768px) {
-  .spotify-episodes {
-    gap: 1rem;
-  }
-
-  .spotify-episode {
-    padding: 1rem 1.25rem;
-  }
-
+/* Migliora la gestione dei titoli su breakpoint medi */
+@media (max-width: 820px) {
   .spotify-episode-title {
-    font-size: 1rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 }
 
-/* ============================================
-   DARK MODE (auto)
-============================================ */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --spotify-text: #f9fafb;
-    --spotify-text-muted: #d1d5db;
-    --spotify-subtitle: #9ca3af;
-    --spotify-surface: #1f2937;
-    --spotify-surface-hover: #273348;
-    --spotify-shadow: 0 18px 40px rgba(17, 24, 39, 0.55);
-    --spotify-shadow-hover: 0 25px 55px rgba(17, 24, 39, 0.65);
-  }
-
-  .spotify-episode::after {
-    border-color: rgba(34, 197, 94, 0.15);
-  }
-}
-
-/* ================================
-   SPOTIFY RANKING – INDICE MESI
-================================ */
+/* ============================
+   INDICE MESI
+============================ */
 
 #spotify-ranking-index {
   display: flex;
@@ -262,47 +218,49 @@
   margin: 1.5rem 0 2.25rem;
 }
 
-/* Singolo link indice */
 .spotify-period-link {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.45rem 0.7rem;
   border-radius: 0.6rem;
-  background: #f3f4f6;
+  background: var(--spotify-surface-hover);
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--spotify-font-display);
   font-weight: 700;
   font-size: 0.85rem;
-  color: #111827;
-  transition: background 0.2s ease, transform 0.15s ease;
+  color: var(--spotify-text);
+  transition: background-color var(--spotify-transition), transform var(--spotify-transition), box-shadow var(--spotify-transition);
 }
 
-/* Hover */
-.spotify-period-link:hover {
+.spotify-period-link:hover,
+.spotify-period-link:focus-visible {
   background: #e5e7eb;
   transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
 }
 
-/* Mese */
+.spotify-period-link:focus-visible {
+  outline: 3px solid rgba(34, 197, 94, 0.35);
+  outline-offset: 2px;
+}
+
 .spotify-period-link .spotify-month {
-  color: #dc2626;
+  color: var(--spotify-accent);
 }
 
-/* Anno */
 .spotify-period-link .spotify-year {
-  color: #16a34a;
+  color: var(--spotify-primary-dark);
 }
 
-/* Stato attivo (opzionale, JS-ready) */
 .spotify-period-link.is-active {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+  background: linear-gradient(135deg, var(--spotify-primary), var(--spotify-primary-dark));
   color: #ffffff;
 }
 
 .spotify-period-link.is-active .spotify-month,
 .spotify-period-link.is-active .spotify-year {
-  color: #ffffff;
+  color: inherit;
 }
 
 /* Mobile */
@@ -316,3 +274,19 @@
     padding: 0.4rem 0.6rem;
   }
 }
+
+/* ============================
+   ACCESSIBILITÀ – Riduzione movimento
+============================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
