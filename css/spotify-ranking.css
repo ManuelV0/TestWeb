@@ -1,65 +1,51 @@
 /* ================================
-   SPOTIFY RANKING – TOP 10 PODCAST
+   SPOTIFY CLASSIFICA – PODCAST TOP 10
 ================================ */
 
 /* Sezione generale */
-#spotify-ranking {
+#spotify-classifica {
   margin-top: 3rem;
 }
 
 /* Sottotitolo */
-#spotify-ranking .section-subtitle {
+#spotify-classifica .section-subtitle {
   margin-top: 0.75rem;
   font-size: 0.95rem;
   color: #4b5563;
+  text-align: center;
 }
 
-/* Blocco mese */
-.spotify-month-block {
-  margin-top: 2rem;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 1.5rem;
-}
-
-/* Header mese */
-.spotify-month-header {
+/* Periodo (mese / anno) */
+.spotify-period {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-}
-
-.spotify-month-header h3 {
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 2rem;
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  font-size: 1.25rem;
   color: #111827;
 }
 
-/* Link podcast Spotify */
-.spotify-podcast-link {
-  font-size: 0.85rem;
-  text-decoration: none;
+.spotify-month {
+  color: #dc2626;
+}
+
+.spotify-year {
   color: #16a34a;
-  font-weight: 600;
-  transition: opacity 0.2s ease;
 }
 
-.spotify-podcast-link:hover {
-  opacity: 0.8;
-}
+/* ================================
+   LISTA EPISODI
+================================ */
 
-/* Lista top 10 */
-.spotify-top10-list {
+.spotify-episodes {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-/* Singolo elemento */
-.spotify-poem-item {
+/* Singolo episodio */
+.spotify-episode {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -69,25 +55,25 @@
   transition: background 0.2s ease, transform 0.15s ease;
 }
 
-.spotify-poem-item:hover {
+.spotify-episode:hover {
   background: #f3f4f6;
   transform: translateY(-1px);
 }
 
-/* Rank emoji */
+/* Rank */
 .spotify-rank {
   font-size: 1.25rem;
   min-width: 2rem;
   text-align: center;
 }
 
-/* Info testo */
-.spotify-info {
+/* Info episodio */
+.spotify-episode-info {
   flex: 1;
   min-width: 0;
 }
 
-.spotify-title {
+.spotify-episode-title {
   font-size: 0.95rem;
   font-weight: 600;
   color: #111827;
@@ -96,17 +82,14 @@
   text-overflow: ellipsis;
 }
 
-.spotify-author {
+.spotify-episode-author {
   font-size: 0.8rem;
   color: #6b7280;
 }
 
-/* Azioni */
-.spotify-actions {
+/* Pulsante play */
+.spotify-play-btn {
   margin-left: auto;
-}
-
-.spotify-listen-btn {
   font-size: 0.8rem;
   padding: 0.35rem 0.6rem;
   border-radius: 0.5rem;
@@ -118,29 +101,23 @@
   transition: opacity 0.2s ease, transform 0.15s ease;
 }
 
-.spotify-listen-btn:hover {
+.spotify-play-btn:hover {
   opacity: 0.9;
   transform: translateY(-1px);
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .spotify-month-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+/* ================================
+   CTA FINALE
+================================ */
 
-  .spotify-poem-item {
-    padding: 0.65rem 0.75rem;
-  }
-
-  .spotify-title {
-    font-size: 0.9rem;
-  }
+.spotify-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }
 
 /* ================================
-   SPOTIFY PODCAST COVER
+   PODCAST COVER
 ================================ */
 
 .spotify-cover-wrapper {
@@ -158,14 +135,24 @@
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* Effetto hover leggero */
 .spotify-cover:hover {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 25px 55px rgba(0, 0, 0, 0.3);
 }
 
-/* Mobile */
+/* ================================
+   MOBILE
+================================ */
+
 @media (max-width: 640px) {
+  .spotify-episode {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .spotify-episode-title {
+    font-size: 0.9rem;
+  }
+
   .spotify-cover {
     width: 180px;
     height: 180px;
