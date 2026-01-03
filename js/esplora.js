@@ -1,153 +1,160 @@
-/* =========================================================
-   ESPLORA / POESIE CONSIGLIATE – VERSIONE FINALE
-   Modalità: DISCOVER (non classifica)
-   Stato: PRODUZIONE
-========================================================= */
+/* =========================================
+   SPOTIFY CLASSIFICA – PODCAST TOP 10
+   Produzione ready 🚀
+========================================= */
 
-(async () => {
+document.addEventListener('DOMContentLoaded', () => {
+  initSpotifyClassifica();
+});
 
-  /* ================= SAFE SUPABASE ================= */
+async function initSpotifyClassifica() {
+  const indexEl = document.getElementById('spotify-ranking-index');
+  const contentEl = document.getElementById('spotify-ranking-content');
 
-  async function waitForSupabase(retries = 20) {
-    return new Promise((resolve, reject) => {
-      const check = () => {
-        if (window.supabaseClient) resolve(window.supabaseClient);
-        else if (retries <= 0) reject(new Error('SUPABASE_NOT_READY'));
-        else setTimeout(() => check(--retries), 100);
-      };
-      check();
-    });
+  if (!indexEl || !contentEl) return;
+
+  if (!window.supabaseClient) {
+    console.error('❌ Supabase non inizializzato');
+    return;
   }
 
-  let supabase;
+  const supabase = window.supabaseClient;
+
   try {
-    supabase = await waitForSupabase();
+    const { data, error } = await supabase
+      .from('monthly_top10')
+      .select(`
+        anno,
+        mese,
+        posizione,
+        titolo_snapshot,
+        autore_snapshot,
+        audio_url,
+        spotify_episode_url,
+        spotify_published
+      `)
+      .order('anno', { ascending: false })
+      .order('mese', { ascending: false })
+      .order('posizione', { ascending: true });
+
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      contentEl.innerHTML = '<p>Nessuna classifica disponibile.</p>';
+      return;
+    }
+
+    const grouped = groupByPeriodo(data);
+    renderIndice(indexEl, grouped);
+    renderClassifiche(contentEl, grouped);
+
   } catch (err) {
-    console.error('[ESPLORA] Supabase non pronto', err);
-    return;
+    console.error('Errore Spotify ranking:', err);
+    contentEl.innerHTML = '<p>Errore nel caricamento della classifica.</p>';
   }
+}
 
-  /* ================= DOM ================= */
+/* ================================
+   UTILITIES
+================================ */
 
-  const statusBox  = document.getElementById('explore-status');
-  const poemsList = document.getElementById('explore-poems-list');
-  const emptyBox  = document.getElementById('explore-empty');
+function groupByPeriodo(rows) {
+  return rows.reduce((acc, row) => {
+    const key = `${row.anno}-${row.mese}`;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(row);
+    return acc;
+  }, {});
+}
 
-  if (!statusBox || !poemsList || !emptyBox) {
-    console.warn('[ESPLORA] DOM incompleto, abort');
-    return;
-  }
+function meseLabel(mese) {
+  return [
+    'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+    'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+  ][mese - 1];
+}
 
-  /* ================= STATUS ================= */
+/* ================================
+   RENDER INDEX
+================================ */
 
-  function setStatus(text) {
-    statusBox.innerHTML = `<p class="loading-text">${text}</p>`;
-    statusBox.classList.remove('hidden');
-  }
+function renderIndice(container, grouped) {
+  const keys = Object.keys(grouped);
 
-  function clearStatus() {
-    statusBox.classList.add('hidden');
-    statusBox.innerHTML = '';
-  }
+  if (keys.length <= 1) return;
 
-  /* ================= AUTH ================= */
-
-  async function requireAuth() {
-    const { data } = await supabase.auth.getSession();
-    if (!data?.session) {
-      setStatus('Accedi per scoprire poesie consigliate ✨');
-      throw new Error('NOT_AUTHENTICATED');
-    }
-    return data.session.user.id;
-  }
-
-  /* ================= RENDER ================= */
-
-  function renderPoems(poems) {
-    poemsList.innerHTML = '';
-
-    poems.forEach(poem => {
-      const poemId = poem.id ?? poem.poem_id;
-      if (!poemId) return;
-
-      const li = document.createElement('li');
-      li.className = 'ai-poem-card';
-      li.style.cursor = 'pointer';
-
-      /* 🔍 Reason (backend-first, fallback safe) */
-      let reasonHtml = '';
-      if (poem.reason) {
-        reasonHtml = poem.reason.includes('Suggerita')
-          ? `<span class="discover-reason affinity">🧠 ${poem.reason}</span>`
-          : `<span class="discover-reason explore">✨ ${poem.reason}</span>`;
-      } else {
-        reasonHtml = `<span class="discover-reason explore">✨ Scoperta esplorativa</span>`;
-      }
-
-      li.innerHTML = `
-        <h3>${poem.title}</h3>
-        <p class="author">di ${poem.author_name}</p>
-        ${reasonHtml}
-      `;
-
-      /* 👉 CLICK → ANALISI POESIA */
-      li.addEventListener('click', () => {
-        window.location.href = `poesia-focus.html?id=${poemId}`;
-      });
-
-      poemsList.appendChild(li);
-    });
-  }
-
-  /* ================= CORE ================= */
-
-  async function loadExplore() {
-    try {
-      setStatus('Stiamo esplorando per te…');
-
-      const userId = await requireAuth();
-
-      /**
-       * 🔮 DISCOVER
-       * p_user_top_themes:
-       * - ora fallback []
-       * - pronto per get_user_top_themes()
-       */
-      const { data, error } = await supabase.rpc('get_discover_poems', {
-        p_user_id: userId,
-        p_user_top_themes: [] // fallback sicuro
-      });
-
-      clearStatus();
-
-      if (error) throw error;
-
-      if (!data || data.length === 0) {
-        emptyBox.classList.remove('hidden');
-        emptyBox.innerHTML = `
-          <p>
-            Stiamo imparando i tuoi gusti.<br>
-            Continua a leggere e votare ✨
-          </p>
+  container.innerHTML = `
+    <div class="spotify-period">
+      ${keys.map((key, i) => {
+        const [anno, mese] = key.split('-');
+        return `
+          <a href="#spotify-${key}" class="spotify-period-link">
+            <span class="spotify-month">${meseLabel(Number(mese))}</span>
+            <span class="spotify-year">${anno}</span>
+          </a>
         `;
-        return;
-      }
+      }).join('')}
+    </div>
+  `;
+}
 
-      emptyBox.classList.add('hidden');
-      renderPoems(data);
+/* ================================
+   RENDER CLASSIFICHE
+================================ */
 
-    } catch (err) {
-      console.error('[ESPLORA ERROR]', err);
-      setStatus('Errore nel caricamento delle poesie consigliate.');
-    }
-  }
+function renderClassifiche(container, grouped) {
+  container.innerHTML = '';
 
-  /* ================= INIT ================= */
+  Object.entries(grouped).forEach(([key, poems]) => {
+    const [anno, mese] = key.split('-');
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadExplore);
-  } else {
-    loadExplore();
-  }
+    const episodesHTML = poems.map(poem => {
+      const rankEmoji = ['🥇', '🥈', '🥉'][poem.posizione - 1] || `#${poem.posizione}`;
+      const link = poem.spotify_published
+        ? poem.spotify_episode_url
+        : poem.audio_url;
 
-})();
+      return `
+        <div class="spotify-episode">
+          <div class="spotify-rank">${rankEmoji}</div>
+
+          <div class="spotify-episode-info">
+            <div class="spotify-episode-title">${poem.titolo_snapshot}</div>
+            <div class="spotify-episode-author">${poem.autore_snapshot}</div>
+          </div>
+
+          <a
+            href="${link || '#'}"
+            target="_blank"
+            rel="noreferrer noopener"
+            class="spotify-play-btn"
+          >
+            ▶ Ascolta
+          </a>
+        </div>
+      `;
+    }).join('');
+
+    container.insertAdjacentHTML('beforeend', `
+      <div id="spotify-${key}" class="spotify-month-block">
+        <div class="spotify-period">
+          <span class="spotify-month">${meseLabel(Number(mese))}</span>
+          <span class="spotify-year">${anno}</span>
+        </div>
+
+        <div class="spotify-episodes">
+          ${episodesHTML}
+        </div>
+
+        <div class="spotify-cta">
+          <a
+            href="https://open.spotify.com/show/YOUR_SHOW_ID"
+            target="_blank"
+            class="spotify-play-btn"
+          >
+            🎧 Vai al podcast
+          </a>
+        </div>
+      </div>
+    `);
+  });
+}
