@@ -37,6 +37,12 @@ function initSpotifyRanking(data) {
 
   yearSelect.innerHTML = '';
 
+  // 👉 Option di sicurezza
+  const allOption = document.createElement('option');
+  allOption.value = '';
+  allOption.textContent = 'Seleziona anno';
+  yearSelect.appendChild(allOption);
+
   years.forEach(year => {
     const option = document.createElement('option');
     option.value = year;
@@ -54,7 +60,6 @@ function initSpotifyRanking(data) {
     const yearData = byYear[year];
     if (!yearData) return;
 
-    // Raggruppa per mese
     const byMonth = {};
 
     yearData.forEach(item => {
@@ -95,13 +100,17 @@ function initSpotifyRanking(data) {
   ================================ */
 
   yearSelect.addEventListener('change', e => {
-    renderYear(Number(e.target.value));
+    const value = Number(e.target.value);
+    if (value) {
+      renderYear(value);
+    }
   });
 
   /* ================================
      DEFAULT: ANNO PIÙ RECENTE
   ================================ */
 
+  yearSelect.value = years[0];
   renderYear(years[0]);
 }
 
