@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Helpers Modali / UI =====
   function openModalElement(modal, options = {}) {
-    if (!modal) return;
+  closeAllModals(); // 🔑 QUESTA RIGA È LA CHIAVE    if (!modal) return;
 
     const config = modalCallbacks.get(modal) || {};
     const shouldFocus = options.focus !== undefined ? options.focus : config.focus !== false;
