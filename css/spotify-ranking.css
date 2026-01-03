@@ -138,3 +138,36 @@
     font-size: 0.9rem;
   }
 }
+
+/* ================================
+   SPOTIFY PODCAST COVER
+================================ */
+
+.spotify-cover-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.spotify-cover {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 1.25rem;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Effetto hover leggero */
+.spotify-cover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .spotify-cover {
+    width: 180px;
+    height: 180px;
+  }
+}
