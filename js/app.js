@@ -105,32 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
    
   let copyTimeoutId;
 
-  // ===== Helpers Modali / UI =====
-  function openModalElement(modal, options = {}) {
-  closeAllModals(); // 🔑 QUESTA RIGA È LA CHIAVE    if (!modal) return;
+function openModalElement(modal, options = {}) {
+  if (!modal) return;
 
-    const config = modalCallbacks.get(modal) || {};
-    const shouldFocus = options.focus !== undefined ? options.focus : config.focus !== false;
-    const onOpenCallback = options.onOpen ?? config.onOpen;
+  closeAllModals(); // 🔑 ora è nel punto giusto
 
-    if (modal.classList.contains('hidden')) {
-      modal.classList.remove('hidden');
-      modal.setAttribute('aria-hidden', 'false');
-      modal.setAttribute('aria-modal', 'true');
-      modalStack.push(modal);
-    }
+  const config = modalCallbacks.get(modal) || {};
+  const shouldFocus = options.focus !== undefined ? options.focus : config.focus !== false;
+  const onOpenCallback = options.onOpen ?? config.onOpen;
 
-    body.classList.add('modal-open');
+  modal.classList.remove('hidden');
+  modal.setAttribute('aria-hidden', 'false');
+  modal.setAttribute('aria-modal', 'true');
+  modalStack.push(modal);
 
-    if (shouldFocus) {
-      const focusable = modal.querySelector(focusableSelector);
-      focusable?.focus();
-    }
+  body.classList.add('modal-open');
 
-    if (typeof onOpenCallback === 'function') {
-      onOpenCallback();
-    }
+  if (shouldFocus) {
+    const focusable = modal.querySelector(focusableSelector);
+    focusable?.focus();
   }
+
+  if (typeof onOpenCallback === 'function') {
+    onOpenCallback();
+  }
+}
 
   function closeModalElement(modal, options = {}) {
     if (!modal || modal.classList.contains('hidden')) return;
