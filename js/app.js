@@ -89,6 +89,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const focusableSelector = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
   const modalCallbacks = new WeakMap();
   const modalStack = [];
+
+   function closeAllModals() {
+  document
+    .querySelectorAll('.info-modal:not(.hidden), .modal-backdrop:not(.hidden)')
+    .forEach(modal => {
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.removeAttribute('aria-modal');
+    });
+
+  modalStack.length = 0;
+  body.classList.remove('modal-open');
+}
+   
   let copyTimeoutId;
 
   // ===== Helpers Modali / UI =====
