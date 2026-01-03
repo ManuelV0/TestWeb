@@ -313,65 +313,79 @@
 
 
 
-<section id="spotify-ranking" class="card-section">
+
+<section id="spotify-classifica" class="card-section">
   <div class="card-content">
 
+    <!-- Cover Podcast -->
+    <div class="spotify-cover-wrapper">
+      <a
+        href="https://open.spotify.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Ascolta TheItalianPoetry Podcast su Spotify"
+      >
+        <img
+          src="img/podcast-cover.jpg"
+          alt="TheItalianPoetry Podcast"
+          class="spotify-cover"
+        />
+      </a>
+    </div>
+
+    <!-- Titolo sezione -->
     <h2 class="section-title">
-      🎧 Classifica Spotify – Le Voci del Mese
+      🎧 Classifica Spotify
     </h2>
 
     <p class="section-subtitle">
-      Ogni mese le <strong>10 poesie più votate</strong>
-      diventano episodi ufficiali del podcast
-      <strong>TheItalianPoetry</strong>.
+      Le <strong>10 poesie più amate del mese</strong>, lette e pubblicate
+      come episodi ufficiali del podcast <em>TheItalianPoetry</em>.
     </p>
 
-    <!-- BLOCCO MESE -->
-    <div class="spotify-month-block" data-year="2025" data-month="03">
+    <!-- Mese / Anno -->
+    <div class="spotify-period">
+      <span class="spotify-month">Gennaio</span>
+      <span class="spotify-year">2026</span>
+    </div>
 
-      <div class="spotify-month-header">
-        <h3>Marzo 2025</h3>
+    <!-- Lista episodi (placeholder) -->
+    <div class="spotify-episodes">
 
+      <article class="spotify-episode">
+        <span class="spotify-rank">🥇</span>
+        <div class="spotify-episode-info">
+          <h3 class="spotify-episode-title">Titolo della poesia</h3>
+          <p class="spotify-episode-author">di Nome Autore</p>
+        </div>
         <a
-          href="https://open.spotify.com/show/TUO_PODCAST_ID"
+          href="#"
           target="_blank"
-          rel="noopener noreferrer"
-          class="spotify-podcast-link"
+          class="spotify-play-btn"
+          aria-label="Ascolta su Spotify"
         >
-          🎙 Vai al podcast su Spotify
+          ▶︎
         </a>
-      </div>
+      </article>
 
-      <div class="spotify-top10-list">
+      <!-- altri episodi -->
 
-        <article class="spotify-poem-item" data-poem-id="">
-          <div class="spotify-rank">🥇</div>
+    </div>
 
-          <div class="spotify-info">
-            <h4 class="spotify-title">Titolo della poesia</h4>
-            <p class="spotify-author">di Nome Autore</p>
-          </div>
-
-          <div class="spotify-actions">
-            <a
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="spotify-listen-btn"
-            >
-              🎧 Ascolta episodio
-            </a>
-          </div>
-        </article>
-
-        <!-- 🥈 🥉 4°–10° -->
-
-      </div>
+    <!-- CTA -->
+    <div class="spotify-cta">
+      <a
+        href="https://open.spotify.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="button-primary"
+      >
+        Ascolta il podcast su Spotify
+      </a>
     </div>
 
   </div>
 </section>
-
 
 
     
