@@ -1,204 +1,132 @@
-/* ======================================================
-   SPOTIFY RANKING – TOP 10 PODCAST (PRODUZIONE)
-====================================================== */
+// js/spotify-ranking.js
 
-/**
- * Inizializza la classifica Spotify
- * @param {Array} data - dati provenienti dal DB
- */
-function initSpotifyRanking(data) {
-  const contentEl = document.getElementById('spotify-ranking-content');
-  const yearSelect = document.getElementById('spotify-year-select');
+(function () {
+  function initSpotifyRanking(data) {
+    const contentEl = document.getElementById('spotify-ranking-content');
+    const yearSelect = document.getElementById('spotify-year-select');
 
-  if (!contentEl || !yearSelect) {
-    console.warn('[SpotifyRanking] Elementi DOM mancanti');
-    return;
-  }
-
-  if (!Array.isArray(data) || data.length === 0) {
-    contentEl.innerHTML = `
-      <p style="text-align:center; color:#6b7280;">
-        Nessuna classifica disponibile al momento.
-      </p>
-    `;
-    return;
-  }
-
-  /* ================================
-     RAGGRUPPA PER ANNO
-  ================================ */
-
-  const byYear = {};
-
-  data.forEach(item => {
-    if (!item.anno || !item.mese) return;
-
-    if (!byYear[item.anno]) {
-      byYear[item.anno] = [];
-    }
-    byYear[item.anno].push(item);
-  });
-
-  const years = Object.keys(byYear)
-    .map(Number)
-    .sort((a, b) => b - a);
-
-  if (years.length === 0) {
-    contentEl.innerHTML = `
-      <p style="text-align:center; color:#6b7280;">
-        Nessun dato valido da mostrare.
-      </p>
-    `;
-    return;
-  }
-
-  /* ================================
-     POPOLA SELECT ANNO
-  ================================ */
-
-  yearSelect.innerHTML = '';
-
-  years.forEach(year => {
-    const option = document.createElement('option');
-    option.value = year;
-    option.textContent = year;
-    yearSelect.appendChild(option);
-  });
-
-  // 🔑 FIX CRITICO
-  yearSelect.value = years[0];
-
-  /* ================================
-     RENDER PER ANNO
-  ================================ */
-
-  function renderYear(year) {
-    contentEl.innerHTML = '';
-
-    const yearData = byYear[year];
-    if (!yearData || yearData.length === 0) {
-      contentEl.innerHTML = `
-        <p style="text-align:center; color:#6b7280;">
-          Nessuna poesia disponibile per l’anno selezionato.
-        </p>
-      `;
+    if (!contentEl || !yearSelect || !Array.isArray(data) || data.length === 0) {
+      console.warn('[SpotifyRanking] Dati non validi o contenitori mancanti');
       return;
     }
 
-    // Raggruppa per mese
-    const byMonth = {};
+    const byYear = {};
 
-    yearData.forEach(item => {
-      if (!byMonth[item.mese]) {
-        byMonth[item.mese] = [];
+    data.forEach(item => {
+      if (!item || !item.anno || !item.mese || !item.posizione) return;
+
+      if (!byYear[item.anno]) {
+        byYear[item.anno] = [];
       }
-      byMonth[item.mese].push(item);
+      byYear[item.anno].push(item);
     });
 
-    Object.keys(byMonth)
-      .map(Number)
-      .sort((a, b) => b - a) // mesi recenti prima
-      .forEach(mese => {
-        const monthBlock = document.createElement('div');
-        monthBlock.className = 'spotify-month-block';
+    const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 
-        monthBlock.innerHTML = `
-          <div class="spotify-period">
-            <span class="spotify-month">${getMonthName(mese)}</span>
-            <span class="spotify-year">${year}</span>
-          </div>
+    if (years.length === 0) {
+      contentEl.innerHTML = '<p>Nessuna classifica disponibile.</p>';
+      return;
+    }
 
-          <div class="spotify-episodes">
-            ${byMonth[mese]
-              .sort((a, b) => a.posizione - b.posizione)
-              .slice(0, 10)
-              .map(renderSpotifyEpisode)
-              .join('')}
-          </div>
-        `;
+    yearSelect.innerHTML = '';
+    years.forEach(year => {
+      const opt = document.createElement('option');
+      opt.value = year;
+      opt.textContent = year;
+      yearSelect.appendChild(opt);
+    });
 
-        contentEl.appendChild(monthBlock);
+    function renderYear(year) {
+      contentEl.innerHTML = '';
+
+      const yearData = byYear[year];
+      if (!yearData) return;
+
+      const byMonth = {};
+      yearData.forEach(item => {
+        if (!byMonth[item.mese]) byMonth[item.mese] = [];
+        byMonth[item.mese].push(item);
       });
+
+      Object.keys(byMonth)
+        .map(Number)
+        .sort((a, b) => b - a)
+        .forEach(mese => {
+          const block = document.createElement('div');
+          block.className = 'spotify-month-block';
+
+          block.innerHTML = `
+            <div class="spotify-period">
+              <span class="spotify-month">${getMonthName(mese)}</span>
+              <span class="spotify-year">${year}</span>
+            </div>
+
+            <div class="spotify-episodes">
+              ${byMonth[mese]
+                .sort((a, b) => a.posizione - b.posizione)
+                .slice(0, 10)
+                .map(renderSpotifyEpisode)
+                .join('')}
+            </div>
+          `;
+
+          contentEl.appendChild(block);
+        });
+    }
+
+    yearSelect.addEventListener('change', e => {
+      renderYear(Number(e.target.value));
+    });
+
+    renderYear(years[0]);
   }
 
-  /* ================================
-     EVENTO SELECT
-  ================================ */
+  function renderSpotifyEpisode(item) {
+    const rankEmoji =
+      item.posizione === 1 ? '🥇' :
+      item.posizione === 2 ? '🥈' :
+      item.posizione === 3 ? '🥉' :
+      `#${item.posizione}`;
 
-  yearSelect.addEventListener('change', e => {
-    renderYear(Number(e.target.value));
-  });
+    const listenUrl =
+      item.spotify_published && item.spotify_episode_url
+        ? item.spotify_episode_url
+        : item.audio_url;
 
-  /* ================================
-     RENDER INIZIALE
-  ================================ */
-
-  renderYear(years[0]);
-}
-
-/* ================================
-   RENDER SINGOLO EPISODIO
-================================ */
-
-function renderSpotifyEpisode(item) {
-  const rankEmoji =
-    item.posizione === 1 ? '🥇' :
-    item.posizione === 2 ? '🥈' :
-    item.posizione === 3 ? '🥉' :
-    `#${item.posizione}`;
-
-  const listenUrl =
-    item.spotify_published && item.spotify_episode_url
-      ? item.spotify_episode_url
-      : item.audio_url;
-
-  const listenLabel =
-    item.spotify_published
+    const label = item.spotify_published
       ? 'Ascolta su Spotify'
       : 'Ascolta audio';
 
-  return `
-    <div class="spotify-episode">
-      <div class="spotify-rank">${rankEmoji}</div>
-
-      <div class="spotify-episode-info">
-        <div class="spotify-episode-title">${escapeHTML(item.titolo)}</div>
-        <div class="spotify-episode-author">${escapeHTML(item.autore)}</div>
+    return `
+      <div class="spotify-episode">
+        <div class="spotify-rank">${rankEmoji}</div>
+        <div class="spotify-episode-info">
+          <div class="spotify-episode-title">${escapeHTML(item.titolo)}</div>
+          <div class="spotify-episode-author">${escapeHTML(item.autore)}</div>
+        </div>
+        <a href="${listenUrl}" target="_blank" class="spotify-play-btn">
+          ${label}
+        </a>
       </div>
+    `;
+  }
 
-      ${
-        listenUrl
-          ? `<a href="${listenUrl}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="spotify-play-btn">
-               ${listenLabel}
-             </a>`
-          : ''
-      }
-    </div>
-  `;
-}
+  function getMonthName(mese) {
+    return [
+      'Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
+      'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'
+    ][mese - 1] || '';
+  }
 
-/* ================================
-   UTILS
-================================ */
+  function escapeHTML(str) {
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
 
-function getMonthName(mese) {
-  const months = [
-    'Gennaio', 'Febbraio', 'Marzo', 'Aprile',
-    'Maggio', 'Giugno', 'Luglio', 'Agosto',
-    'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
-  ];
-  return months[mese - 1] || '';
-}
-
-function escapeHTML(str) {
-  if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+  // 🔑 ESPONIAMO GLOBALMENTE
+  window.initSpotifyRanking = initSpotifyRanking;
+})();
