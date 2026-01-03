@@ -1,161 +1,171 @@
-const MONTHS_IT = [
-  'Gennaio', 'Febbraio', 'Marzo', 'Aprile',
-  'Maggio', 'Giugno', 'Luglio', 'Agosto',
-  'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
-];
+/* ======================================================
+   SPOTIFY RANKING – TOP 10 PODCAST (PRODUZIONE)
+====================================================== */
 
-function monthLabel(mese, anno) {
-  return `${MONTHS_IT[mese - 1]} ${anno}`;
-}
+/**
+ * Inizializza la classifica Spotify
+ * @param {Array} data - dati provenienti dal DB
+ */
+function initSpotifyRanking(data) {
+  const contentEl = document.getElementById('spotify-ranking-content');
+  const yearSelect = document.getElementById('spotify-year-select');
 
-/* ================================
-   LOAD DATA
-================================ */
-async function loadSpotifyRanking() {
-  const { data, error } = await supabaseClient
-    .from('monthly_top10')
-    .select(`
-      anno,
-      mese,
-      posizione,
-      titolo_snapshot,
-      autore_snapshot,
-      audio_url,
-      audio_voice_name,
-      spotify_episode_url,
-      spotify_published,
-      punteggio_totale,
-      numero_voti
-    `)
-    .order('anno', { ascending: false })
-    .order('mese', { ascending: false })
-    .order('posizione', { ascending: true });
-
-  if (error) {
-    console.error('Errore Spotify ranking:', error);
+  if (!contentEl || !yearSelect || !Array.isArray(data) || data.length === 0) {
     return;
   }
 
-  const grouped = groupByMonth(data);
-  renderIndex(grouped);
-  renderContent(grouped);
-}
+  /* ================================
+     RAGGRUPPAMENTO PER ANNO
+  ================================ */
 
-/* ================================
-   GROUP BY MONTH
-================================ */
-function groupByMonth(rows) {
-  return rows.reduce((acc, row) => {
-    const key = `${row.anno}-${row.mese}`;
+  const byYear = {};
 
-    if (!acc[key]) {
-      acc[key] = {
-        anno: row.anno,
-        mese: row.mese,
-        poems: []
-      };
+  data.forEach(item => {
+    if (!byYear[item.anno]) {
+      byYear[item.anno] = [];
     }
-
-    acc[key].poems.push(row);
-    return acc;
-  }, {});
-}
-
-/* ================================
-   INDEX (MONTH / YEAR)
-================================ */
-function renderIndex(grouped) {
-  const container = document.getElementById('spotify-ranking-index');
-  container.innerHTML = '';
-
-  Object.values(grouped).forEach(group => {
-    const anchor = `month-${group.anno}-${group.mese}`;
-
-    const link = document.createElement('a');
-    link.href = `#${anchor}`;
-    link.className = 'spotify-month-link';
-    link.textContent = monthLabel(group.mese, group.anno);
-
-    container.appendChild(link);
+    byYear[item.anno].push(item);
   });
-}
 
-/* ================================
-   CONTENT
-================================ */
-function renderContent(grouped) {
-  const container = document.getElementById('spotify-ranking-content');
-  container.innerHTML = '';
+  const years = Object.keys(byYear)
+    .map(Number)
+    .sort((a, b) => b - a);
 
-  Object.values(grouped).forEach(group => {
-    const section = document.createElement('section');
-    section.className = 'spotify-month-block';
-    section.id = `month-${group.anno}-${group.mese}`;
+  /* ================================
+     POPOLA SELECT ANNO
+  ================================ */
 
-    section.innerHTML = `
-      <div class="spotify-month-header">
-        <h3>${monthLabel(group.mese, group.anno)}</h3>
-        <a
-          href="https://open.spotify.com/show/TUO_SHOW_ID"
-          target="_blank"
-          class="spotify-podcast-link"
-        >
-          Vai al podcast →
-        </a>
-      </div>
+  yearSelect.innerHTML = '';
 
-      <div class="spotify-top10-list">
-        ${group.poems.map(renderPoemItem).join('')}
-      </div>
-    `;
-
-    container.appendChild(section);
+  years.forEach(year => {
+    const option = document.createElement('option');
+    option.value = year;
+    option.textContent = year;
+    yearSelect.appendChild(option);
   });
-}
 
-/* ================================
-   ITEM
-================================ */
-function renderPoemItem(poem) {
-  const rankEmoji = ['🥇', '🥈', '🥉'][poem.posizione - 1] || `#${poem.posizione}`;
+  /* ================================
+     RENDER PER ANNO
+  ================================ */
 
-  let action = `<span class="spotify-listen-btn disabled">In lavorazione</span>`;
+  function renderYear(year) {
+    contentEl.innerHTML = '';
 
-  if (poem.spotify_published && poem.spotify_episode_url) {
-    action = `
-      <a
-        href="${poem.spotify_episode_url}"
-        target="_blank"
-        class="spotify-listen-btn"
-      >
-        Spotify
-      </a>
-    `;
-  } else if (poem.audio_url) {
-    action = `
-      <audio controls preload="none" src="${poem.audio_url}"></audio>
-    `;
+    const yearData = byYear[year];
+    if (!yearData) return;
+
+    // Raggruppa per mese
+    const byMonth = {};
+
+    yearData.forEach(item => {
+      if (!byMonth[item.mese]) {
+        byMonth[item.mese] = [];
+      }
+      byMonth[item.mese].push(item);
+    });
+
+    Object.keys(byMonth)
+      .map(Number)
+      .sort((a, b) => b - a)
+      .forEach(mese => {
+        const monthBlock = document.createElement('div');
+        monthBlock.className = 'spotify-month-block';
+
+        monthBlock.innerHTML = `
+          <div class="spotify-period">
+            <span class="spotify-month">${getMonthName(mese)}</span>
+            <span class="spotify-year">${year}</span>
+          </div>
+
+          <div class="spotify-episodes">
+            ${byMonth[mese]
+              .sort((a, b) => a.posizione - b.posizione)
+              .slice(0, 10)
+              .map(renderSpotifyEpisode)
+              .join('')}
+          </div>
+        `;
+
+        contentEl.appendChild(monthBlock);
+      });
   }
 
+  /* ================================
+     EVENTO SELECT
+  ================================ */
+
+  yearSelect.addEventListener('change', e => {
+    renderYear(Number(e.target.value));
+  });
+
+  /* ================================
+     DEFAULT: ANNO PIÙ RECENTE
+  ================================ */
+
+  renderYear(years[0]);
+}
+
+/* ================================
+   RENDER SINGOLO EPISODIO
+================================ */
+
+function renderSpotifyEpisode(item) {
+  const rankEmoji =
+    item.posizione === 1 ? '🥇' :
+    item.posizione === 2 ? '🥈' :
+    item.posizione === 3 ? '🥉' :
+    `#${item.posizione}`;
+
+  const listenUrl =
+    item.spotify_published && item.spotify_episode_url
+      ? item.spotify_episode_url
+      : item.audio_url;
+
+  const listenLabel =
+    item.spotify_published
+      ? 'Ascolta su Spotify'
+      : 'Ascolta audio';
+
   return `
-    <div class="spotify-poem-item">
+    <div class="spotify-episode">
       <div class="spotify-rank">${rankEmoji}</div>
 
-      <div class="spotify-info">
-        <div class="spotify-title">${poem.titolo_snapshot}</div>
-        <div class="spotify-author">di ${poem.autore_snapshot}</div>
+      <div class="spotify-episode-info">
+        <div class="spotify-episode-title">${escapeHTML(item.titolo)}</div>
+        <div class="spotify-episode-author">${escapeHTML(item.autore)}</div>
       </div>
 
-      <div class="spotify-actions">
-        ${action}
-      </div>
+      <a
+        href="${listenUrl}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="spotify-play-btn"
+      >
+        ${listenLabel}
+      </a>
     </div>
   `;
 }
 
 /* ================================
-   INIT
+   UTILS
 ================================ */
-document.addEventListener('DOMContentLoaded', () => {
-  loadSpotifyRanking();
-});
+
+function getMonthName(mese) {
+  const months = [
+    'Gennaio', 'Febbraio', 'Marzo', 'Aprile',
+    'Maggio', 'Giugno', 'Luglio', 'Agosto',
+    'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+  ];
+  return months[mese - 1] || '';
+}
+
+function escapeHTML(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
