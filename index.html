@@ -319,11 +319,13 @@
     <div class="spotify-cover-wrapper">
       <img
         src="immagini/podcast-cover.jpg"
-        alt="TheItalianPoetry Podcast"
+        alt="TheItalianPoetry Podcast – Copertina ufficiale"
         class="spotify-cover"
+        loading="lazy"
       />
     </div>
 
+    <!-- Titolo -->
     <h2 class="section-title">Classifica Spotify – Top 10</h2>
     <p class="section-subtitle">
       Le poesie più amate del mese, ascoltabili in podcast.
@@ -332,15 +334,20 @@
     <!-- Filtro anno -->
     <div class="spotify-filter">
       <label for="spotify-year-select">Anno</label>
-      <select id="spotify-year-select"></select>
+      <select
+        id="spotify-year-select"
+        aria-label="Seleziona anno classifica Spotify"
+      ></select>
     </div>
 
     <!-- Contenuto ranking -->
-    <div id="spotify-ranking-content"></div>
+    <div
+      id="spotify-ranking-content"
+      aria-live="polite"
+    ></div>
 
   </div>
 </section>
-
 
     
     <div id="how-to-modal" class="info-modal hidden" role="dialog" aria-modal="true" aria-labelledby="how-to-modal-title" aria-hidden="true">
