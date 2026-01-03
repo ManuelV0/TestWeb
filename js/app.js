@@ -108,10 +108,11 @@ document.addEventListener('DOMContentLoaded', () => {
 function openModalElement(modal, options = {}) {
   if (!modal) return;
 
-  closeAllModals(); // 🔑 ora è nel punto giusto
+  closeAllModals(); // 🔑 ORA è nel punto giusto
 
   const config = modalCallbacks.get(modal) || {};
-  const shouldFocus = options.focus !== undefined ? options.focus : config.focus !== false;
+  const shouldFocus =
+    options.focus !== undefined ? options.focus : config.focus !== false;
   const onOpenCallback = options.onOpen ?? config.onOpen;
 
   modal.classList.remove('hidden');
