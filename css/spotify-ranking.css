@@ -328,4 +328,11 @@
   }
 }
 
-
+#spotify-classifica .spotify-episodes:empty::after {
+  content: "Nessun episodio disponibile per questo periodo.";
+  display: block;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
