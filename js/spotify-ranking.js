@@ -10,17 +10,29 @@ function initSpotifyRanking(data) {
   const contentEl = document.getElementById('spotify-ranking-content');
   const yearSelect = document.getElementById('spotify-year-select');
 
-  if (!contentEl || !yearSelect || !Array.isArray(data) || data.length === 0) {
+  if (!contentEl || !yearSelect) {
+    console.warn('[SpotifyRanking] Elementi DOM mancanti');
+    return;
+  }
+
+  if (!Array.isArray(data) || data.length === 0) {
+    contentEl.innerHTML = `
+      <p style="text-align:center; color:#6b7280;">
+        Nessuna classifica disponibile al momento.
+      </p>
+    `;
     return;
   }
 
   /* ================================
-     RAGGRUPPAMENTO PER ANNO
+     RAGGRUPPA PER ANNO
   ================================ */
 
   const byYear = {};
 
   data.forEach(item => {
+    if (!item.anno || !item.mese) return;
+
     if (!byYear[item.anno]) {
       byYear[item.anno] = [];
     }
@@ -31,17 +43,20 @@ function initSpotifyRanking(data) {
     .map(Number)
     .sort((a, b) => b - a);
 
+  if (years.length === 0) {
+    contentEl.innerHTML = `
+      <p style="text-align:center; color:#6b7280;">
+        Nessun dato valido da mostrare.
+      </p>
+    `;
+    return;
+  }
+
   /* ================================
      POPOLA SELECT ANNO
   ================================ */
 
   yearSelect.innerHTML = '';
-
-  // 👉 Option di sicurezza
-  const allOption = document.createElement('option');
-  allOption.value = '';
-  allOption.textContent = 'Seleziona anno';
-  yearSelect.appendChild(allOption);
 
   years.forEach(year => {
     const option = document.createElement('option');
@@ -49,6 +64,9 @@ function initSpotifyRanking(data) {
     option.textContent = year;
     yearSelect.appendChild(option);
   });
+
+  // 🔑 FIX CRITICO
+  yearSelect.value = years[0];
 
   /* ================================
      RENDER PER ANNO
@@ -58,8 +76,16 @@ function initSpotifyRanking(data) {
     contentEl.innerHTML = '';
 
     const yearData = byYear[year];
-    if (!yearData) return;
+    if (!yearData || yearData.length === 0) {
+      contentEl.innerHTML = `
+        <p style="text-align:center; color:#6b7280;">
+          Nessuna poesia disponibile per l’anno selezionato.
+        </p>
+      `;
+      return;
+    }
 
+    // Raggruppa per mese
     const byMonth = {};
 
     yearData.forEach(item => {
@@ -71,7 +97,7 @@ function initSpotifyRanking(data) {
 
     Object.keys(byMonth)
       .map(Number)
-      .sort((a, b) => b - a)
+      .sort((a, b) => b - a) // mesi recenti prima
       .forEach(mese => {
         const monthBlock = document.createElement('div');
         monthBlock.className = 'spotify-month-block';
@@ -100,17 +126,13 @@ function initSpotifyRanking(data) {
   ================================ */
 
   yearSelect.addEventListener('change', e => {
-    const value = Number(e.target.value);
-    if (value) {
-      renderYear(value);
-    }
+    renderYear(Number(e.target.value));
   });
 
   /* ================================
-     DEFAULT: ANNO PIÙ RECENTE
+     RENDER INIZIALE
   ================================ */
 
-  yearSelect.value = years[0];
   renderYear(years[0]);
 }
 
@@ -144,14 +166,16 @@ function renderSpotifyEpisode(item) {
         <div class="spotify-episode-author">${escapeHTML(item.autore)}</div>
       </div>
 
-      <a
-        href="${listenUrl}"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="spotify-play-btn"
-      >
-        ${listenLabel}
-      </a>
+      ${
+        listenUrl
+          ? `<a href="${listenUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="spotify-play-btn">
+               ${listenLabel}
+             </a>`
+          : ''
+      }
     </div>
   `;
 }
