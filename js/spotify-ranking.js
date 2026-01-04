@@ -13,8 +13,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadSpotifyRanking() {
   try {
-    // 👉 TEMP: dati mock (SOSTITUIRE con fetch / Supabase)
-    const data = await getMockSpotifyRanking();
+    const res = await fetch(
+      'https://backend.theitalianpoetryproject.com/.netlify/functions/spotify-get-ranking',
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Errore backend: ${res.status}`);
+    }
+
+    const data = await res.json();
 
     if (!Array.isArray(data) || data.length === 0) {
       console.warn('Spotify ranking vuoto');
