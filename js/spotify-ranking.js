@@ -210,21 +210,4 @@ function escapeHTML(str) {
     .replace(/'/g, '&#039;');
 }
 
-/* ======================================================
-   MOCK DATA (TEMPORANEO – RIMUOVERE IN PROD)
-====================================================== */
 
-async function getMockSpotifyRanking() {
-  return [
-    {
-      anno: 2026,
-      mese: 1,
-      posizione: 1,
-      titolo: 'BENVENUTO',
-      autore: 'Anonimo',
-      audio_url: 'https://djikypgmchywybjxbwar.supabase.co/storage/v1/object/public/poetry-audio/poesia-44-1767398131548.mp3',
-      spotify_episode_url: null,
-      spotify_published: false
-    }
-  ];
-}
