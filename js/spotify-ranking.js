@@ -24,7 +24,7 @@ async function loadSpotifyRanking() {
     );
 
     if (!res.ok) {
-      throw new Error(`Errore backend: ${res.status}`);
+      throw new Error(`Errore backend Spotify ranking: ${res.status}`);
     }
 
     const data = await res.json();
