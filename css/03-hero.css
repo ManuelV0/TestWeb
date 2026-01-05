@@ -192,8 +192,3 @@
 }
 
 
-.countdown-section {
-  position: sticky;
-  top: var(--header-height);
-  z-index: 50;
-}
