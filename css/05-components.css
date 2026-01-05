@@ -370,22 +370,74 @@ body.widget-open {
   z-index: 900;
 }
 
+/* =====================================================
+   SECTION TITLES (GLOBAL – OUTSIDE CARDS)
+   ===================================================== */
 
-/* ================================
+.section-title,
+.hero-section h1,
+.podcast-title,
+.widget-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+  text-align: center;
+  margin: 3.5rem auto 1.2rem;
+  line-height: 1.25;
+  color: #111827;
+  letter-spacing: 0.02em;
+  position: relative;
+}
+
+/* Decorative line */
+.section-title::after,
+.podcast-title::after,
+.widget-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 0.75rem auto 0;
+  background: linear-gradient(
+    90deg,
+    #dc2626,
+    #f59e0b,
+    #16a34a
+  );
+  border-radius: 2px;
+}
+
+/* Subtitles */
+.section-subtitle,
+.podcast-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+/* Global spacing between sections */
+section:not(.card-section) {
+  padding: 3.5rem 1.25rem 2.5rem;
+}
+
+/* =====================================================
    ANALISI IA – SEZIONE
-================================ */
+   ===================================================== */
 
 .poetry-widget-section {
-  margin-top: 4rem;
+  padding: 3rem 1.25rem;
   text-align: center;
 }
 
 .poetry-widget-section .widget-title {
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.6rem;
   font-weight: 800;
-  margin-bottom: 1rem;
-  color: #111827;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
 }
 
 #poetry-widget-container {
@@ -393,13 +445,12 @@ body.widget-open {
   min-height: 120px;
 }
 
-
-/* ================================
+/* =====================================================
    PODCAST – SEZIONE
-================================ */
+   ===================================================== */
 
 .poetry-podcast-section {
-  margin-top: 4rem;
+  padding: 3rem 1.25rem;
   text-align: center;
 }
 
@@ -409,12 +460,6 @@ body.widget-open {
   font-weight: 800;
   margin-bottom: 0.5rem;
   color: #111827;
-}
-
-.podcast-subtitle {
-  font-size: 0.95rem;
-  color: #4b5563;
-  margin-bottom: 1.5rem;
 }
 
 /* CTA Podcast */
@@ -434,7 +479,7 @@ body.widget-open {
   opacity: 0.9;
 }
 
-/* Cover */
+/* Podcast cover */
 .podcast-cover {
   width: 200px;
   aspect-ratio: 1 / 1;
@@ -449,165 +494,10 @@ body.widget-open {
   box-shadow: 0 25px 55px rgba(0, 0, 0, 0.3);
 }
 
-/* Mobile */
-@media (max-width: 640px) {
-  .podcast-cover {
-    width: 170px;
-  }
-}
-
-
-/* =========================
-   SECTION TITLES (OUTSIDE CARDS)
-   ========================= */
-
-.section-title,
-.hero-section h1,
-.podcast-title,
-.widget-title {
-  font-family: 'Playfair Display', serif;
-  font-weight: 600;
-  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
-  text-align: center;
-  margin: 3.5rem auto 1.2rem;
-  line-height: 1.25;
-  color: #111827;
-  letter-spacing: 0.02em;
-  position: relative;
-}
-
-/* Linea decorativa poetica */
-.section-title::after,
-.podcast-title::after,
-.widget-title::after {
-  content: "";
-  display: block;
-  width: 64px;
-  height: 3px;
-  margin: 0.75rem auto 0;
-  background: linear-gradient(
-    90deg,
-    #dc2626,
-    #f59e0b,
-    #16a34a
-  );
-  border-radius: 2px;
-}
-
-/* Sottotitoli / introduzioni */
-.section-subtitle,
-.podcast-subtitle {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 1rem;
-  max-width: 680px;
-  margin: 0 auto 2.5rem;
-  text-align: center;
-  line-height: 1.6;
-  color: #4b5563;
-}
-
-/* Spaziatura tra sezioni */
-section:not(.card-section) {
-  padding: 3.5rem 1.25rem 2.5rem;
-}
-
-/* Variante più compatta mobile */
-@media (max-width: 640px) {
-  .section-title,
-  .podcast-title,
-  .widget-title {
-    font-size: 1.75rem;
-    margin-top: 2.5rem;
-  }
-
-  section:not(.card-section) {
-    padding: 2.5rem 1rem 2rem;
-  }
-}
-
-
 /* =====================================================
-   MOBILE FIX – SECTION TITLES & SPACING
-   TheItalianPoetry
+   HERO VISIBILITY FIX (MOBILE + INSTAGRAM)
    ===================================================== */
 
-@media (max-width: 640px) {
-
-  /* Riduce lo spazio eccessivo tra le section */
-  section:not(.card-section) {
-    padding-top: 2rem;
-    padding-bottom: 1.75rem;
-  }
-
-  /* Titoli di sezione (fuori dalle card) */
-  .section-title,
-  .widget-title,
-  .podcast-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.85rem;
-    font-weight: 700;
-    text-align: center;
-    margin: 1.75rem auto 0.5rem;
-    line-height: 1.25;
-    letter-spacing: 0.03em;
-    color: #111827;
-    padding-bottom: 0.25rem;
-  }
-
-  /* Linea decorativa sotto i titoli */
-  .section-title::after,
-  .widget-title::after,
-  .podcast-title::after {
-    content: "";
-    display: block;
-    width: 56px;
-    height: 3px;
-    margin: 0.5rem auto 1rem;
-    background: linear-gradient(
-      90deg,
-      #dc2626,
-      #f59e0b,
-      #16a34a
-    );
-    border-radius: 2px;
-  }
-
-  /* Sottotitoli / descrizioni brevi */
-  .section-subtitle,
-  .podcast-subtitle {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    max-width: 92%;
-    margin: 0 auto 1.75rem;
-    text-align: center;
-    color: #4b5563;
-  }
-
-  /* Rafforza Analisi IA (feature chiave) */
-  .widget-title {
-    font-size: 2rem;
-  }
-
-  /* Robottino IA meno invasivo */
-  #poetry-widget-toggle {
-    width: 52px;
-    height: 52px;
-    font-size: 1.5rem;
-    bottom: 1.25rem;
-    left: 1rem;
-    opacity: 0.88;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
-  }
-
-}
-
-
-/* =========================================
-   FIX VISIBILITÀ HERO – MOBILE & INSTAGRAM
-========================================= */
-
-/* Overlay scuro per migliorare contrasto */
 .hero-section {
   position: relative;
 }
@@ -624,63 +514,88 @@ section:not(.card-section) {
   z-index: 1;
 }
 
-/* Contenuto sopra overlay */
 .hero-content {
   position: relative;
   z-index: 2;
 }
 
-/* Titolo sempre leggibile */
 .hero-section h1 {
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
 
-/* =========================================
-   SEZIONE ANALISI IA – ALLINEAMENTO PERFETTO
-========================================= */
-
-.poetry-widget-section {
-  padding: 3rem 1.25rem;
-  text-align: center;
-}
-
-.poetry-widget-section .widget-title {
-  margin-bottom: 1.5rem;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 800;
-  font-size: 1.6rem;
-}
-
-/* Mobile */
-@media (max-width: 640px) {
-  .poetry-widget-section {
-    padding: 2.5rem 1rem;
-  }
-
-  .poetry-widget-section .widget-title {
-    font-size: 1.45rem;
-  }
-}
-
-/* =========================================
+/* =====================================================
    FLOATING BUTTONS – NO OVERLAP
-========================================= */
+   ===================================================== */
 
 #poetry-widget-toggle,
 #scroll-top-btn {
   bottom: 1.25rem;
 }
 
+/* =====================================================
+   MOBILE OVERRIDES
+   ===================================================== */
+
 @media (max-width: 640px) {
+
+  section:not(.card-section) {
+    padding: 2rem 1rem 1.75rem;
+  }
+
+  .section-title,
+  .widget-title,
+  .podcast-title {
+    font-size: 1.85rem;
+    margin: 1.75rem auto 0.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .section-title::after,
+  .widget-title::after,
+  .podcast-title::after {
+    width: 56px;
+    margin: 0.5rem auto 1rem;
+  }
+
+  .section-subtitle,
+  .podcast-subtitle {
+    font-size: 0.95rem;
+    max-width: 92%;
+    margin-bottom: 1.75rem;
+  }
+
+  /* Analisi IA enfatizzata */
+  .poetry-widget-section .widget-title {
+    font-size: 2rem;
+  }
+
+  .poetry-widget-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .poetry-podcast-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .podcast-cover {
+    width: 170px;
+  }
+
   #poetry-widget-toggle {
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
     bottom: 5rem;
+    left: 1rem;
+    opacity: 0.88;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
   }
 }
 
-/* =========================================
-   EXTRA: MICRO STABILITÀ SU WEBVIEW INSTAGRAM
-========================================= */
+/* =====================================================
+   MICRO STABILITY – WEBVIEW / INSTAGRAM
+   ===================================================== */
 
 body {
   -webkit-text-size-adjust: 100%;
