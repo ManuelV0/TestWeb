@@ -369,3 +369,26 @@ body.widget-open {
 .nav-wrapper {
   z-index: 900;
 }
+
+
+/* ================================
+   ANALISI IA – SEZIONE
+================================ */
+
+.poetry-widget-section {
+  margin-top: 4rem;
+  text-align: center;
+}
+
+.poetry-widget-section .widget-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+#poetry-widget-container {
+  margin-top: 1.5rem;
+  min-height: 120px;
+}
