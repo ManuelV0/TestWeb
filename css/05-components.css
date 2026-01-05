@@ -601,3 +601,92 @@ section:not(.card-section) {
   }
 
 }
+
+
+/* =========================================
+   FIX VISIBILITÀ HERO – MOBILE & INSTAGRAM
+========================================= */
+
+/* Overlay scuro per migliorare contrasto */
+.hero-section {
+  position: relative;
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.55),
+    rgba(0, 0, 0, 0.25)
+  );
+  z-index: 1;
+}
+
+/* Contenuto sopra overlay */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Titolo sempre leggibile */
+.hero-section h1 {
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+/* =========================================
+   SEZIONE ANALISI IA – ALLINEAMENTO PERFETTO
+========================================= */
+
+.poetry-widget-section {
+  padding: 3rem 1.25rem;
+  text-align: center;
+}
+
+.poetry-widget-section .widget-title {
+  margin-bottom: 1.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .poetry-widget-section {
+    padding: 2.5rem 1rem;
+  }
+
+  .poetry-widget-section .widget-title {
+    font-size: 1.45rem;
+  }
+}
+
+/* =========================================
+   FLOATING BUTTONS – NO OVERLAP
+========================================= */
+
+#poetry-widget-toggle,
+#scroll-top-btn {
+  bottom: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  #poetry-widget-toggle {
+    bottom: 5rem;
+  }
+}
+
+/* =========================================
+   EXTRA: MICRO STABILITÀ SU WEBVIEW INSTAGRAM
+========================================= */
+
+body {
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
